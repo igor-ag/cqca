@@ -4,7 +4,6 @@
  */
 
 const Pets = {
-  // Estado atual
   currentPetId: null,
   autoSaveInterval: null,
   
@@ -159,20 +158,29 @@ const Pets = {
     // Auto-save a cada 30 segundos
     Pets.startAutoSave();
     
-    // Carregar pet se houver ID na URL
+    // Carregar pet se houver ID na URL (hash)
     Pets.loadFromURL();
   },
   
   /**
-   * Carregar pet da URL (edição)
+   * Carregar pet da URL/hash (edição)
    */
   loadFromURL: () => {
-    const params = new URLSearchParams(window.location.hash.split('?')[1]);
+    const hash = window.location.hash;
+    const params = new URLSearchParams(hash.split('?')[1]);
     const petId = params.get('id');
+    
+    const petFormTitle = document.getElementById('petFormTitle');
+    const petForm = document.getElementById('petForm');
     
     if (petId) {
       Pets.currentPetId = petId;
       Pets.load(petId);
+      if (petFormTitle) petFormTitle.textContent = 'Editar Pet';
+    } else {
+      Pets.currentPetId = null;
+      if (petFormTitle) petFormTitle.textContent = 'Cadastrar Pet';
+      if (petForm) petForm.reset();
     }
   },
   
@@ -216,7 +224,6 @@ const Pets = {
     }
     
     Pets.currentPetId = petId;
-    document.getElementById('petFormTitle').textContent = 'Editar Pet';
     
     // Identificação
     document.getElementById('petId').value = pet.id;
@@ -424,10 +431,9 @@ const Pets = {
     Pets.autoSaveInterval = setInterval(() => {
       const petForm = document.getElementById('petForm');
       if (petForm && document.getElementById('petName')?.value) {
-        // Auto-save silencioso (não redireciona)
         console.log('Auto-save executado às', new Date().toLocaleTimeString());
       }
-    }, 30000); // 30 segundos
+    }, 30000);
   },
   
   /**
@@ -442,7 +448,6 @@ const Pets = {
   
   /**
    * Obter pets do usuário atual
-   * @returns {array} - Lista de pets
    */
   getUserPets: () => {
     if (!Auth.currentUser) return [];
@@ -452,8 +457,6 @@ const Pets = {
   
   /**
    * Obter pet por ID
-   * @param {string} petId - ID do pet
-   * @returns {object|null} - Pet ou null
    */
   getPetById: (petId) => {
     const pets = Utils.get('pets', []);
@@ -462,8 +465,6 @@ const Pets = {
   
   /**
    * Deletar pet
-   * @param {string} petId - ID do pet
-   * @param {function} callback - Callback após deleção
    */
   delete: (petId, callback) => {
     if (!confirm('Tem certeza que deseja excluir este pet? Esta ação não pode ser desfeita.')) {
@@ -511,8 +512,6 @@ const Pets = {
   
   /**
    * Verificar vacinas vencendo
-   * @param {number} days - Dias para alerta (padrão: 30)
-   * @returns {array} - Pets com vacinas vencendo
    */
   getVaccineAlerts: (days = 30) => {
     const pets = Utils.get('pets', []);
@@ -563,5 +562,4 @@ const Pets = {
   }
 };
 
-// Exportar para escopo global
 window.Pets = Pets;

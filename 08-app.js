@@ -28,29 +28,22 @@ const App = {
     
     console.log('%c🐾 CQC Adestramento App', 'font-size:16px;font-weight:bold;color:#48bb78');
     console.log('Aplicação inicializada com sucesso!');
-    console.log('Comandos úteis no console:');
-    console.log('  Utils.exportAll() - Exportar todos os dados');
-    console.log('  Utils.importAll(json) - Importar dados');
-    console.log('  localStorage.clear() - Limpar tudo (reset)');
   },
   
   /**
    * Configurar roteamento por hash
    */
   setupRouting: () => {
-    // Handler de rota
     const handleRoute = () => {
       const hash = window.location.hash.slice(1) || 'home';
-      const page = document.querySelector(`.page[data-page="${hash}"]`);
+      const hashWithoutParams = hash.split('?')[0];
       
-      // Páginas permitidas
       const allowedPages = [
         'home', 'servicos', 'valores', 'regras', 'conteudos', 'contato',
         'auth', 'dashboard', 'perfil', 'pet', 'agendamentos', 'financeiro', 'admin'
       ];
       
-      // Página padrão
-      const targetPage = allowedPages.includes(hash) ? hash : 'home';
+      const targetPage = allowedPages.includes(hashWithoutParams) ? hashWithoutParams : 'home';
       
       // Proteger páginas privadas
       if (['dashboard', 'perfil', 'pet', 'agendamentos', 'financeiro'].includes(targetPage)) {
@@ -68,7 +61,6 @@ const App = {
           Utils.toast('Acesso restrito ao administrador', 'error');
           return;
         }
-        Admin.load();
       }
       
       // Mostrar página
@@ -93,7 +85,6 @@ const App = {
       document.getElementById('navMenu')?.classList.remove('active');
     };
     
-    // Event listeners
     window.addEventListener('hashchange', handleRoute);
     window.addEventListener('load', handleRoute);
     
@@ -107,7 +98,6 @@ const App = {
       navMenu?.classList.toggle('active');
     });
     
-    // Fechar menu ao clicar em link
     navMenu?.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         navMenu?.classList.remove('active');
@@ -127,25 +117,6 @@ const App = {
     accHeader?.addEventListener('click', () => {
       accHeader.classList.toggle('active');
       accContent?.classList.toggle('show');
-    });
-    
-    // Calculadora
-    ['calcService', 'calcStart', 'calcEnd', 'calcFreq', 'calcDuration', 'calcHoliday', 'calcHighSeason'].forEach(id => {
-      document.getElementById(id)?.addEventListener('change', Appointments.updateCalculator);
-    });
-    
-    // Mostrar/esconder campos da calculadora
-    document.getElementById('calcService')?.addEventListener('change', () => {
-      const service = document.getElementById('calcService').value;
-      const dateFields = document.getElementById('calcDateFields');
-      const freqField = document.getElementById('calcFrequencyField');
-      
-      if (dateFields) {
-        dateFields.classList.toggle('hidden', !['hospedagem', 'daycare'].includes(service));
-      }
-      if (freqField) {
-        freqField.classList.toggle('hidden', service !== 'passeio-mensal');
-      }
     });
     
     // Formulário de contato
@@ -170,7 +141,7 @@ const App = {
       Auth.exportUserData();
     });
     
-    // Exportar PDF (simulado)
+    // Exportar PDF
     document.getElementById('exportPdfBtn')?.addEventListener('click', () => {
       Utils.toast('Funcionalidade de PDF em desenvolvimento', 'info');
     });
@@ -185,6 +156,8 @@ const App = {
    * Carregar dados específicos da página
    */
   loadPageData: (page) => {
+    console.log('Carregando página:', page);
+    
     switch(page) {
       case 'home':
         App.renderHomeServices();
@@ -206,7 +179,6 @@ const App = {
         Appointments.renderDashboard();
         Pets.renderDashboardList();
         Pets.renderVaccineAlerts();
-        Appointments.renderFinancial();
         break;
       
       case 'perfil':
@@ -214,6 +186,7 @@ const App = {
         break;
       
       case 'pet':
+        // IMPORTANTE: Carregar pet da URL (hash com ?id=)
         Pets.loadFromURL();
         break;
       
@@ -223,6 +196,10 @@ const App = {
       
       case 'financeiro':
         Appointments.renderFinancial();
+        break;
+      
+      case 'admin':
+        Admin.load();
         break;
     }
   },
@@ -241,7 +218,7 @@ const App = {
         <div class="service-icon">${s.icon}</div>
         <h4>${s.title}</h4>
         <p>${s.description}</p>
-        <a href="#precos" class="btn btn-sm btn-secondary" style="margin-top:1rem">${s.cta}</a>
+        <a href="#valores" class="btn btn-sm btn-secondary" style="margin-top:1rem">${s.cta}</a>
       </div>
     `).join('');
   },
@@ -266,7 +243,7 @@ const App = {
         <p style="font-size:0.875rem;color:var(--color-text-muted);margin:0.5rem 0">
           <strong>Duração:</strong> ${s.duration}
         </p>
-        <a href="#precos" class="btn btn-secondary btn-block" style="margin-top:1rem">${s.cta}</a>
+        <a href="#valores" class="btn btn-secondary btn-block" style="margin-top:1rem">${s.cta}</a>
       </div>
     `).join('');
   },
@@ -394,7 +371,7 @@ const App = {
       <div class="modal">
         <div class="modal-header">
           <h3 id="modalTitle" style="margin:0">${content.title}</h3>
-          <button class="modal-close" onclick="Utils.hideModal()" aria-label="Fechar">&times;</button>
+          <button class="modal-close" onclick="Utils.hideModal()">&times;</button>
         </div>
         <div class="modal-body">
           <p class="text-muted" style="margin-bottom:1rem">
@@ -519,14 +496,13 @@ const App = {
   },
   
   /**
-   * Obter nome do serviço (para uso externo)
+   * Obter nome do serviço
    */
   getServiceName: (service) => {
     return Appointments.getServiceName(service);
   }
 };
 
-// Exportar para escopo global
 window.App = App;
 
 // Inicializar quando DOM estiver pronto

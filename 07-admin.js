@@ -1,21 +1,13 @@
 /**
  * CQC Adestramento - Módulo Administrativo
- * Dashboard, relatórios, gestão de clientes, pets, agendamentos e notas fiscais
  */
 
 const Admin = {
-  /**
-   * Inicializar módulo admin
-   */
   init: () => {
     Admin.bindEvents();
   },
   
-  /**
-   * Bind de eventos
-   */
   bindEvents: () => {
-    // Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const tab = e.target.dataset.tab;
@@ -23,21 +15,17 @@ const Admin = {
       });
     });
     
-    // Formulário de preços
     document.getElementById('adminConfigForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
       Admin.savePrices();
     });
     
-    // Adicionar conteúdo
     document.getElementById('addContentBtn')?.addEventListener('click', Admin.addContent);
     
-    // Novo agendamento
     document.getElementById('newAppointmentBtn')?.addEventListener('click', () => {
       Admin.openAppointmentModal();
     });
     
-    // Ações em botões dinâmicos
     document.addEventListener('click', (e) => {
       if (e.target.matches('[data-action="edit-content"]')) {
         Admin.editContent(e.target.dataset.id);
@@ -68,12 +56,10 @@ const Admin = {
       }
     });
     
-    // Campos do formulário de agendamento
     ['adminAptClient', 'adminAptService', 'adminAptStart', 'adminAptEnd', 'adminAptDuration', 'adminAptFrequency'].forEach(id => {
       document.getElementById(id)?.addEventListener('change', Admin.calculateAppointmentTotal);
     });
     
-    // Máscaras do formulário de cliente
     document.getElementById('adminClientCpf')?.addEventListener('input', function() {
       this.value = Utils.maskCPF(this.value);
     });
@@ -86,7 +72,6 @@ const Admin = {
       this.value = Utils.maskPhone(this.value);
     });
     
-    // Fechar modais ao clicar fora
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => {
         if (e.target === e.currentTarget) {
@@ -98,9 +83,6 @@ const Admin = {
     });
   },
   
-  /**
-   * Trocar aba
-   */
   switchTab: (tabName) => {
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tabName);
@@ -109,7 +91,6 @@ const Admin = {
       pane.classList.toggle('active', pane.id === `tab-${tabName}`);
     });
     
-    // Carregar dados da aba
     switch(tabName) {
       case 'appointments': Admin.renderAppointments(); break;
       case 'clients': Admin.renderClients(); break;
@@ -120,9 +101,6 @@ const Admin = {
     }
   },
   
-  /**
-   * Renderizar estatísticas
-   */
   renderStats: () => {
     const users = Utils.get('users', []).filter(u => u.role !== 'admin');
     const appointments = Utils.get('appointments', []);
@@ -131,17 +109,11 @@ const Admin = {
     document.getElementById('adminClients').textContent = users.length;
     document.getElementById('adminAppointments').textContent = appointments.length;
     
-    const revenue = appointments
-      .filter(a => a.paymentStatus === 'paid')
-      .reduce((sum, a) => sum + a.totalPrice, 0);
+    const revenue = appointments.filter(a => a.paymentStatus === 'paid').reduce((sum, a) => sum + a.totalPrice, 0);
     document.getElementById('adminRevenue').textContent = Utils.formatCurrency(revenue);
     
     document.getElementById('adminPets').textContent = pets.length;
   },
-  
-  // ============================================
-  // AGENDAMENTOS
-  // ============================================
   
   renderAppointments: () => {
     const container = document.getElementById('adminAppointmentsTable');
@@ -150,8 +122,7 @@ const Admin = {
     
     if (clientFilter && clientFilter.options.length <= 1) {
       const users = Utils.get('users', []).filter(u => u.role !== 'admin');
-      clientFilter.innerHTML = '<option value="">Todos</option>' + 
-        users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+      clientFilter.innerHTML = '<option value="">Todos</option>' + users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
     }
     
     const clientFilterVal = document.getElementById('adminFilterClient')?.value || '';
@@ -192,10 +163,7 @@ const Admin = {
           <td>${user?.name || 'N/A'}</td>
           <td>${pet?.name || 'N/A'}</td>
           <td>${Appointments.getServiceName(apt.service)}</td>
-          <td>
-            ${Utils.formatDate(apt.startDate)}
-            ${apt.endDate && apt.endDate !== apt.startDate ? `<br><small class="text-muted">até ${Utils.formatDate(apt.endDate)}</small>` : ''}
-          </td>
+          <td>${Utils.formatDate(apt.startDate)}${apt.endDate && apt.endDate !== apt.startDate ? `<br><small class="text-muted">até ${Utils.formatDate(apt.endDate)}</small>` : ''}</td>
           <td><strong>${Utils.formatCurrency(apt.totalPrice)}</strong></td>
           <td><span class="status-badge status-${paymentClass}">${apt.paymentStatus === 'paid' ? 'Pago' : 'Pendente'}</span></td>
           <td><span class="status-badge status-${statusClass}">${Appointments.getStatusLabel(apt)}</span></td>
@@ -224,8 +192,7 @@ const Admin = {
     const pets = Utils.get('pets', []);
     
     const clientSelect = document.getElementById('adminAptClient');
-    clientSelect.innerHTML = '<option value="">Selecione o cliente...</option>' + 
-      users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+    clientSelect.innerHTML = '<option value="">Selecione o cliente...</option>' + users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
     
     const petSelect = document.getElementById('adminAptPet');
     petSelect.innerHTML = '<option value="">Selecione o cliente primeiro...</option>';
@@ -233,8 +200,7 @@ const Admin = {
     clientSelect.onchange = () => {
       const userId = clientSelect.value;
       const userPets = pets.filter(p => p.userId === userId);
-      petSelect.innerHTML = '<option value="">Selecione o pet...</option>' + 
-        userPets.map(p => `<option value="${p.id}">${p.name} (${p.breed})</option>`).join('');
+      petSelect.innerHTML = '<option value="">Selecione o pet...</option>' + userPets.map(p => `<option value="${p.id}">${p.name} (${p.breed})</option>`).join('');
     };
     
     if (aptId) {
@@ -280,7 +246,7 @@ const Admin = {
     
     if (endField) endField.classList.toggle('hidden', !['hospedagem', 'daycare'].includes(service));
     if (durationField) durationField.classList.toggle('hidden', service !== 'passeio');
-    if (frequencyField) frequencyField.classList.toggle('hidden', service !== 'passeio');
+    if (frequencyField) frequencyField.classList.toggle('hidden', service !== 'passeio-mensal');
   },
   
   calculateAppointmentTotal: () => {
@@ -318,9 +284,7 @@ const Admin = {
     
     if (breakdownEl) {
       if (breakdown.length > 0 && typeof breakdown[0] === 'object') {
-        breakdownEl.innerHTML = breakdown.slice(0, 5).map(b => 
-          `<div>${b.date || b.label}: ${Utils.formatCurrency(b.price || b.value)} ${b.tags?.length ? '(' + b.tags.join(', ') + ')' : ''}</div>`
-        ).join('') + (breakdown.length > 5 ? `<div>... e mais ${breakdown.length - 5} dias</div>` : '');
+        breakdownEl.innerHTML = breakdown.slice(0, 5).map(b => `<div>${b.date || b.label}: ${Utils.formatCurrency(b.price || b.value)} ${b.tags?.length ? '(' + b.tags.join(', ') + ')' : ''}</div>`).join('') + (breakdown.length > 5 ? `<div>... e mais ${breakdown.length - 5} dias</div>` : '');
       } else {
         breakdownEl.innerHTML = '';
       }
@@ -399,10 +363,6 @@ const Admin = {
     Admin.renderStats();
   },
   
-  // ============================================
-  // CLIENTES E PETS
-  // ============================================
-  
   renderClients: () => {
     const container = document.getElementById('adminClientsTable');
     if (!container) return;
@@ -462,7 +422,6 @@ const Admin = {
     document.getElementById('adminT2Phone').value = user.profile?.tutor2?.phone || '';
     document.getElementById('adminT2Relation').value = user.profile?.tutor2?.relation || '';
     
-    // Carregar pets do cliente
     Admin.renderClientPets(userId);
   },
   
@@ -577,45 +536,95 @@ const Admin = {
     Utils.showModal(modalContent);
   },
   
-  // ============================================
-  // NOTAS FISCAIS
-  // ============================================
+  openInvoiceModal: (aptId) => {
+    const modal = document.getElementById('invoiceModal');
+    if (!modal) return;
+    
+    const apt = Appointments.getAppointmentById(aptId);
+    if (!apt) {
+      Utils.toast('Agendamento não encontrado', 'error');
+      return;
+    }
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    document.getElementById('invoiceAptId').value = aptId;
+    document.getElementById('invoiceNumber').value = apt.invoice?.number || '';
+    document.getElementById('invoiceDate').value = apt.invoice?.date || new Date().toISOString().split('T')[0];
+    document.getElementById('invoiceObservations').value = apt.invoice?.observations || '';
+    document.getElementById('invoiceFileUrl').value = apt.invoice?.fileUrl || '';
+    
+    const users = Utils.get('users', []);
+    const pets = Utils.get('pets', []);
+    const user = users.find(u => u.id === apt.userId);
+    const pet = pets.find(p => p.id === apt.petId);
+    
+    document.getElementById('invoiceAppointmentSummary').innerHTML = `
+      <p><strong>Cliente:</strong> ${user?.name || 'N/A'}</p>
+      <p><strong>Pet:</strong> ${pet?.name || 'N/A'}</p>
+      <p><strong>Serviço:</strong> ${Appointments.getServiceName(apt.service)}</p>
+      <p><strong>Data:</strong> ${Utils.formatDate(apt.startDate)}${apt.endDate && apt.endDate !== apt.startDate ? ` a ${Utils.formatDate(apt.endDate)}` : ''}</p>
+      <p><strong>Valor:</strong> ${Utils.formatCurrency(apt.totalPrice)}</p>
+    `;
+  },
   
-openInvoiceModal: (aptId) => {
-  const modal = document.getElementById('invoiceModal');
-  if (!modal) return;
+  closeInvoiceModal: () => {
+    const modal = document.getElementById('invoiceModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
   
-  const apt = Appointments.getAppointmentById(aptId);
-  if (!apt) {
-    Utils.toast('Agendamento não encontrado', 'error');
-    return;
-  }
+  saveInvoice: () => {
+    const aptId = document.getElementById('invoiceAptId')?.value;
+    if (!aptId) return;
+    
+    const invoiceData = {
+      number: document.getElementById('invoiceNumber').value.trim() || `NF-${Date.now()}`,
+      date: document.getElementById('invoiceDate').value,
+      observations: document.getElementById('invoiceObservations').value.trim(),
+      fileUrl: document.getElementById('invoiceFileUrl').value.trim(),
+      issuedAt: new Date().toISOString()
+    };
+    
+    const appointments = Utils.get('appointments', []);
+    const index = appointments.findIndex(a => a.id === aptId);
+    
+    if (index !== -1) {
+      appointments[index].invoice = invoiceData;
+      Utils.save('appointments', appointments);
+      
+      Utils.toast('Nota fiscal emitida e disponível para o cliente!', 'success');
+      Admin.closeInvoiceModal();
+      Admin.renderPayments();
+      Admin.renderAppointments();
+    } else {
+      Utils.toast('Erro ao emitir nota fiscal', 'error');
+    }
+  },
   
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
+  downloadInvoice: (aptId) => {
+    const apt = Appointments.getAppointmentById(aptId);
+    if (!apt || !apt.invoice?.fileUrl) {
+      Utils.toast('Nota fiscal não disponível', 'error');
+      return;
+    }
+    
+    window.open(apt.invoice.fileUrl, '_blank');
+  },
   
-  document.getElementById('invoiceAptId').value = aptId;
-  document.getElementById('invoiceNumber').value = apt.invoice?.number || '';
-  document.getElementById('invoiceDate').value = apt.invoice?.date || new Date().toISOString().split('T')[0];
-  document.getElementById('invoiceObservations').value = apt.invoice?.observations || '';
-  document.getElementById('invoiceFileUrl').value = apt.invoice?.fileUrl || '';
+  markAsPaid: (aptId) => {
+    Appointments.markAsPaid(aptId);
+    Admin.renderPayments();
+    Admin.renderReports();
+    Admin.renderAppointments();
+  },
   
-  const users = Utils.get('users', []);
-  const pets = Utils.get('pets', []);
-  const user = users.find(u => u.id === apt.userId);
-  const pet = pets.find(p => p.id === apt.petId);
-  
-  document.getElementById('invoiceAppointmentSummary').innerHTML = `
-    <p><strong>Cliente:</strong> ${user?.name || 'N/A'}</p>
-    <p><strong>Pet:</strong> ${pet?.name || 'N/A'}</p>
-    <p><strong>Serviço:</strong> ${Appointments.getServiceName(apt.service)}</p>
-    <p><strong>Data:</strong> ${Utils.formatDate(apt.startDate)}${apt.endDate && apt.endDate !== apt.startDate ? ` a ${Utils.formatDate(apt.endDate)}` : ''}</p>
-    <p><strong>Valor:</strong> ${Utils.formatCurrency(apt.totalPrice)}</p>
-  `;
-},
-  // ============================================
-  // PAGAMENTOS
-  // ============================================
+  addInvoice: (aptId) => {
+    Admin.openInvoiceModal(aptId);
+  },
   
   renderPayments: () => {
     const container = document.getElementById('adminPaymentsTable');
@@ -642,8 +651,7 @@ openInvoiceModal: (aptId) => {
           <td>${Utils.formatCurrency(apt.totalPrice)}</td>
           <td><span class="status-badge status-${statusClass}">${apt.paymentStatus}</span> ${hasInvoice}</td>
           <td>
-            ${apt.paymentStatus !== 'paid' ? 
-              `<button class="btn btn-sm btn-primary" data-action="mark-paid" data-id="${apt.id}">Marcar pago</button>` : ''}
+            ${apt.paymentStatus !== 'paid' ? `<button class="btn btn-sm btn-primary" data-action="mark-paid" data-id="${apt.id}">Marcar pago</button>` : ''}
             <button class="btn btn-sm btn-secondary" data-action="add-invoice" data-id="${apt.id}" style="margin-left:0.5rem">📄 Nota</button>
             ${apt.invoice ? `<button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}" style="margin-left:0.25rem">⬇️</button>` : ''}
           </td>
@@ -652,10 +660,6 @@ openInvoiceModal: (aptId) => {
     }).join('');
   },
   
-  // ============================================
-  // RELATÓRIOS
-  // ============================================
-  
   renderReports: () => {
     const revenueContainer = document.getElementById('revenueByService');
     if (revenueContainer) {
@@ -663,31 +667,18 @@ openInvoiceModal: (aptId) => {
       const services = ['adestramento', 'passeio', 'hospedagem', 'daycare', 'pet-sitter'];
       
       revenueContainer.innerHTML = services.map(service => {
-        const total = appointments
-          .filter(a => a.service === service && a.paymentStatus === 'paid')
-          .reduce((sum, a) => sum + a.totalPrice, 0);
-        
-        return `
-          <div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:var(--color-bg-hover);border-radius:var(--radius-sm)">
-            <span>${Appointments.getServiceName(service)}</span>
-            <strong>${Utils.formatCurrency(total)}</strong>
-          </div>
-        `;
+        const total = appointments.filter(a => a.service === service && a.paymentStatus === 'paid').reduce((sum, a) => sum + a.totalPrice, 0);
+        return `<div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:var(--color-bg-hover);border-radius:var(--radius-sm)"><span>${Appointments.getServiceName(service)}</span><strong>${Utils.formatCurrency(total)}</strong></div>`;
       }).join('');
     }
     
     const alertsContainer = document.getElementById('vaccineAlerts');
     if (alertsContainer) {
       const alerts = Pets.getVaccineAlerts(30);
-      
       if (alerts.length === 0) {
         alertsContainer.innerHTML = '<p class="text-muted" style="font-size:0.875rem">Nenhum alerta de vacina.</p>';
       } else {
-        alertsContainer.innerHTML = alerts.map(alert => `
-          <div style="padding:0.5rem;background:#fefcbf;color:#744210;border-radius:var(--radius-sm);margin-bottom:0.5rem;font-size:0.875rem">
-            🐕 <strong>${alert.petName}</strong>: ${alert.vaccineName} vence em ${alert.daysRemaining} dia${alert.daysRemaining > 1 ? 's' : ''}
-          </div>
-        `).join('');
+        alertsContainer.innerHTML = alerts.map(alert => `<div style="padding:0.5rem;background:#fefcbf;color:#744210;border-radius:var(--radius-sm);margin-bottom:0.5rem;font-size:0.875rem">🐕 <strong>${alert.petName}</strong>: ${alert.vaccineName} vence em ${alert.daysRemaining} dia${alert.daysRemaining > 1 ? 's' : ''}</div>`).join('');
       }
     }
     
@@ -695,12 +686,8 @@ openInvoiceModal: (aptId) => {
     if (topContainer) {
       const appointments = Utils.get('appointments', []);
       const users = Utils.get('users', []);
-      
       const userCounts = {};
-      appointments.forEach(apt => {
-        userCounts[apt.userId] = (userCounts[apt.userId] || 0) + 1;
-      });
-      
+      appointments.forEach(apt => { userCounts[apt.userId] = (userCounts[apt.userId] || 0) + 1; });
       const sorted = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
       
       if (sorted.length === 0) {
@@ -708,12 +695,7 @@ openInvoiceModal: (aptId) => {
       } else {
         topContainer.innerHTML = sorted.map(([userId, count]) => {
           const user = users.find(u => u.id === userId);
-          return `
-            <div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:var(--color-bg-hover);border-radius:var(--radius-sm)">
-              <span>${user?.name || 'N/A'}</span>
-              <strong>${count} agendamentos</strong>
-            </div>
-          `;
+          return `<div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:var(--color-bg-hover);border-radius:var(--radius-sm)"><span>${user?.name || 'N/A'}</span><strong>${count} agendamentos</strong></div>`;
         }).join('');
       }
     }
@@ -722,14 +704,12 @@ openInvoiceModal: (aptId) => {
     if (defaultersContainer) {
       const appointments = Utils.get('appointments', []);
       const users = Utils.get('users', []);
-      
       const defaulters = {};
       appointments.forEach(apt => {
         if (apt.paymentStatus === 'pending' && apt.status !== 'cancelled') {
           defaulters[apt.userId] = (defaulters[apt.userId] || 0) + apt.totalPrice;
         }
       });
-      
       const sorted = Object.entries(defaulters).sort((a, b) => b[1] - a[1]);
       
       if (sorted.length === 0) {
@@ -737,20 +717,11 @@ openInvoiceModal: (aptId) => {
       } else {
         defaultersContainer.innerHTML = sorted.map(([userId, amount]) => {
           const user = users.find(u => u.id === userId);
-          return `
-            <div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:#fed7d7;color:#822727;border-radius:var(--radius-sm)">
-              <span>${user?.name || 'N/A'}</span>
-              <strong>${Utils.formatCurrency(amount)}</strong>
-            </div>
-          `;
+          return `<div style="display:flex;justify-content:space-between;margin:0.5rem 0;padding:0.5rem;background:#fed7d7;color:#822727;border-radius:var(--radius-sm)"><span>${user?.name || 'N/A'}</span><strong>${Utils.formatCurrency(amount)}</strong></div>`;
         }).join('');
       }
     }
   },
-  
-  // ============================================
-  // CONFIGURAÇÕES
-  // ============================================
   
   renderSettings: () => {
     const container = document.getElementById('pricesGrid');
@@ -778,25 +749,14 @@ openInvoiceModal: (aptId) => {
       { key: 'daycareHighSeason', label: 'Daycare Alta Temporada' }
     ];
     
-    container.innerHTML = priceFields.map(field => `
-      <div class="form-group">
-        <label class="form-label" for="price_${field.key}">${field.label}</label>
-        <input type="number" class="form-control" id="price_${field.key}" 
-               value="${prices[field.key] || 0}" step="0.01" min="0">
-      </div>
-    `).join('');
+    container.innerHTML = priceFields.map(field => `<div class="form-group"><label class="form-label" for="price_${field.key}">${field.label}</label><input type="number" class="form-control" id="price_${field.key}" value="${prices[field.key] || 0}" step="0.01" min="0"></div>`).join('');
   },
   
   savePrices: () => {
     const config = Utils.get('adminConfig', {});
     const prices = {};
     
-    const priceFields = [
-      'adestramento', 'petSitter', 'passeio30', 'passeio50',
-      'passeioMensal2x', 'passeioMensal3x', 'passeioMensal4x', 'passeioMensal5x',
-      'hospedagemWeekday', 'hospedagemWeekend', 'hospedagemHoliday', 'hospedagemHighSeason',
-      'daycareWeekday', 'daycareWeekend', 'daycareHoliday', 'daycareHighSeason'
-    ];
+    const priceFields = ['adestramento', 'petSitter', 'passeio30', 'passeio50', 'passeioMensal2x', 'passeioMensal3x', 'passeioMensal4x', 'passeioMensal5x', 'hospedagemWeekday', 'hospedagemWeekend', 'hospedagemHoliday', 'hospedagemHighSeason', 'daycareWeekday', 'daycareWeekend', 'daycareHoliday', 'daycareHighSeason'];
     
     priceFields.forEach(key => {
       const value = parseFloat(document.getElementById(`price_${key}`)?.value) || 0;
@@ -805,78 +765,43 @@ openInvoiceModal: (aptId) => {
     
     config.prices = prices;
     Utils.save('adminConfig', config);
-    
     Utils.toast('Preços atualizados com sucesso!', 'success');
   },
-  
-  // ============================================
-  // CONTEÚDO
-  // ============================================
   
   renderContent: () => {
     const container = document.getElementById('contentList');
     if (!container) return;
     
     const contents = Utils.get('educationalContent', []);
-    
     if (contents.length === 0) {
       container.innerHTML = '<p class="text-muted">Nenhum conteúdo cadastrado.</p>';
       return;
     }
     
-    container.innerHTML = contents.map(c => `
-      <div class="card" style="margin-bottom:0.5rem">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <strong>${c.title}</strong><br>
-            <small class="text-muted">${c.excerpt}</small><br>
-            <small class="text-muted">${c.type === 'video' ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</small>
-          </div>
-          <div style="display:flex;gap:0.5rem">
-            <button class="btn btn-sm btn-secondary" data-action="edit-content" data-id="${c.id}">✏️</button>
-            <button class="btn btn-sm btn-secondary" style="color:var(--color-danger)" data-action="delete-content" data-id="${c.id}">🗑️</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
+    container.innerHTML = contents.map(c => `<div class="card" style="margin-bottom:0.5rem"><div style="display:flex;justify-content:space-between;align-items:start"><div><strong>${c.title}</strong><br><small class="text-muted">${c.excerpt}</small><br><small class="text-muted">${c.type === 'video' ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</small></div><div style="display:flex;gap:0.5rem"><button class="btn btn-sm btn-secondary" data-action="edit-content" data-id="${c.id}">✏️</button><button class="btn btn-sm btn-secondary" style="color:var(--color-danger)" data-action="delete-content" data-id="${c.id}">🗑️</button></div></div></div>`).join('');
   },
   
   addContent: () => {
     const contents = Utils.get('educationalContent', []);
-    const newContent = {
-      id: Utils.generateId('edu_'),
-      title: 'Novo conteúdo',
-      excerpt: 'Descrição breve do conteúdo...',
-      content: 'Conteúdo completo aqui...',
-      type: 'article',
-      createdAt: new Date().toISOString()
-    };
-    
-    contents.unshift(newContent);
+    contents.unshift({ id: Utils.generateId('edu_'), title: 'Novo conteúdo', excerpt: 'Descrição breve...', content: 'Conteúdo completo...', type: 'article', createdAt: new Date().toISOString() });
     Utils.save('educationalContent', contents);
-    
     Admin.renderContent();
-    Utils.toast('Conteúdo criado! Edite para personalizar.', 'success');
+    Utils.toast('Conteúdo criado!', 'success');
   },
   
   editContent: (id) => {
     const contents = Utils.get('educationalContent', []);
     const content = contents.find(c => c.id === id);
     if (!content) return;
-    
     const newTitle = prompt('Título:', content.title);
     if (newTitle === null) return;
-    
-    const newExcerpt = prompt('Descrição breve:', content.excerpt);
+    const newExcerpt = prompt('Descrição:', content.excerpt);
     if (newExcerpt === null) return;
-    
-    const newContent = prompt('Conteúdo completo:', content.content);
+    const newContent = prompt('Conteúdo:', content.content);
     if (newContent === null) return;
-    
     content.title = newTitle;
     content.excerpt = newExcerpt;
     content.content = newContent;
-    
     Utils.save('educationalContent', contents);
     Admin.renderContent();
     Utils.toast('Conteúdo atualizado!', 'success');
@@ -884,18 +809,13 @@ openInvoiceModal: (aptId) => {
   
   deleteContent: (id) => {
     if (!confirm('Excluir este conteúdo?')) return;
-    
     let contents = Utils.get('educationalContent', []);
     contents = contents.filter(c => c.id !== id);
     Utils.save('educationalContent', contents);
-    
     Admin.renderContent();
     Utils.toast('Conteúdo excluído', 'success');
   },
   
-  /**
-   * Carregar dados admin
-   */
   load: () => {
     Admin.renderStats();
     Admin.switchTab('appointments');

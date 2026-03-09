@@ -161,65 +161,49 @@
         
         <p class="text-muted"><small>* Alta temporada: meses de julho, dezembro e janeiro.</small></p>
         
-        <!-- Calculadora -->
-        <div class="calculator card">
-          <h3 style="margin-bottom:1.5rem">🧮 Calculadora de Estimativa</h3>
-          <form id="calculatorForm">
-            <div class="calculator-grid">
-              <div class="form-group">
-                <label class="form-label required" for="calcService">Tipo de serviço</label>
-                <select class="form-control" id="calcService" required>
-                  <option value="">Selecione...</option>
-                  <option value="hospedagem">Hospedagem</option>
-                  <option value="daycare">Daycare</option>
-                  <option value="passeio">Passeio Avulso</option>
-                  <option value="passeio-mensal">Passeio Mensal</option>
-                  <option value="adestramento">Adestramento</option>
-                  <option value="pet-sitter">Pet Sitter</option>
-                </select>
-              </div>
-              
-              <div class="form-group" id="calcDateFields">
-                <label class="form-label">Período</label>
-                <div class="input-group">
-                  <input type="date" class="form-control" id="calcStart" placeholder="Início">
-                  <input type="date" class="form-control" id="calcEnd" placeholder="Fim">
-                </div>
-              </div>
-              
-              <div class="form-group hidden" id="calcFrequencyField">
-                <label class="form-label">Frequência semanal</label>
-                <select class="form-control" id="calcFrequency">
-                  <option value="2">2x por semana</option>
-                  <option value="3">3x por semana</option>
-                  <option value="4">4x por semana</option>
-                  <option value="5">5x por semana</option>
-                </select>
-              </div>
-              
-              <div class="form-group" id="calcDurationField">
-                <label class="form-label">Duração (passeios)</label>
-                <select class="form-control" id="calcDuration">
-                  <option value="30">30 minutos</option>
-                  <option value="50" selected>50 minutos</option>
-                </select>
-              </div>
-              
-              <div class="calculator-result">
-                <div>Valor estimado:</div>
-                <div class="amount" id="calcResult">R$ 0,00</div>
-                <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
-                <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
-              </div>
-            </div>
-            
-            <div class="text-center" style="margin-top:1.5rem">
-              <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço." target="_blank" rel="noopener" class="btn btn-primary btn-large">
-                💬 Agendar via WhatsApp
-              </a>
-            </div>
-          </form>
-        </div>
+<!-- Calculadora -->
+<div class="calculator card">
+  <h3 style="margin-bottom:1.5rem">🧮 Simulador de Hospedagem/Daycare</h3>
+  <p class="text-muted" style="margin-bottom:1.5rem">
+    Calcule o valor estimado da estadia do seu pet. O cálculo considera automaticamente finais de semana, feriados e alta temporada.
+  </p>
+  
+  <form id="calculatorForm">
+    <div class="calculator-grid">
+      <div class="form-group">
+        <label class="form-label required" for="calcService">Tipo de serviço</label>
+        <select class="form-control" id="calcService" required>
+          <option value="">Selecione...</option>
+          <option value="hospedagem">Hospedagem (24h)</option>
+          <option value="daycare">Daycare (8h-20h)</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label required" for="calcStart">Data de Entrada *</label>
+        <input type="date" class="form-control" id="calcStart" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label required" for="calcEnd">Data de Saída *</label>
+        <input type="date" class="form-control" id="calcEnd" required>
+      </div>
+      
+      <div class="calculator-result">
+        <div>Valor estimado:</div>
+        <div class="amount" id="calcResult">R$ 0,00</div>
+        <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
+        <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
+      </div>
+    </div>
+    
+    <div class="text-center" style="margin-top:1.5rem">
+      <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20hospedagem/daycare." target="_blank" rel="noopener" class="btn btn-primary btn-large">
+        💬 Agendar via WhatsApp
+      </a>
+    </div>
+  </form>
+</div>
         
         <!-- Observações -->
         <div class="accordion">
@@ -1551,33 +1535,99 @@
   <script src="07-admin.js"></script>
   <script src="08-app.js"></script>
   
-  <!-- Calculadora - Mostrar/Esconder Campos -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const calcService = document.getElementById('calcService');
-      if (calcService) {
-        calcService.addEventListener('change', function() {
-          const service = this.value;
-          const dateFields = document.getElementById('calcDateFields');
-          const freqField = document.getElementById('calcFrequencyField');
-          const durationField = document.getElementById('calcDurationField');
-          
-          if (dateFields) {
-            dateFields.classList.toggle('hidden', !['hospedagem', 'daycare'].includes(service));
-          }
-          if (freqField) {
-            freqField.classList.toggle('hidden', service !== 'passeio-mensal');
-          }
-          if (durationField) {
-            durationField.classList.toggle('hidden', service !== 'passeio');
-          }
-          
-          if (window.Appointments) {
-            Appointments.updateCalculator();
-          }
-        });
+ <!-- Calculadora - Hospedagem/Daycare -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const calcService = document.getElementById('calcService');
+    const calcStart = document.getElementById('calcStart');
+    const calcEnd = document.getElementById('calcEnd');
+    
+    [calcService, calcStart, calcEnd].forEach(el => {
+      if (el) {
+        el.addEventListener('change', updateCalculator);
       }
     });
-  </script>
+    
+    function updateCalculator() {
+      const service = calcService?.value;
+      const start = calcStart?.value;
+      const end = calcEnd?.value;
+      const resultEl = document.getElementById('calcResult');
+      const breakdownEl = document.getElementById('calcBreakdown');
+      
+      if (!resultEl || !service || !start || !end) {
+        if (resultEl) resultEl.textContent = 'R$ 0,00';
+        if (breakdownEl) breakdownEl.style.display = 'none';
+        return;
+      }
+      
+      // Verificar se data de saída é maior que entrada
+      if (new Date(end) < new Date(start)) {
+        resultEl.textContent = 'Data inválida';
+        breakdownEl.style.display = 'none';
+        return;
+      }
+      
+      const config = Utils.get('adminConfig', {}) || {};
+      const prices = config.prices || {};
+      let total = 0;
+      const breakdown = [];
+      
+      // Iterar por cada dia do período
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      const currentDate = new Date(startDate);
+      
+      while (currentDate <= endDate) {
+        let dailyPrice;
+        const isHoliday = Utils.isHoliday(currentDate);
+        const isHighSeason = Utils.isHighSeason(currentDate);
+        const isWeekend = Utils.isWeekend(currentDate);
+        
+        if (service === 'hospedagem') {
+          if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
+          else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
+          else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
+          else dailyPrice = prices.hospedagemWeekday || 80;
+        } else { // daycare
+          if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
+          else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
+          else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
+          else dailyPrice = prices.daycareWeekday || 70;
+        }
+        
+        total += dailyPrice;
+        breakdown.push({
+          date: new Date(currentDate).toISOString().split('T')[0],
+          price: dailyPrice,
+          tags: [
+            isHoliday ? 'Feriado' : null,
+            isWeekend ? 'Fim de semana' : null,
+            isHighSeason ? 'Alta temporada' : null
+          ].filter(Boolean)
+        });
+        
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      
+      resultEl.textContent = Utils.formatCurrency(total);
+      
+      // Mostrar breakdown se houver mais de 1 dia
+      if (breakdownEl) {
+        if (breakdown.length > 1) {
+          breakdownEl.innerHTML = breakdown.map(b => 
+            `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
+              <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
+              <span>${Utils.formatCurrency(b.price)}</span>
+            </div>`
+          ).join('');
+          breakdownEl.style.display = 'block';
+        } else {
+          breakdownEl.style.display = 'none';
+        }
+      }
+    }
+  });
+</script>
 </body>
 </html>
