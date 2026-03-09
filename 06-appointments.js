@@ -4,20 +4,13 @@
  */
 
 const Appointments = {
-  // Estado atual
   currentAppointmentId: null,
   
-  /**
-   * Inicializar módulo de agendamentos
-   */
   init: () => {
     Appointments.bindEvents();
     Appointments.loadSeedData();
   },
   
-  /**
-   * Carregar dados de teste se vazio
-   */
   loadSeedData: () => {
     if (!Utils.get('appointments')) {
       const today = new Date();
@@ -75,35 +68,24 @@ const Appointments = {
     }
   },
   
-  /**
-   * Bind de eventos
-   */
   bindEvents: () => {
-    // Filtros da página de agendamentos
     document.getElementById('filterService')?.addEventListener('change', Appointments.renderTable);
     document.getElementById('filterStatus')?.addEventListener('change', Appointments.renderTable);
     document.getElementById('filterPeriod')?.addEventListener('change', Appointments.renderTable);
     
-    // Botão de pagamento
     document.addEventListener('click', (e) => {
       if (e.target.matches('[data-action="pay"]')) {
-        const aptId = e.target.dataset.id;
-        Appointments.markAsPaid(aptId);
+        Appointments.markAsPaid(e.target.dataset.id);
       }
       if (e.target.matches('[data-action="cancel"]')) {
-        const aptId = e.target.dataset.id;
-        Appointments.cancel(aptId);
+        Appointments.cancel(e.target.dataset.id);
       }
       if (e.target.matches('[data-action="download-invoice"]')) {
-        const aptId = e.target.dataset.id;
-        Appointments.downloadInvoice(aptId);
+        Appointments.downloadInvoice(e.target.dataset.id);
       }
     });
   },
   
-  /**
-   * Obter nome amigável do serviço
-   */
   getServiceName: (service) => {
     const map = {
       'adestramento': 'Adestramento',
@@ -115,44 +97,29 @@ const Appointments = {
     return map[service] || service;
   },
   
-  /**
-   * Obter label de status
-   */
   getStatusLabel: (apt) => {
     if (apt.status === 'cancelled') return 'Cancelado';
     if (apt.status === 'completed') return 'Concluído';
     return apt.paymentStatus === 'paid' ? 'Pago' : 'Pendente';
   },
   
-  /**
-   * Obter classe de status
-   */
   getStatusClass: (apt) => {
     if (apt.status === 'cancelled') return 'cancelled';
     if (apt.status === 'completed') return 'paid';
     return apt.paymentStatus === 'paid' ? 'paid' : 'pending';
   },
   
-  /**
-   * Obter agendamentos do usuário atual
-   */
   getUserAppointments: () => {
     if (!Auth.currentUser) return [];
     const appointments = Utils.get('appointments', []);
     return appointments.filter(a => a.userId === Auth.currentUser.id);
   },
   
-  /**
-   * Obter agendamento por ID
-   */
   getAppointmentById: (aptId) => {
     const appointments = Utils.get('appointments', []);
     return appointments.find(a => a.id === aptId) || null;
   },
   
-  /**
-   * Filtrar agendamentos
-   */
   filterAppointments: (appointments) => {
     const serviceFilter = document.getElementById('filterService')?.value || '';
     const statusFilter = document.getElementById('filterStatus')?.value || '';
@@ -162,10 +129,8 @@ const Appointments = {
     today.setHours(0, 0, 0, 0);
     
     return appointments.filter(apt => {
-      // Filtro por serviço
       if (serviceFilter && apt.service !== serviceFilter) return false;
       
-      // Filtro por status
       if (statusFilter) {
         if (statusFilter === 'confirmed' && apt.status !== 'confirmed') return false;
         if (statusFilter === 'pending' && (apt.status !== 'confirmed' || apt.paymentStatus !== 'pending')) return false;
@@ -173,7 +138,6 @@ const Appointments = {
         if (statusFilter === 'cancelled' && apt.status !== 'cancelled') return false;
       }
       
-      // Filtro por período
       if (periodFilter !== 'all') {
         const aptDate = new Date(apt.startDate);
         aptDate.setHours(0, 0, 0, 0);
@@ -191,9 +155,6 @@ const Appointments = {
     });
   },
   
-  /**
-   * Renderizar tabela de agendamentos
-   */
   renderTable: () => {
     const container = document.getElementById('appointmentsTable');
     if (!container) return;
@@ -233,9 +194,6 @@ const Appointments = {
     }).join('');
   },
   
-  /**
-   * Marcar como pago
-   */
   markAsPaid: (aptId) => {
     const appointments = Utils.get('appointments', []);
     const index = appointments.findIndex(a => a.id === aptId);
@@ -255,13 +213,8 @@ const Appointments = {
     Appointments.renderFinancial();
   },
   
-  /**
-   * Cancelar agendamento
-   */
   cancel: (aptId) => {
-    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) {
-      return;
-    }
+    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
     
     const appointments = Utils.get('appointments', []);
     const index = appointments.findIndex(a => a.id === aptId);
@@ -271,36 +224,8 @@ const Appointments = {
       return;
     }
     
-    // Verificar política de cancelamento
-    const apt = appointments[index];
-    const today = new Date();
-    const startDate = new Date(apt.startDate);
-    const diffHours = (startDate - today) / (1000 * 60 * 60);
-    const config = Utils.get('adminConfig', {});
-    const isHighSeason = Utils.isHighSeason(startDate);
-    
-    let cancellationFee = 0;
-    if (isHighSeason) {
-      const policy = config.cancellationPolicy?.highSeason || { days: 10, fee: 0.5 };
-      if (diffHours < policy.days * 24) {
-        cancellationFee = apt.totalPrice * policy.fee;
-      }
-    } else {
-      const policy = config.cancellationPolicy?.normal || { hours: 48, fee: 0.3 };
-      if (diffHours < policy.hours) {
-        cancellationFee = apt.totalPrice * policy.fee;
-      }
-    }
-    
-    if (cancellationFee > 0) {
-      if (!confirm(`Atenção: Cancelamento fora do prazo pode acarretar taxa de ${Utils.formatCurrency(cancellationFee)}. Deseja continuar?`)) {
-        return;
-      }
-    }
-    
     appointments[index].status = 'cancelled';
     appointments[index].cancelledAt = new Date().toISOString();
-    appointments[index].cancellationFee = cancellationFee;
     Utils.save('appointments', appointments);
     
     Utils.toast('Agendamento cancelado', 'success');
@@ -308,9 +233,6 @@ const Appointments = {
     Appointments.renderDashboard();
   },
   
-  /**
-   * Renderizar dashboard de agendamentos
-   */
   renderDashboard: () => {
     const container = document.getElementById('dashAppointments');
     if (!container) return;
@@ -355,66 +277,97 @@ const Appointments = {
     }).join('');
   },
   
-  /**
-   * Renderizar financeiro
-   */
-renderFinancial: () => {
-  const appointments = Appointments.getUserAppointments();
-  const pending = appointments.filter(a => a.paymentStatus === 'pending' && a.status !== 'cancelled');
-  const paid = appointments.filter(a => a.paymentStatus === 'paid');
-  
-  const totalPending = pending.reduce((sum, a) => sum + a.totalPrice, 0);
-  const totalElement = document.getElementById('finTotalPending');
-  if (totalElement) {
-    totalElement.textContent = Utils.formatCurrency(totalPending);
-  }
-  
-  const pendingContainer = document.getElementById('finPendingList');
-  if (pendingContainer) {
-    if (pending.length === 0) {
-      pendingContainer.innerHTML = '<p style="color:var(--color-accent)">✅ Nenhuma pendência!</p>';
-    } else {
-      pendingContainer.innerHTML = pending.map(apt => `
-        <div class="appointment-card pending" style="margin-bottom:0.5rem">
-          <strong>${Appointments.getServiceName(apt.service)}</strong> • ${Utils.formatDate(apt.startDate)}<br>
-          <span style="font-weight:600">${Utils.formatCurrency(apt.totalPrice)}</span>
-          <button class="btn btn-sm btn-primary btn-block" style="margin-top:0.5rem" data-action="pay" data-id="${apt.id}">Pagar agora</button>
-        </div>
-      `).join('');
+  renderFinancial: () => {
+    const appointments = Appointments.getUserAppointments();
+    const pending = appointments.filter(a => a.paymentStatus === 'pending' && a.status !== 'cancelled');
+    const paid = appointments.filter(a => a.paymentStatus === 'paid');
+    
+    const totalPending = pending.reduce((sum, a) => sum + a.totalPrice, 0);
+    const totalElement = document.getElementById('finTotalPending');
+    if (totalElement) {
+      totalElement.textContent = Utils.formatCurrency(totalPending);
     }
-  }
-  
-  const historyContainer = document.getElementById('financialTable');
-  if (historyContainer) {
-    if (paid.length === 0) {
-      historyContainer.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum pagamento registrado.</td></tr>';
-    } else {
-      historyContainer.innerHTML = paid.slice(0, 10).map(apt => `
-        <tr>
-          <td>${Utils.formatDate(apt.startDate)}</td>
-          <td>${Appointments.getServiceName(apt.service)}</td>
-          <td>${Utils.formatCurrency(apt.totalPrice)}</td>
-          <td>
-            ${apt.invoice ? `
-              ${apt.invoice.fileUrl ? `
-                <a href="${apt.invoice.fileUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">
-                  📄 ${apt.invoice.number || 'Ver Nota'}
-                </a>
-              ` : `
-                <button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}">
-                  📄 ${apt.invoice.number || 'Baixar'}
-                </button>
-              `}
-            ` : '<span class="text-muted" style="font-size:0.875rem">Aguardando emissão</span>'}
-          </td>
-        </tr>
-      `).join('');
+    
+    const pendingContainer = document.getElementById('finPendingList');
+    if (pendingContainer) {
+      if (pending.length === 0) {
+        pendingContainer.innerHTML = '<p style="color:var(--color-accent)">✅ Nenhuma pendência!</p>';
+      } else {
+        pendingContainer.innerHTML = pending.map(apt => `
+          <div class="appointment-card pending" style="margin-bottom:0.5rem">
+            <strong>${Appointments.getServiceName(apt.service)}</strong> • ${Utils.formatDate(apt.startDate)}<br>
+            <span style="font-weight:600">${Utils.formatCurrency(apt.totalPrice)}</span>
+            <button class="btn btn-sm btn-primary btn-block" style="margin-top:0.5rem" data-action="pay" data-id="${apt.id}">Pagar agora</button>
+          </div>
+        `).join('');
+      }
     }
-  }
-},  
-  /**
-   * Calcular preço de hospedagem/daycare
-   */
+    
+    const historyContainer = document.getElementById('financialTable');
+    if (historyContainer) {
+      if (paid.length === 0) {
+        historyContainer.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum pagamento registrado.</td></tr>';
+      } else {
+        historyContainer.innerHTML = paid.slice(0, 10).map(apt => `
+          <tr>
+            <td>${Utils.formatDate(apt.startDate)}</td>
+            <td>${Appointments.getServiceName(apt.service)}</td>
+            <td>${Utils.formatCurrency(apt.totalPrice)}</td>
+            <td>
+              ${apt.invoice ? `
+                ${apt.invoice.fileUrl ? `
+                  <a href="${apt.invoice.fileUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">
+                    📄 ${apt.invoice.number || 'Ver Nota'}
+                  </a>
+                ` : `
+                  <button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}">
+                    📄 ${apt.invoice.number || 'Baixar'}
+                  </button>
+                `}
+              ` : '<span class="text-muted" style="font-size:0.875rem">Aguardando emissão</span>'}
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+  },
+  
+  downloadInvoice: (aptId) => {
+    const apt = Appointments.getAppointmentById(aptId);
+    if (!apt) {
+      Utils.toast('Agendamento não encontrado', 'error');
+      return;
+    }
+    
+    const pets = Utils.get('pets', []);
+    const pet = pets.find(p => p.id === apt.petId);
+    const user = Auth.currentUser;
+    
+    let text = `NOTA FISCAL DE SERVIÇO\n`;
+    text += `================================\n\n`;
+    text += `CQC Adestramento\n`;
+    text += `Rua Guiratinga, 1249 - Chácara Inglesa, São Paulo/SP\n`;
+    text += `CNPJ: 00.000.000/0001-00\n\n`;
+    text += `Cliente: ${user?.name || 'N/A'}\n`;
+    text += `CPF: ${user?.profile?.cpf || 'N/A'}\n`;
+    text += `E-mail: ${user?.email || 'N/A'}\n\n`;
+    text += `Serviço: ${Appointments.getServiceName(apt.service)}\n`;
+    text += `Pet: ${pet?.name || 'N/A'}\n`;
+    text += `Data: ${Utils.formatDate(apt.startDate)}\n`;
+    if (apt.endDate && apt.endDate !== apt.startDate) {
+      text += `Período: até ${Utils.formatDate(apt.endDate)}\n`;
+    }
+    text += `Valor Total: ${Utils.formatCurrency(apt.totalPrice)}\n`;
+    text += `Status: PAGO\n`;
+    text += `Data do Pagamento: ${apt.paidAt ? Utils.formatDateTime(apt.paidAt) : 'N/A'}\n\n`;
+    text += `Esta é uma nota fiscal de demonstração.\n`;
+    text += `Obrigado por confiar na CQC Adestramento! 🐾\n`;
+    
+    const filename = `nota-fiscal-${aptId}.txt`;
+    Utils.downloadFile(text, filename);
+    Utils.toast('Nota fiscal baixada', 'success');
+  },
+  
   calculateStay: (serviceType, startDate, endDate) => {
     const config = Utils.get('adminConfig', {});
     const prices = config.prices || {};
@@ -432,7 +385,7 @@ renderFinancial: () => {
         else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
         else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
         else dailyPrice = prices.hospedagemWeekday || 80;
-      } else { // daycare
+      } else {
         if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
         else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
         else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
@@ -454,9 +407,6 @@ renderFinancial: () => {
     return { total, breakdown };
   },
   
-  /**
-   * Calcular preço de passeio mensal
-   */
   calculateMonthlyWalks: (frequency) => {
     const config = Utils.get('adminConfig', {});
     const prices = config.prices || {};
@@ -469,9 +419,6 @@ renderFinancial: () => {
     return map[frequency] || 0;
   },
   
-  /**
-   * Obter preço unitário
-   */
   getUnitPrice: (service, details = {}) => {
     const config = Utils.get('adminConfig', {});
     const prices = config.prices || {};
@@ -485,55 +432,49 @@ renderFinancial: () => {
     }
   },
   
-  /**
-   * Atualizar calculadora
-   */
   updateCalculator: () => {
-  const service = document.getElementById('calcService')?.value;
-  const start = document.getElementById('calcStart')?.value;
-  const end = document.getElementById('calcEnd')?.value;
-  const freq = document.getElementById('calcFrequency')?.value;
-  const dur = document.getElementById('calcDuration')?.value;
-  const resultEl = document.getElementById('calcResult');
-  
-  if (!resultEl) return;
-  
-  let total = 0;
-  let breakdown = [];
-  
-  if (['hospedagem', 'daycare'].includes(service) && start && end) {
-    // Cálculo automático com detecção de feriado/fim de semana/alta temporada
-    const calc = Appointments.calculateStay(service, start, end);
-    total = calc.total;
-    breakdown = calc.breakdown;
-    
-    // Mostrar breakdown se houver mais de 1 dia
+    const service = document.getElementById('calcService')?.value;
+    const start = document.getElementById('calcStart')?.value;
+    const end = document.getElementById('calcEnd')?.value;
+    const freq = document.getElementById('calcFrequency')?.value;
+    const dur = document.getElementById('calcDuration')?.value;
+    const resultEl = document.getElementById('calcResult');
     const breakdownEl = document.getElementById('calcBreakdown');
-    if (breakdownEl && breakdown.length > 1) {
-      breakdownEl.innerHTML = breakdown.map(b => 
-        `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
-          <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
-          <span>${Utils.formatCurrency(b.price)}</span>
-        </div>`
-      ).join('');
-      breakdownEl.style.display = 'block';
-    } else if (breakdownEl) {
-      breakdownEl.style.display = 'none';
+    
+    if (!resultEl) return;
+    
+    let total = 0;
+    let breakdown = [];
+    
+    if (['hospedagem', 'daycare'].includes(service) && start && end) {
+      const calc = Appointments.calculateStay(service, start, end);
+      total = calc.total;
+      breakdown = calc.breakdown;
+      
+      if (breakdownEl && breakdown.length > 1) {
+        breakdownEl.innerHTML = breakdown.map(b => 
+          `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
+            <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
+            <span>${Utils.formatCurrency(b.price)}</span>
+          </div>`
+        ).join('');
+        breakdownEl.style.display = 'block';
+      } else if (breakdownEl) {
+        breakdownEl.style.display = 'none';
+      }
+      
+    } else if (service === 'passeio-mensal' && freq) {
+      total = Appointments.calculateMonthlyWalks(freq);
+      
+    } else if (service === 'passeio') {
+      total = Appointments.getUnitPrice('passeio', { duration: dur || '50' });
+      
+    } else if (service) {
+      total = Appointments.getUnitPrice(service);
     }
     
-  } else if (service === 'passeio-mensal' && freq) {
-    total = Appointments.calculateMonthlyWalks(freq);
-    
-  } else if (service === 'passeio') {
-    // Apenas para passeio avulso
-    total = Appointments.getUnitPrice('passeio', { duration: dur || '50' });
-    
-  } else if (service) {
-    total = Appointments.getUnitPrice(service);
+    resultEl.textContent = Utils.formatCurrency(total);
   }
-  
-  resultEl.textContent = Utils.formatCurrency(total);
-},
+};
 
-// Exportar para escopo global
 window.Appointments = Appointments;
