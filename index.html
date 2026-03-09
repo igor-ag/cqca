@@ -29,7 +29,7 @@
       <ul class="nav-menu" id="navMenu">
         <li><a href="#home" data-route="home">Início</a></li>
         <li><a href="#servicos" data-route="servicos">Serviços</a></li>
-        <li><a href="#precos" data-route="precos">Preços</a></li>
+        <li><a href="#valores" data-route="valores">Valores</a></li>
         <li><a href="#regras" data-route="regras">Regras</a></li>
         <li><a href="#conteudos" data-route="conteudos">Conteúdos</a></li>
         <li><a href="#contato" data-route="contato">Contato</a></li>
@@ -132,13 +132,13 @@
         
         <div class="text-center" style="margin-top:2rem">
           <p style="margin-bottom:1rem">Quer saber os valores?</p>
-          <a href="#precos" class="btn btn-primary">Ver tabela de preços</a>
+          <a href="#valores" class="btn btn-primary">Ver tabela de preços</a>
         </div>
       </div>
     </section>
 
     <!-- ==================== PREÇOS ==================== -->
-    <section id="precos" class="page" data-page="precos">
+    <section id="valores" class="page" data-page="valores">
       <div class="container section">
         <div class="section-header text-center">
           <h1>Investimento</h1>
@@ -197,31 +197,23 @@
                 </select>
               </div>
               
-              <div class="form-group">
+              <div class="form-group" id="calcDurationField">
                 <label class="form-label">Duração (passeios)</label>
                 <select class="form-control" id="calcDuration">
                   <option value="30">30 minutos</option>
                   <option value="50" selected>50 minutos</option>
                 </select>
-              </div>
-              
-              <div class="form-group">
-                <label class="form-label">Opções</label>
-                <div class="checkbox-group">
-                  <label class="checkbox-label">
-                    <input type="checkbox" id="calcHoliday">
-                    <span>Inclui feriado?</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input type="checkbox" id="calcHighSeason">
-                    <span>Alta temporada?</span>
-                  </label>
-                </div>
-              </div>
-              
+              </div>             
+                 
               <div class="calculator-result">
                 <div>Valor estimado:</div>
+                <div class="amount" id="calcResult"> R$ 0,00</div>
+                <div class="calculator-result">
+                <div>Valor estimado:</div>
                 <div class="amount" id="calcResult">R$ 0,00</div>
+                <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
+                <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
+             </div>
                 <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
               </div>
             </div>
@@ -1310,7 +1302,7 @@
           <ul class="footer-links">
             <li><a href="#home">Início</a></li>
             <li><a href="#servicos">Serviços</a></li>
-            <li><a href="#precos">Preços</a></li>
+            <li><a href="#valores">Valores</a></li>
             <li><a href="#regras">Termos e Regras</a></li>
             <li><a href="#contato">Contato</a></li>
           </ul>
@@ -1458,5 +1450,169 @@
     </div>
   </div>
 </div>
+<!-- MODAL DE CLIENTE -->
+<div id="clientModal" class="hidden">
+  <div class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:800px;max-height:90vh;overflow-y:auto">
+      <div class="modal-header">
+        <h3 id="clientModalTitle" style="margin:0">Dados do Cliente</h3>
+        <button class="modal-close" onclick="Admin.closeClientModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="adminClientForm">
+          <input type="hidden" id="adminClientId">
+          
+          <h4 style="margin:1rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">👤 Dados Pessoais</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="adminClientName">Nome</label>
+              <input type="text" class="form-control" id="adminClientName">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="adminClientEmail">E-mail</label>
+              <input type="email" class="form-control" id="adminClientEmail">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="adminClientCpf">CPF</label>
+              <input type="text" class="form-control" id="adminClientCpf" maxlength="14">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="adminClientPhone">Telefone</label>
+              <input type="tel" class="form-control" id="adminClientPhone" maxlength="15">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adminClientAddress">Endereço</label>
+            <input type="text" class="form-control" id="adminClientAddress">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="adminClientBirth">Data de Nascimento</label>
+              <input type="date" class="form-control" id="adminClientBirth">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="adminClientProfession">Profissão</label>
+              <input type="text" class="form-control" id="adminClientProfession">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adminClientEmergency">Contato de Emergência</label>
+            <input type="text" class="form-control" id="adminClientEmergency" placeholder="Nome - Telefone">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adminClientNotes">Observações</label>
+            <textarea class="form-control" id="adminClientNotes" rows="2"></textarea>
+          </div>
+          
+          <h4 style="margin:1.5rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">👥 Segundo Tutor</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="adminT2Name">Nome</label>
+              <input type="text" class="form-control" id="adminT2Name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="adminT2Phone">Telefone</label>
+              <input type="tel" class="form-control" id="adminT2Phone" maxlength="15">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="adminT2Relation">Vínculo</label>
+            <select class="form-control" id="adminT2Relation">
+              <option value="">Selecione...</option>
+              <option value="cônjuge">Cônjuge</option>
+              <option value="familiar">Familiar</option>
+              <option value="amigo">Amigo</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          
+          <h4 style="margin:1.5rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">🐕 Pets do Cliente</h4>
+          <div id="adminClientPets" style="margin-bottom:1rem"></div>
+          <a href="#pet" class="btn btn-sm btn-secondary" onclick="Admin.closeClientModal()">+ Cadastrar Novo Pet</a>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="Admin.closeClientModal()">Fechar</button>
+        <button type="button" class="btn btn-primary" onclick="Admin.saveClient()">💾 Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL DE NOTA FISCAL -->
+<div id="invoiceModal" class="hidden">
+  <div class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:600px">
+      <div class="modal-header">
+        <h3 style="margin:0">📄 Nota Fiscal</h3>
+        <button class="modal-close" onclick="Admin.closeInvoiceModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="invoiceAptId">
+        
+        <div class="form-group">
+          <label class="form-label" for="invoiceNumber">Número da Nota</label>
+          <input type="text" class="form-control" id="invoiceNumber" placeholder="Ex: 001234">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="invoiceDate">Data de Emissão</label>
+          <input type="date" class="form-control" id="invoiceDate">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="invoiceObservations">Observações da Nota</label>
+          <textarea class="form-control" id="invoiceObservations" rows="3" placeholder="Observações adicionais..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="invoiceFileUrl">📎 Link do Arquivo (Google Drive)</label>
+          <input type="url" class="form-control" id="invoiceFileUrl" placeholder="https://drive.google.com/file/d/...">
+          <small class="form-hint">Cole o link compartilhável do arquivo PDF da nota fiscal</small>
+        </div>
+        
+        <div class="card" style="background:var(--color-bg-hover);padding:1rem;margin-top:1rem">
+          <h4 style="margin:0 0 0.5rem">📋 Resumo do Agendamento</h4>
+          <div id="invoiceAppointmentSummary"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="Admin.closeInvoiceModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="Admin.saveInvoice()">📄 Emitir Nota Fiscal</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Calculadora - Mostrar/Esconder Campos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calcService = document.getElementById('calcService');
+      if (calcService) {
+        calcService.addEventListener('change', function() {
+          const service = this.value;
+          const dateFields = document.getElementById('calcDateFields');
+          const freqField = document.getElementById('calcFrequencyField');
+          const durationField = document.getElementById('calcDurationField');
+          
+          if (dateFields) {
+            dateFields.classList.toggle('hidden', !['hospedagem', 'daycare'].includes(service));
+          }
+          if (freqField) {
+            freqField.classList.toggle('hidden', service !== 'passeio-mensal');
+          }
+          if (durationField) {
+            durationField.classList.toggle('hidden', service !== 'passeio');
+          }
+          
+          if (window.Appointments) {
+            Appointments.updateCalculator();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
 </body>
 </html>

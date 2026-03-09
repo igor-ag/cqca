@@ -358,96 +358,60 @@ const Appointments = {
   /**
    * Renderizar financeiro
    */
-  renderFinancial: () => {
-    const appointments = Appointments.getUserAppointments();
-    const pending = appointments.filter(a => a.paymentStatus === 'pending' && a.status !== 'cancelled');
-    const paid = appointments.filter(a => a.paymentStatus === 'paid');
-    
-    // Total em aberto
-    const totalPending = pending.reduce((sum, a) => sum + a.totalPrice, 0);
-    const totalElement = document.getElementById('finTotalPending');
-    if (totalElement) {
-      totalElement.textContent = Utils.formatCurrency(totalPending);
-    }
-    
-    // Pendências
-    const pendingContainer = document.getElementById('finPendingList');
-    if (pendingContainer) {
-      if (pending.length === 0) {
-        pendingContainer.innerHTML = '<p style="color:var(--color-accent)">✅ Nenhuma pendência!</p>';
-      } else {
-        pendingContainer.innerHTML = pending.map(apt => `
-          <div class="appointment-card pending" style="margin-bottom:0.5rem">
-            <strong>${Appointments.getServiceName(apt.service)}</strong> • ${Utils.formatDate(apt.startDate)}<br>
-            <span style="font-weight:600">${Utils.formatCurrency(apt.totalPrice)}</span>
-            <button class="btn btn-sm btn-primary btn-block" style="margin-top:0.5rem" data-action="pay" data-id="${apt.id}">Pagar agora</button>
-          </div>
-        `).join('');
-      }
-    }
-    
-    // Histórico
-    const historyContainer = document.getElementById('financialTable');
-    if (historyContainer) {
-      if (paid.length === 0) {
-        historyContainer.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum pagamento registrado.</td></tr>';
-      } else {
-        historyContainer.innerHTML = paid.slice(0, 10).map(apt => `
-          <tr>
-            <td>${Utils.formatDate(apt.startDate)}</td>
-            <td>${Appointments.getServiceName(apt.service)}</td>
-            <td>${Utils.formatCurrency(apt.totalPrice)}</td>
-            <td>
-              <button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}">
-                📄 Baixar
-              </button>
-            </td>
-          </tr>
-        `).join('');
-      }
-    }
-  },
+renderFinancial: () => {
+  const appointments = Appointments.getUserAppointments();
+  const pending = appointments.filter(a => a.paymentStatus === 'pending' && a.status !== 'cancelled');
+  const paid = appointments.filter(a => a.paymentStatus === 'paid');
   
-  /**
-   * Baixar nota fiscal
-   */
-  downloadInvoice: (aptId) => {
-    const apt = Appointments.getAppointmentById(aptId);
-    if (!apt) {
-      Utils.toast('Agendamento não encontrado', 'error');
-      return;
-    }
-    
-    const pets = Utils.get('pets', []);
-    const pet = pets.find(p => p.id === apt.petId);
-    const user = Auth.currentUser;
-    
-    let text = `NOTA FISCAL DE SERVIÇO\n`;
-    text += `================================\n\n`;
-    text += `CQC Adestramento\n`;
-    text += `Rua Guiratinga, 1249 - Chácara Inglesa, São Paulo/SP\n`;
-    text += `CNPJ: 00.000.000/0001-00\n\n`;
-    text += `Cliente: ${user?.name || 'N/A'}\n`;
-    text += `CPF: ${user?.profile?.cpf || 'N/A'}\n`;
-    text += `E-mail: ${user?.email || 'N/A'}\n\n`;
-    text += `Serviço: ${Appointments.getServiceName(apt.service)}\n`;
-    text += `Pet: ${pet?.name || 'N/A'}\n`;
-    text += `Data: ${Utils.formatDate(apt.startDate)}\n`;
-    if (apt.endDate && apt.endDate !== apt.startDate) {
-      text += `Período: até ${Utils.formatDate(apt.endDate)}\n`;
-    }
-    text += `Valor Total: ${Utils.formatCurrency(apt.totalPrice)}\n`;
-    text += `Status: PAGO\n`;
-    text += `Data do Pagamento: ${apt.paidAt ? Utils.formatDateTime(apt.paidAt) : 'N/A'}\n\n`;
-    text += `Esta é uma nota fiscal de demonstração.\n`;
-    text += `Para fins de teste da aplicação.\n\n`;
-    text += `Obrigado por confiar na CQC Adestramento! 🐾\n`;
-    
-    const filename = `nota-fiscal-${aptId}.txt`;
-    Utils.downloadFile(text, filename);
-    Utils.toast('Nota fiscal baixada', 'success');
-  },
+  const totalPending = pending.reduce((sum, a) => sum + a.totalPrice, 0);
+  const totalElement = document.getElementById('finTotalPending');
+  if (totalElement) {
+    totalElement.textContent = Utils.formatCurrency(totalPending);
+  }
   
+  const pendingContainer = document.getElementById('finPendingList');
+  if (pendingContainer) {
+    if (pending.length === 0) {
+      pendingContainer.innerHTML = '<p style="color:var(--color-accent)">✅ Nenhuma pendência!</p>';
+    } else {
+      pendingContainer.innerHTML = pending.map(apt => `
+        <div class="appointment-card pending" style="margin-bottom:0.5rem">
+          <strong>${Appointments.getServiceName(apt.service)}</strong> • ${Utils.formatDate(apt.startDate)}<br>
+          <span style="font-weight:600">${Utils.formatCurrency(apt.totalPrice)}</span>
+          <button class="btn btn-sm btn-primary btn-block" style="margin-top:0.5rem" data-action="pay" data-id="${apt.id}">Pagar agora</button>
+        </div>
+      `).join('');
+    }
+  }
+  
+  const historyContainer = document.getElementById('financialTable');
+  if (historyContainer) {
+    if (paid.length === 0) {
+      historyContainer.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Nenhum pagamento registrado.</td></tr>';
+    } else {
+      historyContainer.innerHTML = paid.slice(0, 10).map(apt => `
+        <tr>
+          <td>${Utils.formatDate(apt.startDate)}</td>
+          <td>${Appointments.getServiceName(apt.service)}</td>
+          <td>${Utils.formatCurrency(apt.totalPrice)}</td>
+          <td>
+            ${apt.invoice ? `
+              ${apt.invoice.fileUrl ? `
+                <a href="${apt.invoice.fileUrl}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">
+                  📄 ${apt.invoice.number || 'Ver Nota'}
+                </a>
+              ` : `
+                <button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}">
+                  📄 ${apt.invoice.number || 'Baixar'}
+                </button>
+              `}
+            ` : '<span class="text-muted" style="font-size:0.875rem">Aguardando emissão</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+},  
   /**
    * Calcular preço de hospedagem/daycare
    */
@@ -525,31 +489,51 @@ const Appointments = {
    * Atualizar calculadora
    */
   updateCalculator: () => {
-    const service = document.getElementById('calcService')?.value;
-    const start = document.getElementById('calcStart')?.value;
-    const end = document.getElementById('calcEnd')?.value;
-    const freq = document.getElementById('calcFrequency')?.value;
-    const dur = document.getElementById('calcDuration')?.value;
-    const resultEl = document.getElementById('calcResult');
+  const service = document.getElementById('calcService')?.value;
+  const start = document.getElementById('calcStart')?.value;
+  const end = document.getElementById('calcEnd')?.value;
+  const freq = document.getElementById('calcFrequency')?.value;
+  const dur = document.getElementById('calcDuration')?.value;
+  const resultEl = document.getElementById('calcResult');
+  
+  if (!resultEl) return;
+  
+  let total = 0;
+  let breakdown = [];
+  
+  if (['hospedagem', 'daycare'].includes(service) && start && end) {
+    // Cálculo automático com detecção de feriado/fim de semana/alta temporada
+    const calc = Appointments.calculateStay(service, start, end);
+    total = calc.total;
+    breakdown = calc.breakdown;
     
-    if (!resultEl) return;
-    
-    let total = 0;
-    
-    if (['hospedagem', 'daycare'].includes(service) && start && end) {
-      const calc = Appointments.calculateStay(service, start, end);
-      total = calc.total;
-    } else if (service === 'passeio-mensal' && freq) {
-      total = Appointments.calculateMonthlyWalks(freq);
-    } else if (service === 'passeio') {
-      total = Appointments.getUnitPrice('passeio', { duration: dur });
-    } else if (service) {
-      total = Appointments.getUnitPrice(service);
+    // Mostrar breakdown se houver mais de 1 dia
+    const breakdownEl = document.getElementById('calcBreakdown');
+    if (breakdownEl && breakdown.length > 1) {
+      breakdownEl.innerHTML = breakdown.map(b => 
+        `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
+          <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
+          <span>${Utils.formatCurrency(b.price)}</span>
+        </div>`
+      ).join('');
+      breakdownEl.style.display = 'block';
+    } else if (breakdownEl) {
+      breakdownEl.style.display = 'none';
     }
     
-    resultEl.textContent = Utils.formatCurrency(total);
+  } else if (service === 'passeio-mensal' && freq) {
+    total = Appointments.calculateMonthlyWalks(freq);
+    
+  } else if (service === 'passeio') {
+    // Apenas para passeio avulso
+    total = Appointments.getUnitPrice('passeio', { duration: dur || '50' });
+    
+  } else if (service) {
+    total = Appointments.getUnitPrice(service);
   }
-};
+  
+  resultEl.textContent = Utils.formatCurrency(total);
+},
 
 // Exportar para escopo global
 window.Appointments = Appointments;

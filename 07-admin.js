@@ -1,6 +1,6 @@
 /**
  * CQC Adestramento - Módulo Administrativo
- * Dashboard, relatórios, gestão de clientes, agendamentos e configurações
+ * Dashboard, relatórios, gestão de clientes, pets, agendamentos e notas fiscais
  */
 
 const Admin = {
@@ -49,13 +49,22 @@ const Admin = {
         Admin.markAsPaid(e.target.dataset.id);
       }
       if (e.target.matches('[data-action="add-invoice"]')) {
-        Admin.addInvoice(e.target.dataset.id);
+        Admin.openInvoiceModal(e.target.dataset.id);
       }
       if (e.target.matches('[data-action="edit-appointment"]')) {
         Admin.openAppointmentModal(e.target.dataset.id);
       }
       if (e.target.matches('[data-action="delete-appointment"]')) {
         Admin.deleteAppointment(e.target.dataset.id);
+      }
+      if (e.target.matches('[data-action="view-client"]')) {
+        Admin.openClientModal(e.target.dataset.id);
+      }
+      if (e.target.matches('[data-action="view-pet"]')) {
+        Admin.viewPet(e.target.dataset.id);
+      }
+      if (e.target.matches('[data-action="download-invoice"]')) {
+        Admin.downloadInvoice(e.target.dataset.id);
       }
     });
     
@@ -64,11 +73,28 @@ const Admin = {
       document.getElementById(id)?.addEventListener('change', Admin.calculateAppointmentTotal);
     });
     
-    // Fechar modal ao clicar fora
-    document.querySelector('#appointmentModal .modal-overlay')?.addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) {
-        Admin.closeAppointmentModal();
-      }
+    // Máscaras do formulário de cliente
+    document.getElementById('adminClientCpf')?.addEventListener('input', function() {
+      this.value = Utils.maskCPF(this.value);
+    });
+    
+    document.getElementById('adminClientPhone')?.addEventListener('input', function() {
+      this.value = Utils.maskPhone(this.value);
+    });
+    
+    document.getElementById('adminT2Phone')?.addEventListener('input', function() {
+      this.value = Utils.maskPhone(this.value);
+    });
+    
+    // Fechar modais ao clicar fora
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+          Admin.closeAppointmentModal();
+          Admin.closeClientModal();
+          Admin.closeInvoiceModal();
+        }
+      });
     });
   },
   
@@ -102,19 +128,14 @@ const Admin = {
     const appointments = Utils.get('appointments', []);
     const pets = Utils.get('pets', []);
     
-    // Clientes
     document.getElementById('adminClients').textContent = users.length;
-    
-    // Agendamentos
     document.getElementById('adminAppointments').textContent = appointments.length;
     
-    // Faturamento
     const revenue = appointments
       .filter(a => a.paymentStatus === 'paid')
       .reduce((sum, a) => sum + a.totalPrice, 0);
     document.getElementById('adminRevenue').textContent = Utils.formatCurrency(revenue);
     
-    // Pets cadastrados (substitui ocupação)
     document.getElementById('adminPets').textContent = pets.length;
   },
   
@@ -122,22 +143,17 @@ const Admin = {
   // AGENDAMENTOS
   // ============================================
   
-  /**
-   * Renderizar agendamentos
-   */
   renderAppointments: () => {
     const container = document.getElementById('adminAppointmentsTable');
     const clientFilter = document.getElementById('adminFilterClient');
     if (!container) return;
     
-    // Popular filtro de clientes
     if (clientFilter && clientFilter.options.length <= 1) {
       const users = Utils.get('users', []).filter(u => u.role !== 'admin');
       clientFilter.innerHTML = '<option value="">Todos</option>' + 
         users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
     }
     
-    // Filtros
     const clientFilterVal = document.getElementById('adminFilterClient')?.value || '';
     const serviceFilterVal = document.getElementById('adminFilterService')?.value || '';
     const statusFilterVal = document.getElementById('adminFilterStatus')?.value || '';
@@ -146,13 +162,8 @@ const Admin = {
     const users = Utils.get('users', []);
     const pets = Utils.get('pets', []);
     
-    // Aplicar filtros
-    if (clientFilterVal) {
-      appointments = appointments.filter(a => a.userId === clientFilterVal);
-    }
-    if (serviceFilterVal) {
-      appointments = appointments.filter(a => a.service === serviceFilterVal);
-    }
+    if (clientFilterVal) appointments = appointments.filter(a => a.userId === clientFilterVal);
+    if (serviceFilterVal) appointments = appointments.filter(a => a.service === serviceFilterVal);
     if (statusFilterVal) {
       appointments = appointments.filter(a => {
         if (statusFilterVal === 'confirmed') return a.status === 'confirmed';
@@ -163,7 +174,6 @@ const Admin = {
       });
     }
     
-    // Ordenar por data
     appointments.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     
     if (appointments.length === 0) {
@@ -190,22 +200,19 @@ const Admin = {
           <td><span class="status-badge status-${paymentClass}">${apt.paymentStatus === 'paid' ? 'Pago' : 'Pendente'}</span></td>
           <td><span class="status-badge status-${statusClass}">${Appointments.getStatusLabel(apt)}</span></td>
           <td>
-            <button class="btn btn-sm btn-secondary" data-action="edit-appointment" data-id="${apt.id}">✏️</button>
-            <button class="btn btn-sm btn-secondary" style="color:var(--color-danger);margin-left:0.25rem" data-action="delete-appointment" data-id="${apt.id}">🗑️</button>
+            <button class="btn btn-sm btn-secondary" data-action="edit-appointment" data-id="${apt.id}" title="Editar">✏️</button>
+            <button class="btn btn-sm btn-secondary" data-action="add-invoice" data-id="${apt.id}" title="Nota Fiscal" style="margin-left:0.25rem">📄</button>
+            <button class="btn btn-sm btn-secondary" style="color:var(--color-danger);margin-left:0.25rem" data-action="delete-appointment" data-id="${apt.id}" title="Excluir">🗑️</button>
           </td>
         </tr>
       `;
     }).join('');
     
-    // Re-bind filters
     document.getElementById('adminFilterClient')?.addEventListener('change', Admin.renderAppointments);
     document.getElementById('adminFilterService')?.addEventListener('change', Admin.renderAppointments);
     document.getElementById('adminFilterStatus')?.addEventListener('change', Admin.renderAppointments);
   },
   
-  /**
-   * Abrir modal de agendamento
-   */
   openAppointmentModal: (aptId = null) => {
     const modal = document.getElementById('appointmentModal');
     if (!modal) return;
@@ -216,16 +223,13 @@ const Admin = {
     const users = Utils.get('users', []).filter(u => u.role !== 'admin');
     const pets = Utils.get('pets', []);
     
-    // Popular clientes
     const clientSelect = document.getElementById('adminAptClient');
     clientSelect.innerHTML = '<option value="">Selecione o cliente...</option>' + 
       users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
     
-    // Popular pets (inicialmente vazio, atualiza ao selecionar cliente)
     const petSelect = document.getElementById('adminAptPet');
     petSelect.innerHTML = '<option value="">Selecione o cliente primeiro...</option>';
     
-    // Ao selecionar cliente, atualizar pets
     clientSelect.onchange = () => {
       const userId = clientSelect.value;
       const userPets = pets.filter(p => p.userId === userId);
@@ -233,7 +237,6 @@ const Admin = {
         userPets.map(p => `<option value="${p.id}">${p.name} (${p.breed})</option>`).join('');
     };
     
-    // Se for edição, carregar dados
     if (aptId) {
       document.getElementById('appointmentModalTitle').textContent = 'Editar Agendamento';
       document.getElementById('adminAptId').value = aptId;
@@ -241,10 +244,8 @@ const Admin = {
       const apt = Appointments.getAppointmentById(aptId);
       if (apt) {
         clientSelect.value = apt.userId;
-        clientSelect.onchange(); // Trigger para carregar pets
-        setTimeout(() => {
-          petSelect.value = apt.petId;
-        }, 100);
+        clientSelect.onchange();
+        setTimeout(() => { petSelect.value = apt.petId; }, 100);
         document.getElementById('adminAptService').value = apt.service;
         document.getElementById('adminAptStart').value = apt.startDate;
         document.getElementById('adminAptEnd').value = apt.endDate || '';
@@ -259,14 +260,10 @@ const Admin = {
       document.getElementById('adminAppointmentForm').reset();
     }
     
-    // Mostrar/esconder campos
     Admin.toggleAppointmentFields();
     Admin.calculateAppointmentTotal();
   },
   
-  /**
-   * Fechar modal de agendamento
-   */
   closeAppointmentModal: () => {
     const modal = document.getElementById('appointmentModal');
     if (modal) {
@@ -275,9 +272,6 @@ const Admin = {
     }
   },
   
-  /**
-   * Mostrar/esconder campos do formulário
-   */
   toggleAppointmentFields: () => {
     const service = document.getElementById('adminAptService')?.value;
     const endField = document.getElementById('adminAptEndField');
@@ -289,9 +283,6 @@ const Admin = {
     if (frequencyField) frequencyField.classList.toggle('hidden', service !== 'passeio');
   },
   
-  /**
-   * Calcular total do agendamento
-   */
   calculateAppointmentTotal: () => {
     Admin.toggleAppointmentFields();
     
@@ -338,9 +329,6 @@ const Admin = {
     return total;
   },
   
-  /**
-   * Salvar agendamento
-   */
   saveAppointment: () => {
     const aptId = document.getElementById('adminAptId')?.value;
     const userId = document.getElementById('adminAptClient')?.value;
@@ -354,16 +342,13 @@ const Admin = {
     const status = document.getElementById('adminAptStatus')?.value;
     const notes = document.getElementById('adminAptNotes')?.value;
     
-    // Validações
     if (!userId || !petId || !service || !start) {
       Utils.toast('Preencha os campos obrigatórios', 'error');
       return;
     }
     
-    // Calcular valor
     const total = Admin.calculateAppointmentTotal();
     
-    // Montar objeto
     const aptData = {
       id: aptId || Utils.generateId('apt_'),
       userId,
@@ -380,14 +365,11 @@ const Admin = {
       updatedAt: new Date().toISOString()
     };
     
-    // Salvar
     const appointments = Utils.get('appointments', []);
     
     if (aptId) {
       const index = appointments.findIndex(a => a.id === aptId);
-      if (index !== -1) {
-        appointments[index] = aptData;
-      }
+      if (index !== -1) appointments[index] = aptData;
     } else {
       appointments.push(aptData);
     }
@@ -400,13 +382,8 @@ const Admin = {
     Admin.renderStats();
   },
   
-  /**
-   * Deletar agendamento
-   */
   deleteAppointment: (aptId) => {
-    if (!confirm('Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.')) {
-      return;
-    }
+    if (!confirm('Tem certeza que deseja excluir este agendamento?')) return;
     
     const appointments = Utils.get('appointments', []);
     const filtered = appointments.filter(a => a.id !== aptId);
@@ -423,12 +400,9 @@ const Admin = {
   },
   
   // ============================================
-  // CLIENTES
+  // CLIENTES E PETS
   // ============================================
   
-  /**
-   * Renderizar clientes
-   */
   renderClients: () => {
     const container = document.getElementById('adminClientsTable');
     if (!container) return;
@@ -454,30 +428,195 @@ const Admin = {
           <td>${userPets}</td>
           <td>${userApts}</td>
           <td>
-            <button class="btn btn-sm btn-secondary" onclick="Admin.editUser('${user.id}')">Editar</button>
+            <button class="btn btn-sm btn-primary" data-action="view-client" data-id="${user.id}">👁️ Ver/Edit</button>
           </td>
         </tr>
       `;
     }).join('');
   },
   
-  /**
-   * Editar usuário
-   */
-  editUser: (userId) => {
-    const user = Auth.getUserById(userId);
-    if (!user) return;
+  openClientModal: (userId) => {
+    const modal = document.getElementById('clientModal');
+    if (!modal) return;
     
-    Utils.toast(`Editar usuário: ${user.name} (funcionalidade simplificada)`, 'info');
+    const user = Auth.getUserById(userId);
+    if (!user) {
+      Utils.toast('Cliente não encontrado', 'error');
+      return;
+    }
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    document.getElementById('adminClientId').value = user.id;
+    document.getElementById('adminClientName').value = user.name || '';
+    document.getElementById('adminClientEmail').value = user.email || '';
+    document.getElementById('adminClientCpf').value = user.profile?.cpf || '';
+    document.getElementById('adminClientPhone').value = user.profile?.phone || '';
+    document.getElementById('adminClientAddress').value = user.profile?.address || '';
+    document.getElementById('adminClientBirth').value = user.profile?.birthdate || '';
+    document.getElementById('adminClientProfession').value = user.profile?.profession || '';
+    document.getElementById('adminClientEmergency').value = user.profile?.emergencyContact || '';
+    document.getElementById('adminClientNotes').value = user.profile?.notes || '';
+    document.getElementById('adminT2Name').value = user.profile?.tutor2?.name || '';
+    document.getElementById('adminT2Phone').value = user.profile?.tutor2?.phone || '';
+    document.getElementById('adminT2Relation').value = user.profile?.tutor2?.relation || '';
+    
+    // Carregar pets do cliente
+    Admin.renderClientPets(userId);
   },
   
+  renderClientPets: (userId) => {
+    const container = document.getElementById('adminClientPets');
+    if (!container) return;
+    
+    const pets = Utils.get('pets', []).filter(p => p.userId === userId);
+    
+    if (pets.length === 0) {
+      container.innerHTML = '<p class="text-muted" style="padding:1rem;background:var(--color-bg-hover);border-radius:var(--radius-md)">Nenhum pet cadastrado para este cliente.</p>';
+      return;
+    }
+    
+    container.innerHTML = pets.map(pet => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--color-bg-hover);border-radius:var(--radius-md);margin-bottom:0.5rem">
+        <div>
+          <strong>🐕 ${pet.name}</strong> (${pet.breed})<br>
+          <small class="text-muted">${pet.sex} • ${pet.weight}kg • ${pet.birthdate ? Utils.formatAge(pet.birthdate) : 'Idade N/A'}</small>
+        </div>
+        <button class="btn btn-sm btn-secondary" data-action="view-pet" data-id="${pet.id}">👁️ Ver</button>
+      </div>
+    `).join('');
+  },
+  
+  closeClientModal: () => {
+    const modal = document.getElementById('clientModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
+  
+  saveClient: () => {
+    const userId = document.getElementById('adminClientId')?.value;
+    if (!userId) return;
+    
+    const updates = {
+      name: document.getElementById('adminClientName').value.trim(),
+      email: document.getElementById('adminClientEmail').value.trim(),
+      profile: {
+        cpf: document.getElementById('adminClientCpf').value.trim(),
+        phone: document.getElementById('adminClientPhone').value.trim(),
+        address: document.getElementById('adminClientAddress').value.trim(),
+        birthdate: document.getElementById('adminClientBirth').value,
+        profession: document.getElementById('adminClientProfession').value.trim(),
+        emergencyContact: document.getElementById('adminClientEmergency').value.trim(),
+        notes: document.getElementById('adminClientNotes').value.trim(),
+        tutor2: {
+          name: document.getElementById('adminT2Name').value.trim(),
+          phone: document.getElementById('adminT2Phone').value.trim(),
+          relation: document.getElementById('adminT2Relation').value
+        }
+      }
+    };
+    
+    if (Auth.updateUser(userId, updates)) {
+      Utils.toast('Dados do cliente atualizados!', 'success');
+      Admin.renderClients();
+      Admin.renderAppointments();
+    } else {
+      Utils.toast('Erro ao atualizar cliente', 'error');
+    }
+  },
+  
+  viewPet: (petId) => {
+    const pet = Pets.getPetById(petId);
+    if (!pet) {
+      Utils.toast('Pet não encontrado', 'error');
+      return;
+    }
+    
+    const modalContent = `
+      <div class="modal">
+        <div class="modal-header">
+          <h3 style="margin:0">🐕 ${pet.name}</h3>
+          <button class="modal-close" onclick="Utils.hideModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem">
+            <div>
+              <h4 style="margin-bottom:0.5rem">Identificação</h4>
+              <p><strong>Raça:</strong> ${pet.breed || 'N/A'}</p>
+              <p><strong>Peso:</strong> ${pet.weight || 'N/A'}kg</p>
+              <p><strong>Nascimento:</strong> ${pet.birthdate ? Utils.formatDate(pet.birthdate) : 'N/A'}</p>
+              <p><strong>Sexo:</strong> ${pet.sex || 'N/A'}</p>
+              <p><strong>Microchip:</strong> ${pet.microchip || 'N/A'}</p>
+            </div>
+            <div>
+              <h4 style="margin-bottom:0.5rem">Saúde</h4>
+              <p><strong>Castrado:</strong> ${pet.health?.neutered ? 'Sim' : 'Não'}</p>
+              <p><strong>Plano:</strong> ${pet.health?.plan || 'N/A'}</p>
+              <p><strong>Condições:</strong> ${pet.health?.conditions || 'Nenhuma'}</p>
+              <p><strong>Vacinas:</strong> ${pet.health?.vaccines?.length || 0}</p>
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <h4 style="margin-bottom:0.5rem">⚠️ Pontos de Atenção</h4>
+            <p style="background:#fefcbf;padding:0.75rem;border-radius:var(--radius-md)">${pet.alerts || 'Nenhum'}</p>
+          </div>
+          <div style="margin-top:1rem">
+            <h4 style="margin-bottom:0.5rem">💭 Personalidade</h4>
+            <p style="background:var(--color-bg-hover);padding:0.75rem;border-radius:var(--radius-md)">${pet.personality || 'N/A'}</p>
+          </div>
+          <div style="margin-top:1rem;text-align:center">
+            <a href="#pet?id=${pet.id}" class="btn btn-primary" onclick="Utils.hideModal()">✏️ Editar Pet</a>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    Utils.showModal(modalContent);
+  },
+  
+  // ============================================
+  // NOTAS FISCAIS
+  // ============================================
+  
+openInvoiceModal: (aptId) => {
+  const modal = document.getElementById('invoiceModal');
+  if (!modal) return;
+  
+  const apt = Appointments.getAppointmentById(aptId);
+  if (!apt) {
+    Utils.toast('Agendamento não encontrado', 'error');
+    return;
+  }
+  
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  
+  document.getElementById('invoiceAptId').value = aptId;
+  document.getElementById('invoiceNumber').value = apt.invoice?.number || '';
+  document.getElementById('invoiceDate').value = apt.invoice?.date || new Date().toISOString().split('T')[0];
+  document.getElementById('invoiceObservations').value = apt.invoice?.observations || '';
+  document.getElementById('invoiceFileUrl').value = apt.invoice?.fileUrl || '';
+  
+  const users = Utils.get('users', []);
+  const pets = Utils.get('pets', []);
+  const user = users.find(u => u.id === apt.userId);
+  const pet = pets.find(p => p.id === apt.petId);
+  
+  document.getElementById('invoiceAppointmentSummary').innerHTML = `
+    <p><strong>Cliente:</strong> ${user?.name || 'N/A'}</p>
+    <p><strong>Pet:</strong> ${pet?.name || 'N/A'}</p>
+    <p><strong>Serviço:</strong> ${Appointments.getServiceName(apt.service)}</p>
+    <p><strong>Data:</strong> ${Utils.formatDate(apt.startDate)}${apt.endDate && apt.endDate !== apt.startDate ? ` a ${Utils.formatDate(apt.endDate)}` : ''}</p>
+    <p><strong>Valor:</strong> ${Utils.formatCurrency(apt.totalPrice)}</p>
+  `;
+},
   // ============================================
   // PAGAMENTOS
   // ============================================
   
-  /**
-   * Renderizar pagamentos
-   */
   renderPayments: () => {
     const container = document.getElementById('adminPaymentsTable');
     if (!container) return;
@@ -493,6 +632,7 @@ const Admin = {
     container.innerHTML = appointments.map(apt => {
       const user = users.find(u => u.id === apt.userId);
       const statusClass = apt.paymentStatus === 'paid' ? 'paid' : 'pending';
+      const hasInvoice = apt.invoice ? '📄' : '';
       
       return `
         <tr>
@@ -500,43 +640,23 @@ const Admin = {
           <td>${Appointments.getServiceName(apt.service)}</td>
           <td>${Utils.formatDate(apt.startDate)}</td>
           <td>${Utils.formatCurrency(apt.totalPrice)}</td>
-          <td><span class="status-badge status-${statusClass}">${apt.paymentStatus}</span></td>
+          <td><span class="status-badge status-${statusClass}">${apt.paymentStatus}</span> ${hasInvoice}</td>
           <td>
             ${apt.paymentStatus !== 'paid' ? 
               `<button class="btn btn-sm btn-primary" data-action="mark-paid" data-id="${apt.id}">Marcar pago</button>` : ''}
             <button class="btn btn-sm btn-secondary" data-action="add-invoice" data-id="${apt.id}" style="margin-left:0.5rem">📄 Nota</button>
+            ${apt.invoice ? `<button class="btn btn-sm btn-secondary" data-action="download-invoice" data-id="${apt.id}" style="margin-left:0.25rem">⬇️</button>` : ''}
           </td>
         </tr>
       `;
     }).join('');
   },
   
-  /**
-   * Marcar como pago
-   */
-  markAsPaid: (aptId) => {
-    Appointments.markAsPaid(aptId);
-    Admin.renderPayments();
-    Admin.renderReports();
-    Admin.renderAppointments();
-  },
-  
-  /**
-   * Adicionar nota fiscal
-   */
-  addInvoice: (aptId) => {
-    Utils.toast('Nota fiscal anexada (simulação)', 'success');
-  },
-  
   // ============================================
   // RELATÓRIOS
   // ============================================
   
-  /**
-   * Renderizar relatórios
-   */
   renderReports: () => {
-    // Faturamento por serviço
     const revenueContainer = document.getElementById('revenueByService');
     if (revenueContainer) {
       const appointments = Utils.get('appointments', []);
@@ -556,7 +676,6 @@ const Admin = {
       }).join('');
     }
     
-    // Alertas de vacinas
     const alertsContainer = document.getElementById('vaccineAlerts');
     if (alertsContainer) {
       const alerts = Pets.getVaccineAlerts(30);
@@ -572,7 +691,6 @@ const Admin = {
       }
     }
     
-    // Clientes mais frequentes
     const topContainer = document.getElementById('topClients');
     if (topContainer) {
       const appointments = Utils.get('appointments', []);
@@ -583,9 +701,7 @@ const Admin = {
         userCounts[apt.userId] = (userCounts[apt.userId] || 0) + 1;
       });
       
-      const sorted = Object.entries(userCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
+      const sorted = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
       
       if (sorted.length === 0) {
         topContainer.innerHTML = '<p class="text-muted">Nenhum agendamento registrado.</p>';
@@ -602,7 +718,6 @@ const Admin = {
       }
     }
     
-    // Inadimplências
     const defaultersContainer = document.getElementById('defaulters');
     if (defaultersContainer) {
       const appointments = Utils.get('appointments', []);
@@ -615,8 +730,7 @@ const Admin = {
         }
       });
       
-      const sorted = Object.entries(defaulters)
-        .sort((a, b) => b[1] - a[1]);
+      const sorted = Object.entries(defaulters).sort((a, b) => b[1] - a[1]);
       
       if (sorted.length === 0) {
         defaultersContainer.innerHTML = '<p style="color:var(--color-accent)">✅ Nenhuma inadimplência!</p>';
@@ -638,9 +752,6 @@ const Admin = {
   // CONFIGURAÇÕES
   // ============================================
   
-  /**
-   * Renderizar configurações
-   */
   renderSettings: () => {
     const container = document.getElementById('pricesGrid');
     if (!container) return;
@@ -676,9 +787,6 @@ const Admin = {
     `).join('');
   },
   
-  /**
-   * Salvar preços
-   */
   savePrices: () => {
     const config = Utils.get('adminConfig', {});
     const prices = {};
@@ -705,9 +813,6 @@ const Admin = {
   // CONTEÚDO
   // ============================================
   
-  /**
-   * Renderizar conteúdo educacional
-   */
   renderContent: () => {
     const container = document.getElementById('contentList');
     if (!container) return;
@@ -736,9 +841,6 @@ const Admin = {
     `).join('');
   },
   
-  /**
-   * Adicionar conteúdo
-   */
   addContent: () => {
     const contents = Utils.get('educationalContent', []);
     const newContent = {
@@ -757,13 +859,9 @@ const Admin = {
     Utils.toast('Conteúdo criado! Edite para personalizar.', 'success');
   },
   
-  /**
-   * Editar conteúdo
-   */
   editContent: (id) => {
     const contents = Utils.get('educationalContent', []);
     const content = contents.find(c => c.id === id);
-    
     if (!content) return;
     
     const newTitle = prompt('Título:', content.title);
@@ -784,9 +882,6 @@ const Admin = {
     Utils.toast('Conteúdo atualizado!', 'success');
   },
   
-  /**
-   * Deletar conteúdo
-   */
   deleteContent: (id) => {
     if (!confirm('Excluir este conteúdo?')) return;
     
@@ -807,5 +902,4 @@ const Admin = {
   }
 };
 
-// Exportar para escopo global
 window.Admin = Admin;

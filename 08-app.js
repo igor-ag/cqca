@@ -45,7 +45,7 @@ const App = {
       
       // Páginas permitidas
       const allowedPages = [
-        'home', 'servicos', 'precos', 'regras', 'conteudos', 'contato',
+        'home', 'servicos', 'valores', 'regras', 'conteudos', 'contato',
         'auth', 'dashboard', 'perfil', 'pet', 'agendamentos', 'financeiro', 'admin'
       ];
       
@@ -194,7 +194,7 @@ const App = {
         App.renderServices();
         break;
       
-      case 'precos':
+      case 'valores':
         App.renderPricing();
         break;
       
