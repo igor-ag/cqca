@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CQC Adestramento | Passeios e Hospedagem</title>
+  <meta name="description" content="Adestramento positivo, passeios, pet sitter e hospedagem para seu cão em São Paulo">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="02-styles.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="Navegação principal">
+    <div class="container navbar-container">
+      <a href="#home" class="navbar-brand" aria-label="Página inicial">
+        <div class="navbar-logo">🐾</div>
+        <div>
+          CQC Adestramento
+          <span class="navbar-brand-sub">passeios e hospedagem</span>
+        </div>
+      </a>
+      
+      <button class="menu-toggle" aria-label="Menu" aria-expanded="false" id="menuToggle">☰</button>
+      
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home" data-route="home">Início</a></li>
+        <li><a href="#servicos" data-route="servicos">Serviços</a></li>
+        <li><a href="#precos" data-route="precos">Preços</a></li>
+        <li><a href="#regras" data-route="regras">Regras</a></li>
+        <li><a href="#conteudos" data-route="conteudos">Conteúdos</a></li>
+        <li><a href="#contato" data-route="contato">Contato</a></li>
+      </ul>
+      
+      <div class="nav-actions" id="navActions">
+        <a href="#auth" class="btn btn-sm btn-secondary" id="authLink">Entrar</a>
+        <a href="#dashboard" class="btn btn-sm btn-primary hidden" id="dashboardLink">Minha Conta</a>
+        <button class="btn btn-sm btn-secondary hidden" id="logoutBtn" aria-label="Sair">Sair</button>
+        <button class="btn btn-sm btn-secondary hidden" id="adminToggle" aria-label="Painel Admin">⚙️ Admin</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main id="app" class="page-container" role="main">
+
+    <!-- ==================== HOME ==================== -->
+    <section id="home" class="page active" data-page="home">
+      <div class="hero">
+        <div class="container">
+          <h1>Cuidado profissional para seu melhor amigo</h1>
+          <p>Adestramento positivo, passeios, pet sitter e hospedagem com amor e técnica em São Paulo.</p>
+          <div class="hero-cta">
+            <a href="#auth" class="btn btn-primary">Cadastre-se e agende</a>
+            <a href="#servicos" class="btn btn-secondary btn-light">Conheça nossos serviços</a>
+          </div>
+          <div class="hero-image">
+            <div class="hero-placeholder">
+              <span style="font-size:4rem">🐕🐈</span>
+              <p>Imagem ilustrativa de cães felizes</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <section class="container section">
+        <div class="section-header text-center">
+          <h2>Sobre a CQC Adestramento</h2>
+          <p class="lead">Somos especializados em cuidados personalizados para cães, utilizando métodos positivos e baseados em ciência. Nossa missão é fortalecer o vínculo entre tutores e pets.</p>
+        </div>
+        
+        <h3 class="text-center section-title">Nossos Serviços</h3>
+        <div class="services-grid" id="homeServicesGrid">
+          <!-- Preenchido via JS -->
+        </div>
+        
+        <div class="text-center" style="margin-top:2rem">
+          <a href="#servicos" class="btn btn-primary">Ver todos os serviços</a>
+        </div>
+      </section>
+      
+      <section class="container section">
+        <h3 class="text-center section-title">O que nossos clientes dizem</h3>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p>"O Thor nunca ficou tão bem cuidado! A equipe é atenciosa e sempre manda fotos. Recomendo demais!"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">MS</div>
+              <div><strong>Maria S.</strong><br><small>Tutora do Thor</small></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p>"As aulas de adestramento transformaram a relação com minha Luna. Método positivo funciona!"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">CO</div>
+              <div><strong>Carlos O.</strong><br><small>Tutor da Luna</small></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p>"Hospedagem impecável. Meu Max voltou cansado e feliz, como deve ser após boas férias!"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">AP</div>
+              <div><strong>Ana P.</strong><br><small>Tutora do Max</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="cta-section">
+        <div class="container text-center">
+          <h2>Pronto para cuidar do seu pet?</h2>
+          <p>Cadastre-se agora e agende seu primeiro serviço com condições especiais.</p>
+          <a href="#auth" class="btn btn-primary btn-large">Criar conta grátis</a>
+        </div>
+      </section>
+    </section>
+
+    <!-- ==================== SERVIÇOS ==================== -->
+    <section id="servicos" class="page" data-page="servicos">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1>Nossos Serviços</h1>
+          <p class="lead">Soluções completas para o bem-estar do seu cão, com método positivo e atendimento personalizado.</p>
+        </div>
+        
+        <div class="services-grid" id="servicesGrid">
+          <!-- Preenchido via JS -->
+        </div>
+        
+        <div class="text-center" style="margin-top:2rem">
+          <p style="margin-bottom:1rem">Quer saber os valores?</p>
+          <a href="#precos" class="btn btn-primary">Ver tabela de preços</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PREÇOS ==================== -->
+    <section id="precos" class="page" data-page="precos">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1>Investimento</h1>
+          <p class="lead">Transparência total nos nossos valores. Preços podem variar conforme necessidades especiais do pet.</p>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="pricing-table" id="pricingTable">
+            <thead>
+              <tr>
+                <th>Serviço</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Preenchido via JS -->
+            </tbody>
+          </table>
+        </div>
+        
+        <p class="text-muted"><small>* Alta temporada: meses de julho, dezembro e janeiro.</small></p>
+        
+        <!-- Calculadora -->
+        <div class="calculator card">
+          <h3 style="margin-bottom:1.5rem">🧮 Calculadora de Estimativa</h3>
+          <form id="calculatorForm">
+            <div class="calculator-grid">
+              <div class="form-group">
+                <label class="form-label required" for="calcService">Tipo de serviço</label>
+                <select class="form-control" id="calcService" required>
+                  <option value="">Selecione...</option>
+                  <option value="hospedagem">Hospedagem</option>
+                  <option value="daycare">Daycare</option>
+                  <option value="passeio">Passeio Avulso</option>
+                  <option value="passeio-mensal">Passeio Mensal</option>
+                  <option value="adestramento">Adestramento</option>
+                  <option value="pet-sitter">Pet Sitter</option>
+                </select>
+              </div>
+              
+              <div class="form-group" id="calcDateFields">
+                <label class="form-label">Período</label>
+                <div class="input-group">
+                  <input type="date" class="form-control" id="calcStart" placeholder="Início">
+                  <input type="date" class="form-control" id="calcEnd" placeholder="Fim">
+                </div>
+              </div>
+              
+              <div class="form-group hidden" id="calcFrequencyField">
+                <label class="form-label">Frequência semanal</label>
+                <select class="form-control" id="calcFrequency">
+                  <option value="2">2x por semana</option>
+                  <option value="3">3x por semana</option>
+                  <option value="4">4x por semana</option>
+                  <option value="5">5x por semana</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Duração (passeios)</label>
+                <select class="form-control" id="calcDuration">
+                  <option value="30">30 minutos</option>
+                  <option value="50" selected>50 minutos</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Opções</label>
+                <div class="checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="calcHoliday">
+                    <span>Inclui feriado?</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="calcHighSeason">
+                    <span>Alta temporada?</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="calculator-result">
+                <div>Valor estimado:</div>
+                <div class="amount" id="calcResult">R$ 0,00</div>
+                <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
+              </div>
+            </div>
+            
+            <div class="text-center" style="margin-top:1.5rem">
+              <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço." target="_blank" rel="noopener" class="btn btn-primary btn-large">
+                💬 Agendar via WhatsApp
+              </a>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Observações -->
+        <div class="accordion">
+          <div class="accordion-header" role="button" tabindex="0" id="accHeader">
+            <span>Observações importantes</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content" id="accContent">
+            <ul class="accordion-list">
+              <li>Valores podem ser ajustados conforme necessidades especiais do pet (medicação, cuidados adicionais)</li>
+              <li>Animais com necessidades comportamentais específicas podem requerer avaliação prévia</li>
+              <li>Cancelamentos seguem política descrita na página de Regras</li>
+              <li>Pagamento de 50% garante a reserva para hospedagem</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="text-center" style="margin-top:2rem">
+          <p style="margin-bottom:1rem">Dúvidas? Fale conosco diretamente:</p>
+          <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-primary btn-large">
+            💬 WhatsApp: (11) 9 9781-1891
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REGRAS ==================== -->
+    <section id="regras" class="page" data-page="regras">
+      <div class="container section" style="max-width:800px">
+        <div class="section-header text-center">
+          <h1>Regras e Termos</h1>
+          <p class="lead">Leia atentamente nossas políticas para garantir o melhor atendimento ao seu pet.</p>
+        </div>
+        
+        <div class="card" style="margin-bottom:1.5rem">
+          <h3 style="margin-bottom:1rem">Regras Gerais</h3>
+          <ol class="rules-list">
+            <li>O tutor deve certificar-se de providenciar equipamento de condução (guia, coleira) seguro e apropriado para o porte do seu pet, além da coleira de identificação.</li>
+            <li>É obrigação do tutor informar as condições de saúde do animal.</li>
+            <li>Não enviar o pet se ele apresentar problema de saúde contagioso ou que coloque em risco a ele próprio, qualquer outro animal e o ambiente.</li>
+            <li>Em caso de animais com necessidades especiais o valor do serviço será a combinar.</li>
+            <li>Os dias de emenda e finais de semana que coincidem com feriados serão cobrados com o valor correspondente a feriados.</li>
+          </ol>
+        </div>
+        
+        <div class="card" style="margin-bottom:1.5rem">
+          <h3 style="margin-bottom:1rem">Hospedagem e Daycare</h3>
+          <ol class="rules-list" start="6">
+            <li>Horário de entrada e saída: 8h - 20h.</li>
+            <li>Cada diária individual de daycare ocorre dentro do horário acima. Cada diária individual de hospedagem dura 24h.</li>
+            <li>Para o pet em daycare que ficar além do horário, considera-se o valor de hospedagem no lugar de daycare.</li>
+            <li>São considerados alta temporada os meses de julho, dezembro e janeiro.</li>
+            <li>É de responsabilidade do tutor fornecer alimentação e demais necessidades que o animal venha a ter.</li>
+            <li>A reserva só é garantia mediante pagamento de 50% do valor total da estadia.</li>
+            <li>Cancelamentos e remarcações (sujeitas a disponibilidade) devem respeitar o prazo mínimo de 48h. Em alta temporada e feriados esse prazo se estende a 10 dias. Caso não seja seguido esse prazo, se aplicará uma taxa de cancelamento de 30% do valor da reserva ou 50% em alta temporada.</li>
+          </ol>
+        </div>
+        
+        <div class="card" style="margin-bottom:1.5rem">
+          <h3 style="margin-bottom:1rem">Passeios</h3>
+          <ol class="rules-list" start="13">
+            <li>Remarcações devem ser feitas com no mínimo 24h de antecedência. O que for diferente disso é considerado desistência e não apto a reposição ou descontos.</li>
+            <li>Mensalistas, para garantirmos a reserva da sua vaga, o valor da mensalidade é fixo e integral, independentemente de faltas, desistências ou condições climáticas (chuva).</li>
+            <li>Para os 2 itens anteriores: exceções por motivos de saúde serão acatadas mediante devida comprovação. Reposições estão sujeitas a disponibilidade.</li>
+            <li>Mensalistas: não há expediente em feriados e emendas. Solicitações para esses dias devem ser combinadas previamente, com custos baseados na tabela de feriados e alta temporada.</li>
+          </ol>
+        </div>
+        
+        <div class="text-center" style="margin-top:2rem">
+          <p style="margin-bottom:1rem">Aceitar estas regras é parte do processo de cadastro.</p>
+          <a href="#auth" class="btn btn-primary btn-large">Criar conta e aceitar termos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTEÚDOS ==================== -->
+    <section id="conteudos" class="page" data-page="conteudos">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1>Conteúdos Educativos</h1>
+          <p class="lead">Artigos e vídeos para ajudar você a entender melhor o mundo canino.</p>
+        </div>
+        
+        <div class="admin-only hidden" style="text-align:center;margin-bottom:1.5rem">
+          <button class="btn btn-secondary" id="editContentBtn">✏️ Editar conteúdos</button>
+        </div>
+        
+        <div class="content-grid" id="contentGrid">
+          <!-- Preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTATO ==================== -->
+    <section id="contato" class="page" data-page="contato">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1>Entre em Contato</h1>
+          <p class="lead">Estamos à disposição para tirar suas dúvidas e ajudar a cuidar do seu melhor amigo.</p>
+        </div>
+        
+        <div class="contact-grid">
+          <div>
+            <div class="card">
+              <h3 style="margin-bottom:1.5rem">Informações de Contato</h3>
+              
+              <div class="contact-info">
+                <div class="contact-item">
+                  <div class="contact-icon">📍</div>
+                  <div>
+                    <strong>Endereço</strong><br>
+                    Rua Guiratinga, 1249<br>
+                    Chácara Inglesa, São Paulo/SP
+                  </div>
+                </div>
+                
+                <div class="contact-item">
+                  <div class="contact-icon">📱</div>
+                  <div>
+                    <strong>WhatsApp</strong><br>
+                    <a href="https://wa.me/5511997811891" target="_blank" rel="noopener">(11) 9 9781-1891</a>
+                    <br><small class="text-muted">Clique para enviar mensagem pré-preenchida</small>
+                  </div>
+                </div>
+                
+                <div class="contact-item">
+                  <div class="contact-icon">✉️</div>
+                  <div>
+                    <strong>E-mail</strong><br>
+                    <a href="mailto:ctt.cqca@gmail.com">ctt.cqca@gmail.com</a>
+                  </div>
+                </div>
+                
+                <div class="contact-item">
+                  <div class="contact-icon">📷</div>
+                  <div>
+                    <strong>Instagram</strong><br>
+                    <a href="https://instagram.com/cqc.adestramento" target="_blank" rel="noopener">@cqc.adestramento</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="card">
+              <h3 style="margin-bottom:1.5rem">Envie uma Mensagem</h3>
+              <form id="contactForm">
+                <div class="form-group">
+                  <label class="form-label required" for="contactName">Seu nome</label>
+                  <input type="text" class="form-control" id="contactName" required>
+                  <div class="form-error"></div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label required" for="contactEmail">Seu e-mail</label>
+                  <input type="email" class="form-control" id="contactEmail" required>
+                  <div class="form-error"></div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label required" for="contactMessage">Mensagem</label>
+                  <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+                  <div class="form-error"></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Enviar mensagem</button>
+                <p class="form-hint text-center">* Esta mensagem será redirecionada para nosso WhatsApp</p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== AUTH ==================== -->
+    <section id="auth" class="page" data-page="auth">
+      <div class="auth-container">
+        <div class="card">
+          <h2 class="text-center" style="margin-bottom:1.5rem">Acesse sua conta</h2>
+          
+          <div class="auth-toggle">
+            <button class="active" id="toggleLogin">Login</button>
+            <button id="toggleRegister">Cadastro</button>
+          </div>
+          
+          <!-- Login Form -->
+          <form id="loginForm">
+            <div class="form-group">
+              <label class="form-label required" for="loginEmail">E-mail</label>
+              <input type="email" class="form-control" id="loginEmail" required placeholder="seu@email.com">
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="loginPassword">Senha</label>
+              <input type="password" class="form-control" id="loginPassword" required>
+              <div class="form-error"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+          </form>
+          
+          <!-- Register Form -->
+          <form id="registerForm" class="hidden">
+            <div class="form-group">
+              <label class="form-label required" for="regName">Nome completo</label>
+              <input type="text" class="form-control" id="regName" required>
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="regEmail">E-mail</label>
+              <input type="email" class="form-control" id="regEmail" required placeholder="seu@email.com">
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="regPassword">Senha (mín. 6 caracteres)</label>
+              <input type="password" class="form-control" id="regPassword" required minlength="6">
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="regConfirm">Confirmar senha</label>
+              <input type="password" class="form-control" id="regConfirm" required>
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group" style="margin-top:1.5rem">
+              <label class="checkbox-label">
+                <input type="checkbox" id="regTerms" required>
+                <span>Li e aceito os <a href="#regras" target="_blank">Termos e Regras</a> *</span>
+              </label>
+              <div class="form-error"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
+          </form>
+          
+          <p class="text-center text-muted" style="margin-top:1.5rem;font-size:0.875rem">
+            <strong>Demo:</strong> Use <em>admin@cqc.com</em> / <em>admin</em> para acesso administrativo
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <section id="dashboard" class="page" data-page="dashboard">
+      <div class="container section">
+        <div class="dashboard-header">
+          <h1 id="dashWelcome">Olá! 👋</h1>
+          <p>Aqui você gerencia seus pets e agendamentos.</p>
+        </div>
+        
+        <div class="dashboard-grid">
+          <div class="dashboard-main">
+            <!-- Próximos Agendamentos -->
+            <div class="card dashboard-card">
+              <div class="card-header">
+                <h3 style="margin:0">Próximos Agendamentos</h3>
+                <a href="#agendamentos" class="btn btn-sm btn-secondary">Ver todos</a>
+              </div>
+              <div class="card-body" id="dashAppointments">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            
+            <!-- Meus Pets -->
+            <div class="card dashboard-card" style="margin-top:1.5rem">
+              <div class="card-header">
+                <h3 style="margin:0">Meus Pets</h3>
+                <a href="#pet" class="btn btn-sm btn-primary">+ Adicionar</a>
+              </div>
+              <div class="card-body" id="dashPets">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+          </div>
+          
+          <div class="dashboard-sidebar">
+            <!-- Atalhos -->
+            <div class="card">
+              <h3 style="margin-bottom:1rem">Atalhos</h3>
+              <div class="quick-links">
+                <a href="#perfil" class="btn btn-secondary btn-block">✏️ Editar meus dados</a>
+                <a href="#pet" class="btn btn-secondary btn-block">🐕 Cadastrar novo pet</a>
+                <a href="#agendamentos" class="btn btn-secondary btn-block">📅 Novo agendamento</a>
+                <a href="#financeiro" class="btn btn-secondary btn-block">💰 Financeiro</a>
+              </div>
+            </div>
+            
+            <!-- Alertas -->
+            <div class="card" style="margin-top:1.5rem">
+              <h3 style="margin-bottom:1rem">Alertas</h3>
+              <div id="dashAlerts">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            
+            <!-- Exportar Dados -->
+            <div class="card" style="margin-top:1.5rem">
+              <h4 style="margin-bottom:0.5rem">Exportar meus dados</h4>
+              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">
+                Baixe uma cópia do seu cadastro e dos seus pets.
+              </p>
+              <button class="btn btn-sm btn-secondary btn-block" id="exportDataBtn">
+                📥 Baixar dados (.txt)
+              </button>
+              <button class="btn btn-sm btn-secondary btn-block" style="margin-top:0.5rem" id="exportPdfBtn">
+                📄 Baixar PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PERFIL ==================== -->
+    <section id="perfil" class="page" data-page="perfil">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1>Meu Cadastro</h1>
+          <p class="lead">Atualize suas informações pessoais.</p>
+        </div>
+        
+        <form class="profile-form card" id="profileForm">
+          <!-- Tutor 1 -->
+          <div class="form-section">
+            <h3 class="form-section-title">Dados do Tutor Principal *</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required" for="pName">Nome completo</label>
+                <input type="text" class="form-control" id="pName" required>
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pBirth">Data de nascimento</label>
+                <input type="date" class="form-control" id="pBirth">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="pProfession">Profissão</label>
+                <input type="text" class="form-control" id="pProfession">
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="pCpf">CPF</label>
+                <input type="text" class="form-control" id="pCpf" placeholder="000.000.000-00" maxlength="14" required>
+                <div class="form-error"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label required" for="pAddress">Endereço completo</label>
+              <input type="text" class="form-control" id="pAddress" required>
+              <div class="form-error"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required" for="pEmail">E-mail</label>
+                <input type="email" class="form-control" id="pEmail" required>
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="pPhone">Telefone</label>
+                <input type="tel" class="form-control" id="pPhone" placeholder="(00) 00000-0000" maxlength="15" required>
+                <div class="form-error"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pEmergency">Contato de emergência</label>
+              <input type="text" class="form-control" id="pEmergency" placeholder="Nome - Telefone">
+            </div>
+          </div>
+          
+          <!-- Tutor 2 -->
+          <div class="form-section">
+            <h3 class="form-section-title">Segundo Tutor (opcional)</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="t2Name">Nome</label>
+                <input type="text" class="form-control" id="t2Name">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="t2Phone">Telefone</label>
+                <input type="tel" class="form-control" id="t2Phone" placeholder="(00) 00000-0000" maxlength="15">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="t2Relation">Vínculo</label>
+              <select class="form-control" id="t2Relation">
+                <option value="">Selecione...</option>
+                <option value="cônjuge">Cônjuge</option>
+                <option value="familiar">Familiar</option>
+                <option value="amigo">Amigo</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Observações -->
+          <div class="form-section" style="border-bottom:none">
+            <h3 class="form-section-title">Observações Gerais</h3>
+            <div class="form-group">
+              <textarea class="form-control" id="pNotes" rows="3" placeholder="Informações adicionais que deseja registrar..."></textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions text-center">
+            <button type="submit" class="btn btn-primary btn-large">💾 Salvar alterações</button>
+            <a href="#dashboard" class="btn btn-secondary btn-large" style="margin-left:0.5rem">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== PET FORM ==================== -->
+    <section id="pet" class="page" data-page="pet">
+      <div class="container section">
+        <div class="section-header text-center">
+          <h1 id="petFormTitle">Cadastrar Pet</h1>
+          <p class="lead">Preencha os dados do seu companheiro.</p>
+        </div>
+        
+        <form class="profile-form card" id="petForm">
+          <input type="hidden" id="petId">
+          
+          <!-- Identificação -->
+          <div class="form-section">
+            <h3 class="form-section-title">🆔 Identificação *</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required" for="petName">Nome</label>
+                <input type="text" class="form-control" id="petName" required>
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="petBreed">Raça</label>
+                <input type="text" class="form-control" id="petBreed" required>
+                <div class="form-error"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required" for="petWeight">Peso (kg)</label>
+                <input type="number" class="form-control" id="petWeight" step="0.1" min="0" required>
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label required" for="petBirth">Data de nascimento</label>
+                <input type="date" class="form-control" id="petBirth" required>
+                <div class="form-error"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label required" for="petSex">Sexo</label>
+                <select class="form-control" id="petSex" required>
+                  <option value="">Selecione...</option>
+                  <option value="Macho">Macho</option>
+                  <option value="Fêmea">Fêmea</option>
+                </select>
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petRga">RGA</label>
+                <input type="text" class="form-control" id="petRga">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="petChip">Microchip</label>
+              <input type="text" class="form-control" id="petChip" placeholder="982000123456789">
+            </div>
+          </div>
+          
+          <!-- Saúde -->
+          <div class="form-section">
+            <h3 class="form-section-title">🏥 Saúde</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="petPlan">Plano de saúde</label>
+                <input type="text" class="form-control" id="petPlan">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Castrado</label>
+                <div class="toggle-container">
+                  <label class="toggle">
+                    <input type="checkbox" id="petNeutered">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <span class="toggle-label">Sim / Não</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Vacinas</label>
+              <div id="vaccinesContainer">
+                <!-- Vacinas dinâmicas -->
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" id="addVaccineBtn" style="margin-top:0.5rem">
+                + Adicionar vacina
+              </button>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="petConditions">Condições pré-existentes</label>
+              <input type="text" class="form-control" id="petConditions" placeholder="Ex: Displasia, alergias...">
+            </div>
+            
+            <h4 class="form-subtitle">Veterinário</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="vetName">Nome</label>
+                <input type="text" class="form-control" id="vetName">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="vetPhone">Telefone</label>
+                <input type="tel" class="form-control" id="vetPhone" placeholder="(00) 0000-0000" maxlength="15">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vetAddress">Endereço da clínica</label>
+              <input type="text" class="form-control" id="vetAddress">
+            </div>
+          </div>
+          
+          <!-- Alimentação -->
+          <div class="form-section">
+            <h3 class="form-section-title">🍽️ Alimentação</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="foodType">Tipo de alimento</label>
+                <input type="text" class="form-control" id="foodType" placeholder="Ex: Ração Premium">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="foodPortion">Porção</label>
+                <input type="text" class="form-control" id="foodPortion" placeholder="Ex: 300g">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="foodSchedule">Horários</label>
+                <input type="text" class="form-control" id="foodSchedule" placeholder="Ex: 8h e 18h">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="foodRestrictions">Restrições</label>
+                <input type="text" class="form-control" id="foodRestrictions" placeholder="Ex: Sem lactose">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Comportamento -->
+          <div class="form-section">
+            <h3 class="form-section-title">🧠 Comportamento</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="behavDogs">Sociabilidade com cães</label>
+                <select class="form-control" id="behavDogs">
+                  <option value="">Selecione...</option>
+                  <option value="Muito sociável">Muito sociável</option>
+                  <option value="Seletivo">Seletivo</option>
+                  <option value="Não sociável">Não sociável</option>
+                  <option value="Reativo">Reativo</option>
+                  <option value="Agressivo">Agressivo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="behavHumans">Sociabilidade com humanos</label>
+                <select class="form-control" id="behavHumans">
+                  <option value="">Selecione...</option>
+                  <option value="Amigável">Amigável</option>
+                  <option value="Cauteloso">Cauteloso</option>
+                  <option value="Medroso">Medroso</option>
+                  <option value="Agressivo">Agressivo</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Reatividade específica</label>
+              <div class="checkbox-group" id="reactivityGroup">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="reactivity" value="barulhos">
+                  <span>Barulhos</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="reactivity" value="carros">
+                  <span>Carros</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="reactivity" value="crianças">
+                  <span>Crianças</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="reactivity" value="bicicletas">
+                  <span>Bicicletas</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="reactivity" value="outros cães">
+                  <span>Outros cães</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Guarda de recursos</label>
+              <div class="toggle-container">
+                <label class="toggle">
+                  <input type="checkbox" id="guardActive">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Ativo</span>
+              </div>
+              <div id="guardItems" class="checkbox-group" style="margin-top:0.5rem">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="guardItem" value="comida">
+                  <span>Comida</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="guardItem" value="brinquedos">
+                  <span>Brinquedos</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="guardItem" value="espaço">
+                  <span>Espaço</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="guardItem" value="pessoas">
+                  <span>Pessoas</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <div class="toggle-container">
+                  <label class="toggle">
+                    <input type="checkbox" id="pullsLeash">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <label class="form-label" for="pullsLeash" style="margin:0">Puxa a guia?</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="toggle-container">
+                  <label class="toggle">
+                    <input type="checkbox" id="barksExcessively">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <label class="form-label" for="barksExcessively" style="margin:0">Late excessivamente?</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="commands">Comandos conhecidos</label>
+              <input type="text" class="form-control" id="commands" placeholder="Ex: senta, fica, junto (separados por vírgula)">
+              <small class="form-hint">Separe os comandos por vírgula</small>
+            </div>
+          </div>
+          
+          <!-- Rotina -->
+          <div class="form-section">
+            <h3 class="form-section-title">🏠 Rotina</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="sleepsWhere">Onde dorme</label>
+                <select class="form-control" id="sleepsWhere">
+                  <option value="">Selecione...</option>
+                  <option value="Cama própria">Cama própria</option>
+                  <option value="Cama do tutor">Cama do tutor</option>
+                  <option value="Sofá">Sofá</option>
+                  <option value="Gaiola">Gaiola</option>
+                  <option value="Área externa">Área externa</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <div class="toggle-container">
+                  <label class="toggle">
+                    <input type="checkbox" id="accessFurniture">
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <label class="form-label" for="accessFurniture" style="margin:0">Acesso a sofá/cama</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bathroomHabits">Hábitos de banheiro</label>
+              <input type="text" class="form-control" id="bathroomHabits" placeholder="Ex: Faz xixi no tapete higiênico">
+            </div>
+          </div>
+          
+          <!-- Alertas e Personalidade -->
+          <div class="form-section">
+            <h3 class="form-section-title">⚠️ Pontos de Atenção *</h3>
+            <div class="form-group">
+              <textarea class="form-control" id="petAlerts" rows="2" required placeholder="Informações essenciais para o cuidado do seu pet..."></textarea>
+              <div class="form-error"></div>
+              <small class="form-hint">Ex: Medo de fogos, não pode comer chocolate, precisa de medicação às 14h...</small>
+            </div>
+          </div>
+          
+          <div class="form-section" style="border-bottom:none">
+            <h3 class="form-section-title">💭 Personalidade</h3>
+            <div class="form-group">
+              <textarea class="form-control" id="petPersonality" rows="3" placeholder="Descreva a personalidade única do seu companheiro..."></textarea>
+            </div>
+          </div>
+          
+          <div class="autosave-notice text-center">
+            <small class="text-muted">💾 Auto-save: Alterações são salvas automaticamente a cada 30 segundos</small>
+          </div>
+          
+          <div class="form-actions text-center">
+            <button type="submit" class="btn btn-primary btn-large">💾 Salvar pet</button>
+            <a href="#dashboard" class="btn btn-secondary btn-large" style="margin-left:0.5rem">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== AGENDAMENTOS ==================== -->
+    <section id="agendamentos" class="page" data-page="agendamentos">
+      <div class="container section">
+        <div class="dashboard-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+            <h1>Meus Agendamentos</h1>
+            <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço." target="_blank" rel="noopener" class="btn btn-primary">
+              + Novo Agendamento
+            </a>
+          </div>
+        </div>
+        
+        <!-- Filtros -->
+        <div class="card" style="margin-bottom:1.5rem">
+          <div class="filters-row">
+            <div class="form-group" style="margin:0;min-width:200px">
+              <label class="form-label" for="filterService">Serviço</label>
+              <select class="form-control" id="filterService">
+                <option value="">Todos</option>
+                <option value="adestramento">Adestramento</option>
+                <option value="pet-sitter">Pet Sitter</option>
+                <option value="passeio">Passeios</option>
+                <option value="hospedagem">Hospedagem</option>
+                <option value="daycare">Daycare</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:150px">
+              <label class="form-label" for="filterStatus">Status</label>
+              <select class="form-control" id="filterStatus">
+                <option value="">Todos</option>
+                <option value="confirmed">Confirmados</option>
+                <option value="pending">Pendentes</option>
+                <option value="completed">Concluídos</option>
+                <option value="cancelled">Cancelados</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:200px">
+              <label class="form-label" for="filterPeriod">Período</label>
+              <select class="form-control" id="filterPeriod">
+                <option value="all">Todos</option>
+                <option value="past">Passados</option>
+                <option value="future">Futuros</option>
+                <option value="this-month">Este mês</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Lista -->
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Serviço</th>
+                  <th>Pet</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTable">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FINANCEIRO ==================== -->
+    <section id="financeiro" class="page" data-page="financeiro">
+      <div class="container section">
+        <div class="section-header">
+          <h1>Financeiro</h1>
+          <p class="lead">Acompanhe seus pagamentos e notas fiscais.</p>
+        </div>
+        
+        <div class="dashboard-grid">
+          <div class="dashboard-main">
+            <div class="card stat-card-large">
+              <h3 style="margin:0 0 0.5rem">Total em Aberto</h3>
+              <div class="stat-amount" id="finTotalPending">R$ 0,00</div>
+              <p class="text-muted" style="margin:0.5rem 0 0">Pendências podem afetar novos agendamentos</p>
+            </div>
+            
+            <div class="card" style="margin-top:1.5rem">
+              <div class="card-header">
+                <h3 style="margin:0">Histórico de Pagamentos</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Serviço</th>
+                      <th>Valor</th>
+                      <th>Nota Fiscal</th>
+                    </tr>
+                  </thead>
+                  <tbody id="financialTable">
+                    <!-- Preenchido via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div class="dashboard-sidebar">
+            <div class="card">
+              <h3 style="margin-bottom:1rem">Pendências</h3>
+              <div id="finPendingList">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            
+            <div class="card" style="margin-top:1.5rem">
+              <h4 style="margin-bottom:0.5rem">Precisa de ajuda?</h4>
+              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">
+                Para questões sobre pagamentos ou notas fiscais, entre em contato:
+              </p>
+              <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-sm btn-secondary btn-block">
+                💬 Falar no WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ADMIN ==================== -->
+   <section id="admin" class="page" data-page="admin">
+  <div class="container section">
+    <div class="dashboard-header">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
+        <h1>🛠️ Painel Administrativo</h1>
+        <button class="btn btn-secondary" id="adminLogoutBtn">Sair do modo admin</button>
+      </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" id="adminClients">0</div>
+        <div class="stat-label">Clientes ativos</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-number" id="adminAppointments">0</div>
+        <div class="stat-label">Agendamentos</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-number" id="adminRevenue">R$ 0</div>
+        <div class="stat-label">Faturamento</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon">🐕</div>
+        <div class="stat-number" id="adminPets">0</div>
+        <div class="stat-label">Pets cadastrados</div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="card" style="margin-top:1.5rem">
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="appointments">Agendamentos</button>
+        <button class="tab-btn" data-tab="clients">Clientes</button>
+        <button class="tab-btn" data-tab="payments">Pagamentos</button>
+        <button class="tab-btn" data-tab="reports">Relatórios</button>
+        <button class="tab-btn" data-tab="settings">Configurações</button>
+        <button class="tab-btn" data-tab="content">Conteúdo</button>
+      </div>
+      
+      <div class="tabs-content">
+        <!-- AGENDAMENTOS -->
+        <div class="tab-pane active" id="tab-appointments">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <h4 style="margin:0">Todos os Agendamentos</h4>
+            <button class="btn btn-primary" id="newAppointmentBtn">+ Novo Agendamento</button>
+          </div>
+          
+          <!-- Filtros -->
+          <div class="filters-row" style="margin-bottom:1rem">
+            <div class="form-group" style="margin:0;min-width:200px">
+              <label class="form-label" for="adminFilterClient">Cliente</label>
+              <select class="form-control" id="adminFilterClient">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:150px">
+              <label class="form-label" for="adminFilterService">Serviço</label>
+              <select class="form-control" id="adminFilterService">
+                <option value="">Todos</option>
+                <option value="adestramento">Adestramento</option>
+                <option value="pet-sitter">Pet Sitter</option>
+                <option value="passeio">Passeios</option>
+                <option value="hospedagem">Hospedagem</option>
+                <option value="daycare">Daycare</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0;min-width:150px">
+              <label class="form-label" for="adminFilterStatus">Status</label>
+              <select class="form-control" id="adminFilterStatus">
+                <option value="">Todos</option>
+                <option value="confirmed">Confirmados</option>
+                <option value="pending">Pendentes</option>
+                <option value="completed">Concluídos</option>
+                <option value="cancelled">Cancelados</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Pet</th>
+                  <th>Serviço</th>
+                  <th>Data(s)</th>
+                  <th>Valor</th>
+                  <th>Pagamento</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="adminAppointmentsTable">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Clientes -->
+        <div class="tab-pane" id="tab-clients">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Pets</th>
+                  <th>Agendamentos</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="adminClientsTable">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Pagamentos -->
+        <div class="tab-pane" id="tab-payments">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Serviço</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="adminPaymentsTable">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Relatórios -->
+        <div class="tab-pane" id="tab-reports">
+          <div class="reports-grid">
+            <div class="card">
+              <h4>Faturamento por Serviço</h4>
+              <div id="revenueByService">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            <div class="card">
+              <h4>Alertas de Vacinas</h4>
+              <p class="text-muted" style="font-size:0.875rem">Próximos 30 dias</p>
+              <div id="vaccineAlerts">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            <div class="card">
+              <h4>Clientes Mais Frequentes</h4>
+              <div id="topClients">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+            <div class="card">
+              <h4>Inadimplências</h4>
+              <div id="defaulters">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Configurações -->
+        <div class="tab-pane" id="tab-settings">
+          <form id="adminConfigForm">
+            <h4 style="margin-bottom:1rem">Valores dos Serviços</h4>
+            <div class="calculator-grid" id="pricesGrid">
+              <!-- Preenchido via JS -->
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:1.5rem">💾 Salvar configurações</button>
+          </form>
+          
+          <div style="margin-top:2rem">
+            <h4 style="margin-bottom:1rem">Alta Temporada</h4>
+            <p class="text-muted" style="margin-bottom:0.5rem">
+              Meses configurados: <strong>Julho, Dezembro, Janeiro</strong>
+            </p>
+            <small class="text-muted">Para editar períodos personalizados, contate o desenvolvedor.</small>
+          </div>
+        </div>
+        
+        <!-- Conteúdo -->
+        <div class="tab-pane" id="tab-content">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <h4>Conteúdos Educacionais</h4>
+            <button class="btn btn-sm btn-primary" id="addContentBtn">+ Novo</button>
+          </div>
+          <div id="contentList">
+            <!-- Preenchido via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>CQC Adestramento</h4>
+          <p class="text-light">
+            Adestramento positivo, passeios e hospedagem com cuidado e profissionalismo para seu melhor amigo.
+          </p>
+          <div class="social-links">
+            <a href="https://instagram.com/cqc.adestramento" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">📷</a>
+            <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="social-link" aria-label="WhatsApp">💬</a>
+            <a href="mailto:ctt.cqca@gmail.com" class="social-link" aria-label="E-mail">✉️</a>
+          </div>
+        </div>
+        <div>
+          <h4>Links Rápidos</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Início</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#precos">Preços</a></li>
+            <li><a href="#regras">Termos e Regras</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul class="footer-links contact-list">
+            <li>📍 Rua Guiratinga, 1249<br>Chácara Inglesa, São Paulo/SP</li>
+            <li>📱 <a href="https://wa.me/5511997811891">(11) 9 9781-1891</a></li>
+            <li>✉️ <a href="mailto:ctt.cqca@gmail.com">ctt.cqca@gmail.com</a></li>
+            <li>📷 @cqc.adestramento</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <span id="currentYear"></span> CQC Adestramento. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Modal Container -->
+  <div id="modalContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="spinner" role="status" aria-label="Carregando"></div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="03-utils.js"></script>
+  <script src="04-auth.js"></script>
+  <script src="05-pets.js"></script>
+  <script src="06-appointments.js"></script>
+  <script src="07-admin.js"></script>
+  <script src="08-app.js"></script>
+<!-- MODAL DE AGENDAMENTO -->
+<div id="appointmentModal" class="hidden">
+  <div class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:700px">
+      <div class="modal-header">
+        <h3 id="appointmentModalTitle" style="margin:0">Novo Agendamento</h3>
+        <button class="modal-close" onclick="Admin.closeAppointmentModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="adminAppointmentForm">
+          <input type="hidden" id="adminAptId">
+          
+          <div class="form-group">
+            <label class="form-label required" for="adminAptClient">Cliente *</label>
+            <select class="form-control" id="adminAptClient" required>
+              <option value="">Selecione o cliente...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required" for="adminAptPet">Pet *</label>
+            <select class="form-control" id="adminAptPet" required>
+              <option value="">Selecione o pet...</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label required" for="adminAptService">Serviço *</label>
+            <select class="form-control" id="adminAptService" required>
+              <option value="">Selecione o serviço...</option>
+              <option value="adestramento">Adestramento</option>
+              <option value="pet-sitter">Pet Sitter</option>
+              <option value="passeio">Passeio</option>
+              <option value="hospedagem">Hospedagem</option>
+              <option value="daycare">Daycare</option>
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label required" for="adminAptStart">Data Início *</label>
+              <input type="date" class="form-control" id="adminAptStart" required>
+            </div>
+            <div class="form-group" id="adminAptEndField">
+              <label class="form-label" for="adminAptEnd">Data Fim</label>
+              <input type="date" class="form-control" id="adminAptEnd">
+            </div>
+          </div>
+          
+          <div class="form-group" id="adminAptDurationField">
+            <label class="form-label">Duração</label>
+            <select class="form-control" id="adminAptDuration">
+              <option value="30">30 minutos</option>
+              <option value="50" selected>50 minutos</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="adminAptFrequencyField">
+            <label class="form-label">Frequência (passeio mensal)</label>
+            <select class="form-control" id="adminAptFrequency">
+              <option value="2">2x por semana</option>
+              <option value="3">3x por semana</option>
+              <option value="4">4x por semana</option>
+              <option value="5">5x por semana</option>
+            </select>
+          </div>
+          
+          <div class="card" style="background:var(--color-bg-hover);margin:1rem 0;padding:1rem">
+            <h4 style="margin:0 0 0.5rem">💰 Resumo do Valor</h4>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>Total:</span>
+              <span id="adminAptTotal" style="font-size:1.5rem;font-weight:700;color:var(--color-accent)">R$ 0,00</span>
+            </div>
+            <div id="adminAptBreakdown" style="margin-top:0.5rem;font-size:0.875rem;color:var(--color-text-muted)">
+              <!-- Breakdown via JS -->
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminAptPayment">Status do Pagamento</label>
+            <select class="form-control" id="adminAptPayment">
+              <option value="pending">Pendente</option>
+              <option value="paid">Pago</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminAptStatus">Status do Agendamento</label>
+            <select class="form-control" id="adminAptStatus">
+              <option value="confirmed">Confirmado</option>
+              <option value="pending">Pendente</option>
+              <option value="completed">Concluído</option>
+              <option value="cancelled">Cancelado</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminAptNotes">Observações</label>
+            <textarea class="form-control" id="adminAptNotes" rows="2" placeholder="Observações adicionais..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="Admin.closeAppointmentModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="Admin.saveAppointment()">💾 Salvar Agendamento</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
