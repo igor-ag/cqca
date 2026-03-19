@@ -862,7 +862,10 @@ closeContentModal: () => {
 saveContent: () => {
   console.log('Salvando conteúdo...');
   
-  const contentId = document.getElementById('contentId')?.value || null;
+  const contentIdEl = document.getElementById('contentId');
+  const contentId = contentIdEl?.value?.trim() || null;
+  
+  console.log('contentId:', contentId);
   
   // Validar campos obrigatórios
   const title = document.getElementById('contentTitle')?.value?.trim();
@@ -893,15 +896,17 @@ saveContent: () => {
     if (index !== -1) {
       contents[index] = contentData;
       console.log('Conteúdo atualizado no índice', index);
+      Utils.toast('Conteúdo atualizado!', 'success');
     } else {
       console.error('Conteúdo não encontrado para atualização');
       Utils.toast('Erro: Conteúdo não encontrado', 'error');
       return;
     }
   } else {
-    // Novo conteúdo
+    // NOVO conteúdo
     contents.unshift(contentData);
-    console.log('Novo conteúdo adicionado');
+    console.log('Novo conteúdo criado');
+    Utils.toast('Conteúdo criado!', 'success');
   }
   
   // Salvar no storage
@@ -909,11 +914,8 @@ saveContent: () => {
   console.log('Salvo no storage:', saved);
   
   if (saved) {
-    Utils.toast(contentId ? 'Conteúdo atualizado!' : 'Conteúdo criado!', 'success');
     Admin.closeContentModal();
     Admin.renderContent();
-  } else {
-    Utils.toast('Erro ao salvar. Verifique o console.', 'error');
   }
 },
   
