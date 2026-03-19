@@ -1535,122 +1535,194 @@
   <script src="07-admin.js"></script>
   <script src="08-app.js"></script>
   
-  <!-- Calculadora - Hospedagem/Daycare -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const calcService = document.getElementById('calcService');
-      const calcStart = document.getElementById('calcStart');
-      const calcEnd = document.getElementById('calcEnd');
-      
-      [calcService, calcStart, calcEnd].forEach(el => {
-        if (el) {
-          el.addEventListener('change', updateCalculator);
-        }
-      });
-      
-      function updateCalculator() {
-        const service = calcService?.value;
-        const start = calcStart?.value;
-        const end = calcEnd?.value;
-        const resultEl = document.getElementById('calcResult');
-        const detailsEl = document.getElementById('calcDetails');
-        const breakdownEl = document.getElementById('calcBreakdown');
-        
-        if (!resultEl || !service || !start || !end) {
-          if (resultEl) resultEl.textContent = 'R$ 0,00';
-          if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
-          if (breakdownEl) breakdownEl.style.display = 'none';
-          return;
-        }
-        
-        const startDate = new Date(start);
-        const endDate = new Date(end);
-        
-        if (endDate < startDate) {
-          resultEl.textContent = 'Data inválida';
-          if (detailsEl) detailsEl.textContent = 'A data de saída deve ser após a entrada';
-          if (breakdownEl) breakdownEl.style.display = 'none';
-          return;
-        }
-        
-        const config = Utils.get('adminConfig', {}) || {};
-        const prices = config.prices || {};
-        let total = 0;
-        const breakdown = [];
-        
-        // Calcular horas totais
-        const totalHours = (endDate - startDate) / (1000 * 60 * 60);
-        
-        // Cortesia de 4h: 28h = 1 diária, 52h = 2 diárias
-        const dailyHours = 24;
-        const graceHours = 4;
-        const numDays = Math.ceil(totalHours / (dailyHours + graceHours));
-        
-        // Calcular preço por dia
-        for (let i = 0; i < numDays; i++) {
-          const currentDate = new Date(startDate);
-          currentDate.setDate(currentDate.getDate() + i);
-          
-          let dailyPrice;
-          const isHoliday = Utils.isHoliday(currentDate);
-          const isHighSeason = Utils.isHighSeason(currentDate);
-          const isWeekend = Utils.isWeekend(currentDate);
-          
-          if (service === 'hospedagem') {
-            if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
-            else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
-            else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
-            else dailyPrice = prices.hospedagemWeekday || 80;
-          } else {
-            if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
-            else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
-            else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
-            else dailyPrice = prices.daycareWeekday || 70;
+<!-- Calculadora - Hospedagem/Daycare -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const calcService = document.getElementById('calcService');
+    const calcStart = document.getElementById('calcStart');
+    const calcEnd = document.getElementById('calcEnd');
+    
+    // Limitar horários para 8h-20h
+    [calcStart, calcEnd].forEach(input => {
+      if (input) {
+        input.addEventListener('change', function() {
+          if (this.value) {
+            const date = new Date(this.value);
+            const hours = date.getHours();
+            
+            if (hours < 8) {
+              date.setHours(8, 0, 0, 0);
+              this.value = date.toISOString().slice(0, 16);
+              Utils.toast('Horário ajustado para 8h (mínimo)', 'warning');
+            } else if (hours >= 20) {
+              date.setHours(20, 0, 0, 0);
+              this.value = date.toISOString().slice(0, 16);
+              Utils.toast('Horário ajustado para 20h (máximo)', 'warning');
+            }
           }
-          
-          total += dailyPrice;
-          breakdown.push({
-            date: currentDate.toISOString().split('T')[0],
-            price: dailyPrice,
-            tags: [
-              isHoliday ? 'Feriado' : null,
-              isWeekend ? 'Fim de semana' : null,
-              isHighSeason ? 'Alta temporada' : null
-            ].filter(Boolean)
-          });
-        }
-        
-        resultEl.textContent = Utils.formatCurrency(total);
-        
-        if (detailsEl) {
-          detailsEl.textContent = `${numDays} diária(s) • ${totalHours.toFixed(1)} horas totais (cortesia de 4h incluída)`;
-        }
-        
-        if (breakdownEl) {
-          if (breakdown.length > 1) {
-            breakdownEl.innerHTML = breakdown.map(b => 
-              `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
-                <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
-                <span>${Utils.formatCurrency(b.price)}</span>
-              </div>`
-            ).join('');
-            breakdownEl.style.display = 'block';
-          } else {
-            breakdownEl.style.display = 'none';
-          }
-        }
-      }
-      
-      // Toggle campo de vídeo no modal de conteúdo
-      const contentType = document.getElementById('contentType');
-      const videoUrlField = document.getElementById('videoUrlField');
-      
-      if (contentType && videoUrlField) {
-        contentType.addEventListener('change', function() {
-          videoUrlField.style.display = this.value.startsWith('video-') ? 'block' : 'none';
         });
       }
     });
-  </script>
+    
+    [calcService, calcStart, calcEnd].forEach(el => {
+      if (el) {
+        el.addEventListener('change', updateCalculator);
+      }
+    });
+    
+    function updateCalculator() {
+      const service = calcService?.value;
+      const start = calcStart?.value;
+      const end = calcEnd?.value;
+      const resultEl = document.getElementById('calcResult');
+      const detailsEl = document.getElementById('calcDetails');
+      const breakdownEl = document.getElementById('calcBreakdown');
+      
+      if (!resultEl || !service || !start || !end) {
+        if (resultEl) resultEl.textContent = 'R$ 0,00';
+        if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
+        if (breakdownEl) breakdownEl.style.display = 'none';
+        return;
+      }
+      
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      
+      // Validar horário 8h-20h
+      const startHour = startDate.getHours();
+      const endHour = endDate.getHours();
+      
+      if (startHour < 8 || startHour >= 20 || endHour < 8 || endHour >= 20) {
+        resultEl.textContent = 'Horário inválido';
+        if (detailsEl) detailsEl.textContent = 'Check-in/out apenas entre 8h e 20h';
+        if (breakdownEl) breakdownEl.style.display = 'none';
+        return;
+      }
+      
+      if (endDate < startDate) {
+        resultEl.textContent = 'Data inválida';
+        if (detailsEl) detailsEl.textContent = 'A data de saída deve ser após a entrada';
+        if (breakdownEl) breakdownEl.style.display = 'none';
+        return;
+      }
+      
+      const config = Utils.get('adminConfig', {}) || {};
+      const prices = config.prices || {};
+      let total = 0;
+      const breakdown = [];
+      
+      // Calcular horas totais
+      const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+      
+      // ✅ Cortesia de 4h no TOTAL da estadia
+      const courtesyHours = 4;
+      const billableHours = Math.max(0, totalHours - courtesyHours);
+      
+      // ✅ Calcular diárias completas (24h cada)
+      const fullDays = Math.floor(billableHours / 24);
+      const remainingHours = billableHours % 24;
+      
+      // ✅ Determinar diárias adicionais baseado no restante
+      let extraHospDays = 0;
+      let extraDaycareDays = 0;
+      
+      if (remainingHours > 0) {
+        if (remainingHours <= 12) {
+          // 1h a 12h = +1 daycare
+          extraDaycareDays = 1;
+        } else {
+          // 13h a 24h = +1 hospedagem
+          extraHospDays = 1;
+        }
+      }
+      
+      // Garantir mínimo de 1 diária se houver horas cobráveis
+      const hospDays = Math.max(fullDays + extraHospDays, billableHours > 0 ? 1 : 0);
+      
+      // Calcular preço das diárias de hospedagem
+      for (let i = 0; i < hospDays; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(currentDate.getDate() + i);
+        
+        let dailyPrice;
+        const isHoliday = Utils.isHoliday(currentDate);
+        const isHighSeason = Utils.isHighSeason(currentDate);
+        const isWeekend = Utils.isWeekend(currentDate);
+        
+        if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
+        else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
+        else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
+        else dailyPrice = prices.hospedagemWeekday || 80;
+        
+        total += dailyPrice;
+        breakdown.push({
+          type: 'hospedagem',
+          date: currentDate.toISOString().split('T')[0],
+          price: dailyPrice,
+          tags: [
+            isHoliday ? 'Feriado' : null,
+            isWeekend ? 'Fim de semana' : null,
+            isHighSeason ? 'Alta temporada' : null
+          ].filter(Boolean)
+        });
+      }
+      
+      // Calcular preço das diárias de daycare extra
+      for (let i = 0; i < extraDaycareDays; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(currentDate.getDate() + hospDays + i);
+        
+        let dailyPrice;
+        const isHoliday = Utils.isHoliday(currentDate);
+        const isHighSeason = Utils.isHighSeason(currentDate);
+        const isWeekend = Utils.isWeekend(currentDate);
+        
+        if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
+        else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
+        else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
+        else dailyPrice = prices.daycareWeekday || 70;
+        
+        total += dailyPrice;
+        breakdown.push({
+          type: 'daycare',
+          date: currentDate.toISOString().split('T')[0],
+          price: dailyPrice,
+          tags: ['Horas excedentes']
+        });
+      }
+      
+      resultEl.textContent = Utils.formatCurrency(total);
+      
+      if (detailsEl) {
+        let details = `${hospDays} hospedagem`;
+        if (extraDaycareDays > 0) {
+          details += ` + ${extraDaycareDays} daycare`;
+        }
+        details += ` • ${totalHours.toFixed(1)}h totais`;
+        if (totalHours > 4) {
+          details += ` (cortesia de 4h aplicada)`;
+        }
+        if (remainingHours > 0) {
+          details += ` • ${remainingHours.toFixed(1)}h excedentes`;
+        }
+        detailsEl.textContent = details;
+      }
+      
+      if (breakdownEl) {
+        if (breakdown.length > 0) {
+          breakdownEl.innerHTML = breakdown.map(b => 
+            `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
+              <span>${b.type === 'daycare' ? '🌞' : '🌙'} ${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
+              <span>${Utils.formatCurrency(b.price)}</span>
+            </div>`
+          ).join('');
+          breakdownEl.style.display = 'block';
+        } else {
+          breakdownEl.style.display = 'none';
+        }
+      }
+    }
+  });
+</script>
 </body>
 </html>

@@ -345,60 +345,14 @@ const Appointments = {
   /**
    * CÁLCULO DE DIÁRIAS COM HORAS (24h + 4h cortesia)
    */
-  calculateStay: (serviceType, startDate, endDate) => {
-    const config = Utils.get('adminConfig', {});
-    const prices = config.prices || {};
-    
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    
-    // Calcular horas totais
-    const totalHours = (end - start) / (1000 * 60 * 60);
-    
-    // Cortesia de 4h: 28h = 1 diária, 52h = 2 diárias
-    const dailyHours = 24;
-    const graceHours = 4;
-    const numDays = Math.ceil(totalHours / (dailyHours + graceHours));
-    
-    let total = 0;
-    const breakdown = [];
-    
-    // Calcular preço por dia considerando feriados/fim de semana/alta temporada
-    for (let i = 0; i < numDays; i++) {
-      const currentDate = new Date(start);
-      currentDate.setDate(currentDate.getDate() + i);
-      
-      let dailyPrice;
-      const isHoliday = Utils.isHoliday(currentDate);
-      const isHighSeason = Utils.isHighSeason(currentDate);
-      const isWeekend = Utils.isWeekend(currentDate);
-      
-      if (serviceType === 'hospedagem') {
-        if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
-        else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
-        else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
-        else dailyPrice = prices.hospedagemWeekday || 80;
-      } else {
-        if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
-        else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
-        else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
-        else dailyPrice = prices.daycareWeekday || 70;
-      }
-      
-      total += dailyPrice;
-      breakdown.push({
-        date: currentDate.toISOString().split('T')[0],
-        price: dailyPrice,
-        tags: [
-          isHoliday ? 'Feriado' : null,
-          isWeekend ? 'Fim de semana' : null,
-          isHighSeason ? 'Alta temporada' : null
-        ].filter(Boolean)
-      });
-    }
-    
-    return { total, breakdown, totalHours, numDays };
-  },
+ calculateStay: (serviceType, startDate, endDate) => {
+  const config = Utils.get('adminConfig', {});
+  const prices = config.prices || {};
+  
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  
+…},
   
   calculateMonthlyWalks: (frequency) => {
     const config = Utils.get('adminConfig', {});
