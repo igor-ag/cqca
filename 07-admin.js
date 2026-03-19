@@ -804,29 +804,54 @@ const Admin = {
     Utils.toast('Preços atualizados com sucesso!', 'success');
   },
   
-  openContentModal: (contentId = null) => {
-    const modal = document.getElementById('contentModal');
-    if (!modal) return;
-    
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    
-    const contents = Utils.get('educationalContent', []);
-    const content = contentId ? contents.find(c => c.id === contentId) : null;
-    
-    document.getElementById('contentId').value = contentId || '';
-    document.getElementById('contentTitle').value = content?.title || '';
-    document.getElementById('contentExcerpt').value = content?.excerpt || '';
-    document.getElementById('contentType').value = content?.type || 'article';
-    document.getElementById('contentVideoUrl').value = content?.videoUrl || '';
-    document.getElementById('contentText').value = content?.content || '';
-    
-    document.getElementById('videoUrlField').style.display = (content?.type?.startsWith('video-')) ? 'block' : 'none';
-    
-    document.getElementById('contentModalTitle').textContent = contentId ? 'Editar Conteúdo' : 'Novo Conteúdo';
-  },
+openContentModal: (contentId = null) => {
+  console.log('Abrindo modal de conteúdo, ID:', contentId);
   
-  closeContentModal: () => {
+  const modal = document.getElementById('contentModal');
+  if (!modal) {
+    console.error('Modal contentModal não encontrado no HTML');
+    Utils.toast('Erro: Modal não encontrado', 'error');
+    return;
+  }
+  
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  
+  const contents = Utils.get('educationalContent', []) || [];
+  const content = contentId ? contents.find(c => c.id === contentId) : null;
+  
+  // Preencher campos com verificação de existência
+  const setContent = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+  };
+  
+  setContent('contentId', contentId || '');
+  setContent('contentTitle', content?.title || '');
+  setContent('contentExcerpt', content?.excerpt || '');
+  setContent('contentVideoUrl', content?.videoUrl || '');
+  setContent('contentText', content?.content || '');
+  
+  const typeSelect = document.getElementById('contentType');
+  if (typeSelect) {
+    typeSelect.value = content?.type || 'article';
+    typeSelect.dispatchEvent(new Event('change'));
+  }
+  
+  const videoField = document.getElementById('videoUrlField');
+  if (videoField) {
+    videoField.style.display = (content?.type?.startsWith('video-')) ? 'block' : 'none';
+  }
+  
+  const titleEl = document.getElementById('contentModalTitle');
+  if (titleEl) {
+    titleEl.textContent = contentId ? 'Editar Conteúdo' : 'Novo Conteúdo';
+  }
+  
+  console.log('Modal aberto com sucesso');
+},
+
+closeContentModal: () => {
     const modal = document.getElementById('contentModal');
     if (modal) {
       modal.classList.add('hidden');
@@ -834,33 +859,63 @@ const Admin = {
     }
   },
   
-  saveContent: () => {
-    const contentId = document.getElementById('contentId')?.value;
-    const contents = Utils.get('educationalContent', []);
-    
-    const contentData = {
-      id: contentId || Utils.generateId('edu_'),
-      title: document.getElementById('contentTitle').value.trim(),
-      excerpt: document.getElementById('contentExcerpt').value.trim(),
-      type: document.getElementById('contentType').value,
-      videoUrl: document.getElementById('contentVideoUrl').value.trim(),
-      content: document.getElementById('contentText').value.trim(),
-      createdAt: contentId ? contents.find(c => c.id === contentId)?.createdAt : new Date().toISOString()
-    };
-    
-    if (contentId) {
-      const index = contents.findIndex(c => c.id === contentId);
-      if (index !== -1) contents[index] = contentData;
+saveContent: () => {
+  console.log('Salvando conteúdo...');
+  
+  const contentId = document.getElementById('contentId')?.value || null;
+  
+  // Validar campos obrigatórios
+  const title = document.getElementById('contentTitle')?.value?.trim();
+  if (!title) {
+    Utils.toast('Título é obrigatório', 'error');
+    return;
+  }
+  
+  const contents = Utils.get('educationalContent', []) || [];
+  
+  const contentData = {
+    id: contentId || Utils.generateId('edu_'),
+    title: title,
+    excerpt: document.getElementById('contentExcerpt')?.value?.trim() || '',
+    type: document.getElementById('contentType')?.value || 'article',
+    videoUrl: document.getElementById('contentVideoUrl')?.value?.trim() || '',
+    content: document.getElementById('contentText')?.value?.trim() || '',
+    createdAt: contentId 
+      ? (contents.find(c => c.id === contentId)?.createdAt || new Date().toISOString())
+      : new Date().toISOString()
+  };
+  
+  console.log('Dados a salvar:', contentData);
+  
+  if (contentId) {
+    // Atualizar existente
+    const index = contents.findIndex(c => c.id === contentId);
+    if (index !== -1) {
+      contents[index] = contentData;
+      console.log('Conteúdo atualizado no índice', index);
     } else {
-      contents.unshift(contentData);
+      console.error('Conteúdo não encontrado para atualização');
+      Utils.toast('Erro: Conteúdo não encontrado', 'error');
+      return;
     }
-    
-    Utils.save('educationalContent', contents);
-    
+  } else {
+    // Novo conteúdo
+    contents.unshift(contentData);
+    console.log('Novo conteúdo adicionado');
+  }
+  
+  // Salvar no storage
+  const saved = Utils.save('educationalContent', contents);
+  console.log('Salvo no storage:', saved);
+  
+  if (saved) {
     Utils.toast(contentId ? 'Conteúdo atualizado!' : 'Conteúdo criado!', 'success');
     Admin.closeContentModal();
     Admin.renderContent();
-  },
+  } else {
+    Utils.toast('Erro ao salvar. Verifique o console.', 'error');
+  }
+},
   
   deleteContent: (contentId) => {
     if (!confirm('Excluir este conteúdo?')) return;
