@@ -345,14 +345,105 @@ const Appointments = {
   /**
    * CALCULO DE DIARIAS COM HORAS (24h + 4h cortesia)
    */
- calculateStay: (serviceType, startDate, endDate) => {
+calculateStay: (serviceType, startDate, endDate) => {
   const config = Utils.get('adminConfig', {});
   const prices = config.prices || {};
   
   const start = new Date(startDate);
   const end = new Date(endDate);
   
-…},
+  const totalHours = (end - start) / (1000 * 60 * 60);
+  
+  const courtesyHours = 4;
+  const billableHours = Math.max(0, totalHours - courtesyHours);
+  
+  const fullDays = Math.floor(billableHours / 24);
+  const remainingHours = billableHours % 24;
+  
+  let extraHospDays = 0;
+  let extraDaycareDays = 0;
+  
+  if (remainingHours > 0) {
+    if (remainingHours <= 12) {
+      extraDaycareDays = 1;
+    } else {
+      extraHospDays = 1;
+    }
+  }
+  
+  const hospDays = Math.max(fullDays + extraHospDays, billableHours > 0 ? 1 : 0);
+  
+  let total = 0;
+  const breakdown = [];
+  
+  for (let i = 0; i < hospDays; i++) {
+    const currentDate = new Date(start);
+    currentDate.setDate(currentDate.getDate() + i);
+    
+    let dailyPrice;
+    const isHoliday = Utils.isHoliday(currentDate);
+    const isHighSeason = Utils.isHighSeason(currentDate);
+    const isWeekend = Utils.isWeekend(currentDate);
+    
+    if (serviceType === 'hospedagem') {
+      if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
+      else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
+      else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
+      else dailyPrice = prices.hospedagemWeekday || 80;
+    } else {
+      if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
+      else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
+      else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
+      else dailyPrice = prices.daycareWeekday || 70;
+    }
+    
+    total += dailyPrice;
+    breakdown.push({
+      type: serviceType,
+      date: currentDate.toISOString().split('T')[0],
+      price: dailyPrice,
+      tags: [
+        isHoliday ? 'Feriado' : null,
+        isWeekend ? 'Fim de semana' : null,
+        isHighSeason ? 'Alta temporada' : null
+      ].filter(Boolean)
+    });
+  }
+  
+  if (serviceType === 'hospedagem' && extraDaycareDays > 0) {
+    for (let i = 0; i < extraDaycareDays; i++) {
+      const currentDate = new Date(start);
+      currentDate.setDate(currentDate.getDate() + hospDays + i);
+      
+      let dailyPrice;
+      const isHoliday = Utils.isHoliday(currentDate);
+      const isHighSeason = Utils.isHighSeason(currentDate);
+      const isWeekend = Utils.isWeekend(currentDate);
+      
+      if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
+      else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
+      else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
+      else dailyPrice = prices.daycareWeekday || 70;
+      
+      total += dailyPrice;
+      breakdown.push({
+        type: 'daycare',
+        date: currentDate.toISOString().split('T')[0],
+        price: dailyPrice,
+        tags: ['Horas excedentes (' + remainingHours.toFixed(1) + 'h)']
+      });
+    }
+  }
+  
+  return { 
+    total: total, 
+    breakdown: breakdown, 
+    totalHours: totalHours, 
+    hospDays: hospDays, 
+    extraDaycareDays: extraDaycareDays,
+    remainingHours: remainingHours 
+  };
+},
   
   calculateMonthlyWalks: (frequency) => {
     const config = Utils.get('adminConfig', {});
