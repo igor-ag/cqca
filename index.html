@@ -175,13 +175,46 @@
               
               <div class="form-group">
                 <label class="form-label required" for="calcStart">Data e Hora de Entrada *</label>
-                <input type="datetime-local" class="form-control" id="calcStart" required>
+                <div class="input-group" style="flex-wrap:wrap;gap:0.5rem">
+                <input type="date" class="form-control" id="calcStartDate" placeholder="Data" required style="flex:1;min-width:150px">
+                 <select class="form-control" id="calcStartTime" required style="width:100px">
+                   <option value="8">08:00</option>
+                   <option value="9">09:00</option>
+                   <option value="10">10:00</option>
+                   <option value="11">11:00</option>
+                   <option value="12">12:00</option>
+                   <option value="13">13:00</option>
+                   <option value="14">14:00</option>
+                   <option value="15">15:00</option>
+                   <option value="16">16:00</option>
+                   <option value="17">17:00</option>
+                   <option value="18">18:00</option>
+                   <option value="19">19:00</option>
+                   <option value="20">20:00</option>
+                 </select>
+               </div>
               </div>
               
               <div class="form-group">
                 <label class="form-label required" for="calcEnd">Data e Hora de Saída *</label>
-                <input type="datetime-local" class="form-control" id="calcEnd" required>
-              </div>
+<div class="input-group" style="flex-wrap:wrap;gap:0.5rem">
+  <input type="date" class="form-control" id="calcEndDate" placeholder="Data" required style="flex:1;min-width:150px">
+  <select class="form-control" id="calcEndTime" required style="width:100px">
+    <option value="8">08:00</option>
+    <option value="9">09:00</option>
+    <option value="10">10:00</option>
+    <option value="11">11:00</option>
+    <option value="12">12:00</option>
+    <option value="13">13:00</option>
+    <option value="14">14:00</option>
+    <option value="15">15:00</option>
+    <option value="16">16:00</option>
+    <option value="17">17:00</option>
+    <option value="18">18:00</option>
+    <option value="19">19:00</option>
+    <option value="20">20:00</option>
+  </select>
+</div>              </div>
               
               <div class="calculator-result">
                 <div>Valor estimado:</div>
@@ -1539,58 +1572,18 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const calcService = document.getElementById('calcService');
-    const calcStart = document.getElementById('calcStart');
-    const calcEnd = document.getElementById('calcEnd');
+    const calcStartDate = document.getElementById('calcStartDate');
+    const calcStartTime = document.getElementById('calcStartTime');
+    const calcEndDate = document.getElementById('calcEndDate');
+    const calcEndTime = document.getElementById('calcEndTime');
     
-    // ✅ RESTRINGIR horários para 8h-20h de forma efetiva
-    [calcStart, calcEnd].forEach(input => {
-      if (input) {
-        // Definir valor inicial (8h)
-        input.addEventListener('focus', function() {
-          if (this.value) {
-            const date = new Date(this.value);
-            const hours = date.getHours();
-            
-            // Se estiver fora do horário, ajustar automaticamente
-            if (hours < 8) {
-              date.setHours(8, 0, 0, 0);
-              this.value = date.toISOString().slice(0, 16);
-            } else if (hours >= 20) {
-              date.setHours(20, 0, 0, 0);
-              this.value = date.toISOString().slice(0, 16);
-            }
-          } else {
-            // Se vazio, definir 8h como padrão
-            const now = new Date();
-            now.setHours(8, 0, 0, 0);
-            this.value = now.toISOString().slice(0, 16);
-          }
-        });
-        
-        // Validar ao mudar
-        input.addEventListener('change', function() {
-          if (this.value) {
-            const date = new Date(this.value);
-            const hours = date.getHours();
-            
-            if (hours < 8 || hours >= 20) {
-              // Ajustar automaticamente sem mostrar erro
-              if (hours < 8) {
-                date.setHours(8, 0, 0, 0);
-              } else {
-                date.setHours(20, 0, 0, 0);
-              }
-              this.value = date.toISOString().slice(0, 16);
-              
-              // Mostrar mensagem informativa (não erro)
-              Utils.toast('Horário disponível: 8h às 20h', 'info');
-            }
-          }
-        });
-      }
-    });
+    // Definir data mínima como hoje
+    const today = new Date().toISOString().split('T')[0];
+    if (calcStartDate) calcStartDate.min = today;
+    if (calcEndDate) calcEndDate.min = today;
     
-    [calcService, calcStart, calcEnd].forEach(el => {
+    // Calcular quando qualquer campo mudar
+    [calcService, calcStartDate, calcStartTime, calcEndDate, calcEndTime].forEach(el => {
       if (el) {
         el.addEventListener('change', updateCalculator);
       }
@@ -1598,34 +1591,27 @@
     
     function updateCalculator() {
       const service = calcService?.value;
-      const start = calcStart?.value;
-      const end = calcEnd?.value;
+      const startDate = calcStartDate?.value;
+      const startTime = calcStartTime?.value;
+      const endDate = calcEndDate?.value;
+      const endTime = calcEndTime?.value;
+      
       const resultEl = document.getElementById('calcResult');
       const detailsEl = document.getElementById('calcDetails');
       const breakdownEl = document.getElementById('calcBreakdown');
       
-      if (!resultEl || !service || !start || !end) {
+      if (!resultEl || !service || !startDate || !endDate) {
         if (resultEl) resultEl.textContent = 'R$ 0,00';
         if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
         if (breakdownEl) breakdownEl.style.display = 'none';
         return;
       }
       
-      const startDate = new Date(start);
-      const endDate = new Date(end);
+      // ✅ Criar datas com horário correto (sem timezone issue)
+      const startDateTime = new Date(startDate + 'T' + (startTime || '8') + ':00:00');
+      const endDateTime = new Date(endDate + 'T' + (endTime || '8') + ':00:00');
       
-      // ✅ Validação suave (já foi ajustado automaticamente)
-      const startHour = startDate.getHours();
-      const endHour = endDate.getHours();
-      
-      if (startHour < 8 || startHour >= 20 || endHour < 8 || endHour >= 20) {
-        resultEl.textContent = 'R$ 0,00';
-        if (detailsEl) detailsEl.textContent = 'Check-in/out: 8h às 20h';
-        if (breakdownEl) breakdownEl.style.display = 'none';
-        return;
-      }
-      
-      if (endDate < startDate) {
+      if (endDateTime < startDateTime) {
         resultEl.textContent = 'R$ 0,00';
         if (detailsEl) detailsEl.textContent = 'Saída deve ser após entrada';
         if (breakdownEl) breakdownEl.style.display = 'none';
@@ -1637,29 +1623,28 @@
       let total = 0;
       const breakdown = [];
       
-      const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+      // Calcular horas totais
+      const totalHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
       
+      // Cortesia de 4h no TOTAL
       const courtesyHours = 4;
       const billableHours = Math.max(0, totalHours - courtesyHours);
       
+      // Diárias completas (24h cada)
       const fullDays = Math.floor(billableHours / 24);
       const remainingHours = billableHours % 24;
       
-      let extraHospDays = 0;
+      // Horas excedentes
       let extraDaycareDays = 0;
-      
-      if (remainingHours > 0) {
-        if (remainingHours <= 12) {
-          extraDaycareDays = 1;
-        } else {
-          extraHospDays = 1;
-        }
+      if (remainingHours > 0 && remainingHours <= 12) {
+        extraDaycareDays = 1;
       }
       
-      const hospDays = Math.max(fullDays + extraHospDays, billableHours > 0 ? 1 : 0);
+      const hospDays = Math.max(fullDays, billableHours > 0 ? 1 : 0);
       
+      // Calcular hospedagem
       for (let i = 0; i < hospDays; i++) {
-        const currentDate = new Date(startDate);
+        const currentDate = new Date(startDateTime);
         currentDate.setDate(currentDate.getDate() + i);
         
         let dailyPrice;
@@ -1685,26 +1670,15 @@
         });
       }
       
-      for (let i = 0; i < extraDaycareDays; i++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(currentDate.getDate() + hospDays + i);
-        
-        let dailyPrice;
-        const isHoliday = Utils.isHoliday(currentDate);
-        const isHighSeason = Utils.isHighSeason(currentDate);
-        const isWeekend = Utils.isWeekend(currentDate);
-        
-        if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
-        else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
-        else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
-        else dailyPrice = prices.daycareWeekday || 70;
-        
-        total += dailyPrice;
+      // Calcular daycare extra
+      if (extraDaycareDays > 0) {
+        const daycarePrice = prices.daycareWeekday || 70;
+        total += daycarePrice;
         breakdown.push({
           type: 'daycare',
-          date: currentDate.toISOString().split('T')[0],
-          price: dailyPrice,
-          tags: ['Horas excedentes']
+          date: 'Excedente',
+          price: daycarePrice,
+          tags: [remainingHours.toFixed(1) + 'h']
         });
       }
       
@@ -1713,7 +1687,7 @@
       if (detailsEl) {
         let details = hospDays + ' hospedagem';
         if (extraDaycareDays > 0) {
-          details += ' + ' + extraDaycareDays + ' daycare';
+          details += ' + 1 daycare';
         }
         details += ' | ' + totalHours.toFixed(1) + 'h totais';
         if (totalHours > 4) {
@@ -1726,7 +1700,7 @@
         if (breakdown.length > 0) {
           breakdownEl.innerHTML = breakdown.map(b => 
             '<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">' +
-              '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + Utils.formatDate(b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
+              '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + (b.date !== 'Excedente' ? Utils.formatDate(b.date) : b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
               '<span>' + Utils.formatCurrency(b.price) + '</span>' +
             '</div>'
           ).join('');
@@ -1737,16 +1711,18 @@
       }
     }
     
-    // ✅ Adicionar texto de ajuda visual
+    // Adicionar texto de ajuda
     const calcGrid = document.querySelector('.calculator-grid');
     if (calcGrid) {
       const helpText = document.createElement('p');
       helpText.className = 'text-muted';
       helpText.style.gridColumn = '1 / -1';
       helpText.style.fontSize = '0.875rem';
-      helpText.innerHTML = 'ℹ️ Check-in e check-out disponíveis apenas entre <strong>8h e 20h</strong>. O horário será ajustado automaticamente se necessário.';
-      calcGrid.insertBefore(helpText, calcGrid.firstChild);
+      helpText.style.marginTop = '0.5rem';
+      helpText.innerHTML = 'ℹ️ Check-in e check-out disponíveis das <strong>8h às 20h</strong>.';
+      calcGrid.appendChild(helpText);
     }
   });
-</script></body>
+</script>
+</body>
 </html>
