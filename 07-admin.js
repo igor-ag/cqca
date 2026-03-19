@@ -933,24 +933,40 @@ saveContent: () => {
     Utils.toast('Conteúdo excluído', 'success');
   },
   
-  renderContent: () => {
-    const container = document.getElementById('contentList');
-    if (!container) return;
+renderContent: () => {
+  const container = document.getElementById('contentList');
+  if (!container) return;
+  
+  const contents = Utils.get('educationalContent', []);
+  
+  if (contents.length === 0) {
+    container.innerHTML = '<p class="text-muted">Nenhum conteúdo cadastrado.</p>';
+    return;
+  }
+  
+  container.innerHTML = contents.map(c => {
+    let icon = '📄';
+    let typeLabel = 'Artigo';
     
-    const contents = Utils.get('educationalContent', []);
-    
-    if (contents.length === 0) {
-      container.innerHTML = '<p class="text-muted">Nenhum conteúdo cadastrado.</p>';
-      return;
+    if (c.type === 'video-youtube') {
+      icon = '🎥';
+      typeLabel = 'YouTube';
+    } else if (c.type === 'video-tiktok') {
+      icon = '🎵';
+      typeLabel = 'TikTok';
+    } else if (c.type === 'video-instagram') {
+      icon = '📷';
+      typeLabel = 'Instagram';
     }
     
-    container.innerHTML = contents.map(c => `
+    return `
       <div class="card" style="margin-bottom:0.5rem">
         <div style="display:flex;justify-content:space-between;align-items:start">
           <div>
             <strong>${c.title}</strong><br>
-            <small class="text-muted">${c.excerpt}</small><br>
-            <small class="text-muted">${c.type.startsWith('video-') ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</small>
+            <small class="text-muted">${c.excerpt || 'Sem descrição'}</small><br>
+            <small class="text-muted">${icon} ${typeLabel} • ${Utils.formatDate(c.createdAt)}</small>
+            ${c.videoUrl ? `<br><small class="text-muted" style="color:var(--color-accent)">🔗 Link do vídeo salvo</small>` : ''}
           </div>
           <div style="display:flex;gap:0.5rem">
             <button class="btn btn-sm btn-secondary" data-action="edit-content" data-id="${c.id}">✏️</button>
@@ -958,8 +974,9 @@ saveContent: () => {
           </div>
         </div>
       </div>
-    `).join('');
-  },
+    `;
+  }).join('');
+},
   
   load: () => {
     Admin.renderStats();

@@ -361,38 +361,92 @@ const App = {
   /**
    * Visualizar conteúdo
    */
-  viewContent: (id) => {
-    const contents = Utils.get('educationalContent', []);
-    const content = contents.find(c => c.id === id);
-    if (!content) return;
-    
-    const modalContent = `
-      <div class="modal">
-        <div class="modal-header">
-          <h3 id="modalTitle" style="margin:0">${content.title}</h3>
-          <button class="modal-close" onclick="Utils.hideModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p class="text-muted" style="margin-bottom:1rem">
-            ${content.type === 'video' ? '🎥 Vídeo educativo' : '📄 Artigo'} • Publicado em ${Utils.formatDate(content.createdAt)}
-          </p>
-          ${content.type === 'video' ? `
-            <div style="background:var(--color-bg-hover);border-radius:var(--radius-md);padding:2rem;text-align:center;margin-bottom:1rem">
-              <p style="font-size:2rem">▶️</p>
-              <p>Player de vídeo (demonstração)</p>
-            </div>
-          ` : ''}
-          <p style="white-space:pre-wrap">${content.content}</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="Utils.hideModal()">Fechar</button>
-        </div>
+viewContent: (id) => {
+  const contents = Utils.get('educationalContent', []);
+  const content = contents.find(c => c.id === id);
+  
+  if (!content) {
+    Utils.toast('Conteúdo não encontrado', 'error');
+    return;
+  }
+  
+  let videoEmbed = '';
+  
+  // Gerar embed para vídeos
+  if (content.type === 'video-youtube' && content.videoUrl) {
+    const videoId = content.videoUrl.split('v=')[1]?.split('&')[0] || content.videoUrl.split('/').pop();
+    videoEmbed = `
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1rem 0;border-radius:var(--radius-md)">
+        <iframe src="https://www.youtube.com/embed/${videoId}" 
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
       </div>
     `;
-    
-    Utils.showModal(modalContent);
-  },
+  } else if (content.type === 'video-tiktok' && content.videoUrl) {
+    videoEmbed = `
+      <div style="margin:1rem 0;text-align:center">
+        <p style="color:var(--color-text-muted);margin-bottom:0.5rem">📱 Vídeo do TikTok</p>
+        <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-primary">
+          Abrir no TikTok
+        </a>
+      </div>
+    `;
+  } else if (content.type === 'video-instagram' && content.videoUrl) {
+    videoEmbed = `
+      <div style="margin:1rem 0;text-align:center">
+        <p style="color:var(--color-text-muted);margin-bottom:0.5rem">📷 Vídeo do Instagram</p>
+        <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-primary">
+          Abrir no Instagram
+        </a>
+      </div>
+    `;
+  }
   
+  const modalContent = `
+    <div class="modal" style="max-width:700px">
+      <div class="modal-header">
+        <h3 id="modalTitle" style="margin:0">${content.title}</h3>
+        <button class="modal-close" onclick="Utils.hideModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted" style="margin-bottom:1rem">
+          ${content.type.startsWith('video-') ? '🎥 Vídeo' : '📄 Artigo'} • Publicado em ${Utils.formatDate(content.createdAt)}
+        </p>
+        
+        ${videoEmbed}
+        
+        ${content.type === 'article' ? `
+          <div style="white-space:pre-wrap;line-height:1.8">${content.content || ''}</div>
+        ` : `
+          ${content.content ? `
+            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)">
+              <h4 style="margin-bottom:0.5rem">Descrição</h4>
+              <p style="white-space:pre-wrap;line-height:1.8">${content.content}</p>
+            </div>
+          ` : ''}
+        `}
+        
+        ${content.excerpt ? `
+          <div style="margin-top:1rem;padding:1rem;background:var(--color-bg-hover);border-radius:var(--radius-md)">
+            <strong>Resumo:</strong> ${content.excerpt}
+          </div>
+        ` : ''}
+      </div>
+      <div class="modal-footer">
+        ${content.videoUrl ? `
+          <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-secondary">
+            Abrir vídeo original
+          </a>
+        ` : ''}
+        <button class="btn btn-primary" onclick="Utils.hideModal()">Fechar</button>
+      </div>
+    </div>
+  `;
+  
+  Utils.showModal(modalContent);
+},
   /**
    * Carregar perfil
    */
