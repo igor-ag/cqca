@@ -1,5 +1,6 @@
 /**
  * CQC Adestramento - Módulo Administrativo
+ * Com tab Pets, conteúdo com vídeo, e modais corrigidos
  */
 
 const Admin = {
@@ -8,80 +9,93 @@ const Admin = {
   },
   
   bindEvents: () => {
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const tab = e.target.dataset.tab;
-        Admin.switchTab(tab);
-      });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const tab = e.target.dataset.tab;
+      Admin.switchTab(tab);
     });
-    
-    document.getElementById('adminConfigForm')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      Admin.savePrices();
+  });
+  
+  document.getElementById('adminConfigForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    Admin.savePrices();
+  });
+  
+  // ✅ ESTA LINHA É IMPORTANTE - Botão "+ Novo" conteúdo
+  document.getElementById('addContentBtn')?.addEventListener('click', Admin.openContentModal);
+  
+  document.getElementById('newAppointmentBtn')?.addEventListener('click', () => {
+    Admin.openAppointmentModal();
+  });
+  
+  document.addEventListener('click', (e) => {
+    if (e.target.matches('[data-action="edit-content"]')) {
+      Admin.openContentModal(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="delete-content"]')) {
+      Admin.deleteContent(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="mark-paid"]')) {
+      Admin.markAsPaid(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="add-invoice"]')) {
+      Admin.openInvoiceModal(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="download-invoice"]')) {
+      Admin.downloadInvoice(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="edit-appointment"]')) {
+      Admin.openAppointmentModal(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="delete-appointment"]')) {
+      Admin.deleteAppointment(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="view-client"]')) {
+      Admin.openClientModal(e.target.dataset.id);
+    }
+    if (e.target.matches('[data-action="view-pet"]')) {
+      Admin.viewPet(e.target.dataset.id);
+    }
+  });
+  
+  ['adminAptClient', 'adminAptService', 'adminAptStart', 'adminAptEnd', 'adminAptDuration', 'adminAptFrequency'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', Admin.calculateAppointmentTotal);
+  });
+  
+  document.getElementById('adminClientCpf')?.addEventListener('input', function() {
+    this.value = Utils.maskCPF(this.value);
+  });
+  
+  document.getElementById('adminClientPhone')?.addEventListener('input', function() {
+    this.value = Utils.maskPhone(this.value);
+  });
+  
+  document.getElementById('adminT2Phone')?.addEventListener('input', function() {
+    this.value = Utils.maskPhone(this.value);
+  });
+  
+  // Fechar modais ao clicar fora
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        Admin.closeAppointmentModal();
+        Admin.closeClientModal();
+        Admin.closeInvoiceModal();
+        Admin.closeContentModal();
+      }
     });
-    
-    document.getElementById('addContentBtn')?.addEventListener('click', Admin.addContent);
-    
-    document.getElementById('newAppointmentBtn')?.addEventListener('click', () => {
-      Admin.openAppointmentModal();
-    });
-    
-    document.addEventListener('click', (e) => {
-      if (e.target.matches('[data-action="edit-content"]')) {
-        Admin.editContent(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="delete-content"]')) {
-        Admin.deleteContent(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="mark-paid"]')) {
-        Admin.markAsPaid(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="add-invoice"]')) {
-        Admin.openInvoiceModal(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="edit-appointment"]')) {
-        Admin.openAppointmentModal(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="delete-appointment"]')) {
-        Admin.deleteAppointment(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="view-client"]')) {
-        Admin.openClientModal(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="view-pet"]')) {
-        Admin.viewPet(e.target.dataset.id);
-      }
-      if (e.target.matches('[data-action="download-invoice"]')) {
-        Admin.downloadInvoice(e.target.dataset.id);
-      }
-    });
-    
-    ['adminAptClient', 'adminAptService', 'adminAptStart', 'adminAptEnd', 'adminAptDuration', 'adminAptFrequency'].forEach(id => {
-      document.getElementById(id)?.addEventListener('change', Admin.calculateAppointmentTotal);
-    });
-    
-    document.getElementById('adminClientCpf')?.addEventListener('input', function() {
-      this.value = Utils.maskCPF(this.value);
-    });
-    
-    document.getElementById('adminClientPhone')?.addEventListener('input', function() {
-      this.value = Utils.maskPhone(this.value);
-    });
-    
-    document.getElementById('adminT2Phone')?.addEventListener('input', function() {
-      this.value = Utils.maskPhone(this.value);
-    });
-    
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === e.currentTarget) {
-          Admin.closeAppointmentModal();
-          Admin.closeClientModal();
-          Admin.closeInvoiceModal();
-        }
-      });
-    });
-  },
+  });
+  
+  // Fechar com Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      Admin.closeAppointmentModal();
+      Admin.closeClientModal();
+      Admin.closeInvoiceModal();
+      Admin.closeContentModal();
+    }
+  });
+},
   
   switchTab: (tabName) => {
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -93,6 +107,7 @@ const Admin = {
     
     switch(tabName) {
       case 'appointments': Admin.renderAppointments(); break;
+      case 'pets': Admin.renderPets(); break;
       case 'clients': Admin.renderClients(); break;
       case 'payments': Admin.renderPayments(); break;
       case 'reports': Admin.renderReports(); break;
@@ -179,6 +194,67 @@ const Admin = {
     document.getElementById('adminFilterClient')?.addEventListener('change', Admin.renderAppointments);
     document.getElementById('adminFilterService')?.addEventListener('change', Admin.renderAppointments);
     document.getElementById('adminFilterStatus')?.addEventListener('change', Admin.renderAppointments);
+  },
+  
+  renderPets: () => {
+    const container = document.getElementById('adminPetsTable');
+    if (!container) return;
+    
+    const pets = Utils.get('pets', []);
+    const users = Utils.get('users', []);
+    
+    if (pets.length === 0) {
+      container.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum pet cadastrado.</td></tr>';
+      return;
+    }
+    
+    container.innerHTML = pets.map(pet => {
+      const user = users.find(u => u.id === pet.userId);
+      return `
+        <tr>
+          <td><strong>${pet.name}</strong></td>
+          <td>${pet.breed}</td>
+          <td>${pet.birthdate ? Utils.formatAge(pet.birthdate) : 'N/A'}</td>
+          <td>${pet.weight}kg</td>
+          <td>${user?.name || 'N/A'}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary" onclick="Admin.viewPet('${pet.id}')">👁️ Ver</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+  
+  renderClients: () => {
+    const container = document.getElementById('adminClientsTable');
+    if (!container) return;
+    
+    const users = Utils.get('users', []).filter(u => u.role !== 'admin');
+    const pets = Utils.get('pets', []);
+    const appointments = Utils.get('appointments', []);
+    
+    if (users.length === 0) {
+      container.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum cliente cadastrado.</td></tr>';
+      return;
+    }
+    
+    container.innerHTML = users.map(user => {
+      const userPets = pets.filter(p => p.userId === user.id).length;
+      const userApts = appointments.filter(a => a.userId === user.id).length;
+      
+      return `
+        <tr>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.profile?.phone || 'N/A'}</td>
+          <td>${userPets}</td>
+          <td>${userApts}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" data-action="view-client" data-id="${user.id}">👁️ Ver/Edit</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
   },
   
   openAppointmentModal: (aptId = null) => {
@@ -363,38 +439,6 @@ const Admin = {
     Admin.renderStats();
   },
   
-  renderClients: () => {
-    const container = document.getElementById('adminClientsTable');
-    if (!container) return;
-    
-    const users = Utils.get('users', []).filter(u => u.role !== 'admin');
-    const pets = Utils.get('pets', []);
-    const appointments = Utils.get('appointments', []);
-    
-    if (users.length === 0) {
-      container.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhum cliente cadastrado.</td></tr>';
-      return;
-    }
-    
-    container.innerHTML = users.map(user => {
-      const userPets = pets.filter(p => p.userId === user.id).length;
-      const userApts = appointments.filter(a => a.userId === user.id).length;
-      
-      return `
-        <tr>
-          <td>${user.name}</td>
-          <td>${user.email}</td>
-          <td>${user.profile?.phone || 'N/A'}</td>
-          <td>${userPets}</td>
-          <td>${userApts}</td>
-          <td>
-            <button class="btn btn-sm btn-primary" data-action="view-client" data-id="${user.id}">👁️ Ver/Edit</button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  },
-  
   openClientModal: (userId) => {
     const modal = document.getElementById('clientModal');
     if (!modal) return;
@@ -522,10 +566,6 @@ const Admin = {
             <h4 style="margin-bottom:0.5rem">⚠️ Pontos de Atenção</h4>
             <p style="background:#fefcbf;padding:0.75rem;border-radius:var(--radius-md)">${pet.alerts || 'Nenhum'}</p>
           </div>
-          <div style="margin-top:1rem">
-            <h4 style="margin-bottom:0.5rem">💭 Personalidade</h4>
-            <p style="background:var(--color-bg-hover);padding:0.75rem;border-radius:var(--radius-md)">${pet.personality || 'N/A'}</p>
-          </div>
           <div style="margin-top:1rem;text-align:center">
             <a href="#pet?id=${pet.id}" class="btn btn-primary" onclick="Utils.hideModal()">✏️ Editar Pet</a>
           </div>
@@ -620,10 +660,6 @@ const Admin = {
     Admin.renderPayments();
     Admin.renderReports();
     Admin.renderAppointments();
-  },
-  
-  addInvoice: (aptId) => {
-    Admin.openInvoiceModal(aptId);
   },
   
   renderPayments: () => {
@@ -768,52 +804,101 @@ const Admin = {
     Utils.toast('Preços atualizados com sucesso!', 'success');
   },
   
+  openContentModal: (contentId = null) => {
+    const modal = document.getElementById('contentModal');
+    if (!modal) return;
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    const contents = Utils.get('educationalContent', []);
+    const content = contentId ? contents.find(c => c.id === contentId) : null;
+    
+    document.getElementById('contentId').value = contentId || '';
+    document.getElementById('contentTitle').value = content?.title || '';
+    document.getElementById('contentExcerpt').value = content?.excerpt || '';
+    document.getElementById('contentType').value = content?.type || 'article';
+    document.getElementById('contentVideoUrl').value = content?.videoUrl || '';
+    document.getElementById('contentText').value = content?.content || '';
+    
+    document.getElementById('videoUrlField').style.display = (content?.type?.startsWith('video-')) ? 'block' : 'none';
+    
+    document.getElementById('contentModalTitle').textContent = contentId ? 'Editar Conteúdo' : 'Novo Conteúdo';
+  },
+  
+  closeContentModal: () => {
+    const modal = document.getElementById('contentModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  },
+  
+  saveContent: () => {
+    const contentId = document.getElementById('contentId')?.value;
+    const contents = Utils.get('educationalContent', []);
+    
+    const contentData = {
+      id: contentId || Utils.generateId('edu_'),
+      title: document.getElementById('contentTitle').value.trim(),
+      excerpt: document.getElementById('contentExcerpt').value.trim(),
+      type: document.getElementById('contentType').value,
+      videoUrl: document.getElementById('contentVideoUrl').value.trim(),
+      content: document.getElementById('contentText').value.trim(),
+      createdAt: contentId ? contents.find(c => c.id === contentId)?.createdAt : new Date().toISOString()
+    };
+    
+    if (contentId) {
+      const index = contents.findIndex(c => c.id === contentId);
+      if (index !== -1) contents[index] = contentData;
+    } else {
+      contents.unshift(contentData);
+    }
+    
+    Utils.save('educationalContent', contents);
+    
+    Utils.toast(contentId ? 'Conteúdo atualizado!' : 'Conteúdo criado!', 'success');
+    Admin.closeContentModal();
+    Admin.renderContent();
+  },
+  
+  deleteContent: (contentId) => {
+    if (!confirm('Excluir este conteúdo?')) return;
+    
+    let contents = Utils.get('educationalContent', []);
+    contents = contents.filter(c => c.id !== contentId);
+    Utils.save('educationalContent', contents);
+    
+    Admin.renderContent();
+    Utils.toast('Conteúdo excluído', 'success');
+  },
+  
   renderContent: () => {
     const container = document.getElementById('contentList');
     if (!container) return;
     
     const contents = Utils.get('educationalContent', []);
+    
     if (contents.length === 0) {
       container.innerHTML = '<p class="text-muted">Nenhum conteúdo cadastrado.</p>';
       return;
     }
     
-    container.innerHTML = contents.map(c => `<div class="card" style="margin-bottom:0.5rem"><div style="display:flex;justify-content:space-between;align-items:start"><div><strong>${c.title}</strong><br><small class="text-muted">${c.excerpt}</small><br><small class="text-muted">${c.type === 'video' ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</small></div><div style="display:flex;gap:0.5rem"><button class="btn btn-sm btn-secondary" data-action="edit-content" data-id="${c.id}">✏️</button><button class="btn btn-sm btn-secondary" style="color:var(--color-danger)" data-action="delete-content" data-id="${c.id}">🗑️</button></div></div></div>`).join('');
-  },
-  
-  addContent: () => {
-    const contents = Utils.get('educationalContent', []);
-    contents.unshift({ id: Utils.generateId('edu_'), title: 'Novo conteúdo', excerpt: 'Descrição breve...', content: 'Conteúdo completo...', type: 'article', createdAt: new Date().toISOString() });
-    Utils.save('educationalContent', contents);
-    Admin.renderContent();
-    Utils.toast('Conteúdo criado!', 'success');
-  },
-  
-  editContent: (id) => {
-    const contents = Utils.get('educationalContent', []);
-    const content = contents.find(c => c.id === id);
-    if (!content) return;
-    const newTitle = prompt('Título:', content.title);
-    if (newTitle === null) return;
-    const newExcerpt = prompt('Descrição:', content.excerpt);
-    if (newExcerpt === null) return;
-    const newContent = prompt('Conteúdo:', content.content);
-    if (newContent === null) return;
-    content.title = newTitle;
-    content.excerpt = newExcerpt;
-    content.content = newContent;
-    Utils.save('educationalContent', contents);
-    Admin.renderContent();
-    Utils.toast('Conteúdo atualizado!', 'success');
-  },
-  
-  deleteContent: (id) => {
-    if (!confirm('Excluir este conteúdo?')) return;
-    let contents = Utils.get('educationalContent', []);
-    contents = contents.filter(c => c.id !== id);
-    Utils.save('educationalContent', contents);
-    Admin.renderContent();
-    Utils.toast('Conteúdo excluído', 'success');
+    container.innerHTML = contents.map(c => `
+      <div class="card" style="margin-bottom:0.5rem">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <strong>${c.title}</strong><br>
+            <small class="text-muted">${c.excerpt}</small><br>
+            <small class="text-muted">${c.type.startsWith('video-') ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</small>
+          </div>
+          <div style="display:flex;gap:0.5rem">
+            <button class="btn btn-sm btn-secondary" data-action="edit-content" data-id="${c.id}">✏️</button>
+            <button class="btn btn-sm btn-secondary" style="color:var(--color-danger)" data-action="delete-content" data-id="${c.id}">🗑️</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
   },
   
   load: () => {

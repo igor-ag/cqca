@@ -1,6 +1,6 @@
 /**
  * CQC Adestramento - Módulo de Agendamentos
- * CRUD completo, calculadora de preços, filtros e histórico
+ * Com cálculo de diárias por horas (24h + 4h cortesia)
  */
 
 const Appointments = {
@@ -334,51 +334,44 @@ const Appointments = {
   
   downloadInvoice: (aptId) => {
     const apt = Appointments.getAppointmentById(aptId);
-    if (!apt) {
-      Utils.toast('Agendamento não encontrado', 'error');
+    if (!apt || !apt.invoice?.fileUrl) {
+      Utils.toast('Nota fiscal não disponível', 'error');
       return;
     }
     
-    const pets = Utils.get('pets', []);
-    const pet = pets.find(p => p.id === apt.petId);
-    const user = Auth.currentUser;
-    
-    let text = `NOTA FISCAL DE SERVIÇO\n`;
-    text += `================================\n\n`;
-    text += `CQC Adestramento\n`;
-    text += `Rua Guiratinga, 1249 - Chácara Inglesa, São Paulo/SP\n`;
-    text += `CNPJ: 00.000.000/0001-00\n\n`;
-    text += `Cliente: ${user?.name || 'N/A'}\n`;
-    text += `CPF: ${user?.profile?.cpf || 'N/A'}\n`;
-    text += `E-mail: ${user?.email || 'N/A'}\n\n`;
-    text += `Serviço: ${Appointments.getServiceName(apt.service)}\n`;
-    text += `Pet: ${pet?.name || 'N/A'}\n`;
-    text += `Data: ${Utils.formatDate(apt.startDate)}\n`;
-    if (apt.endDate && apt.endDate !== apt.startDate) {
-      text += `Período: até ${Utils.formatDate(apt.endDate)}\n`;
-    }
-    text += `Valor Total: ${Utils.formatCurrency(apt.totalPrice)}\n`;
-    text += `Status: PAGO\n`;
-    text += `Data do Pagamento: ${apt.paidAt ? Utils.formatDateTime(apt.paidAt) : 'N/A'}\n\n`;
-    text += `Esta é uma nota fiscal de demonstração.\n`;
-    text += `Obrigado por confiar na CQC Adestramento! 🐾\n`;
-    
-    const filename = `nota-fiscal-${aptId}.txt`;
-    Utils.downloadFile(text, filename);
-    Utils.toast('Nota fiscal baixada', 'success');
+    window.open(apt.invoice.fileUrl, '_blank');
   },
   
+  /**
+   * CÁLCULO DE DIÁRIAS COM HORAS (24h + 4h cortesia)
+   */
   calculateStay: (serviceType, startDate, endDate) => {
     const config = Utils.get('adminConfig', {});
     const prices = config.prices || {};
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    // Calcular horas totais
+    const totalHours = (end - start) / (1000 * 60 * 60);
+    
+    // Cortesia de 4h: 28h = 1 diária, 52h = 2 diárias
+    const dailyHours = 24;
+    const graceHours = 4;
+    const numDays = Math.ceil(totalHours / (dailyHours + graceHours));
+    
     let total = 0;
     const breakdown = [];
     
-    Utils.forEachDay(startDate, endDate, (date) => {
+    // Calcular preço por dia considerando feriados/fim de semana/alta temporada
+    for (let i = 0; i < numDays; i++) {
+      const currentDate = new Date(start);
+      currentDate.setDate(currentDate.getDate() + i);
+      
       let dailyPrice;
-      const isHoliday = Utils.isHoliday(date);
-      const isHighSeason = Utils.isHighSeason(date);
-      const isWeekend = Utils.isWeekend(date);
+      const isHoliday = Utils.isHoliday(currentDate);
+      const isHighSeason = Utils.isHighSeason(currentDate);
+      const isWeekend = Utils.isWeekend(currentDate);
       
       if (serviceType === 'hospedagem') {
         if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
@@ -394,7 +387,7 @@ const Appointments = {
       
       total += dailyPrice;
       breakdown.push({
-        date: date.toISOString().split('T')[0],
+        date: currentDate.toISOString().split('T')[0],
         price: dailyPrice,
         tags: [
           isHoliday ? 'Feriado' : null,
@@ -402,9 +395,9 @@ const Appointments = {
           isHighSeason ? 'Alta temporada' : null
         ].filter(Boolean)
       });
-    });
+    }
     
-    return { total, breakdown };
+    return { total, breakdown, totalHours, numDays };
   },
   
   calculateMonthlyWalks: (frequency) => {
@@ -433,47 +426,8 @@ const Appointments = {
   },
   
   updateCalculator: () => {
-    const service = document.getElementById('calcService')?.value;
-    const start = document.getElementById('calcStart')?.value;
-    const end = document.getElementById('calcEnd')?.value;
-    const freq = document.getElementById('calcFrequency')?.value;
-    const dur = document.getElementById('calcDuration')?.value;
-    const resultEl = document.getElementById('calcResult');
-    const breakdownEl = document.getElementById('calcBreakdown');
-    
-    if (!resultEl) return;
-    
-    let total = 0;
-    let breakdown = [];
-    
-    if (['hospedagem', 'daycare'].includes(service) && start && end) {
-      const calc = Appointments.calculateStay(service, start, end);
-      total = calc.total;
-      breakdown = calc.breakdown;
-      
-      if (breakdownEl && breakdown.length > 1) {
-        breakdownEl.innerHTML = breakdown.map(b => 
-          `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
-            <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
-            <span>${Utils.formatCurrency(b.price)}</span>
-          </div>`
-        ).join('');
-        breakdownEl.style.display = 'block';
-      } else if (breakdownEl) {
-        breakdownEl.style.display = 'none';
-      }
-      
-    } else if (service === 'passeio-mensal' && freq) {
-      total = Appointments.calculateMonthlyWalks(freq);
-      
-    } else if (service === 'passeio') {
-      total = Appointments.getUnitPrice('passeio', { duration: dur || '50' });
-      
-    } else if (service) {
-      total = Appointments.getUnitPrice(service);
-    }
-    
-    resultEl.textContent = Utils.formatCurrency(total);
+    // Esta função é usada apenas no modal admin
+    // A calculadora pública está no inline script do index.html
   }
 };
 

@@ -1,23 +1,17 @@
 /**
  * CQC Adestramento - Módulo de Gestão de Pets
- * CRUD completo com 20+ campos, autosave e validações
+ * CRUD completo com todos os campos atualizados
  */
 
 const Pets = {
   currentPetId: null,
   autoSaveInterval: null,
   
-  /**
-   * Inicializar módulo de pets
-   */
   init: () => {
     Pets.bindEvents();
     Pets.loadSeedData();
   },
   
-  /**
-   * Carregar dados de teste se vazio
-   */
   loadSeedData: () => {
     if (!Utils.get('pets')) {
       Utils.save('pets', [
@@ -39,13 +33,15 @@ const Pets = {
               { name: 'Antirrábica', date: '2024-01-15', nextDate: '2025-01-15' }
             ],
             conditions: 'Nenhuma',
-            vet: { name: 'Dr. Fernando', phone: '(11) 3333-4444', address: 'Clínica Pet Care' }
+            vet: { name: 'Dr. Fernando', phone: '(11) 3333-4444', address: 'Clínica Pet Care' },
+            observations: ''
           },
           food: {
             type: 'Ração Premium',
             portion: '300g',
             schedule: '8h e 18h',
-            restrictions: 'Sem lactose'
+            restrictions: 'Sem lactose',
+            observations: ''
           },
           behavior: {
             sociabilityDogs: 'Muito sociável',
@@ -54,11 +50,11 @@ const Pets = {
             resourceGuarding: { active: false, items: [] },
             pullsLeash: false,
             barksExcessively: false,
-            knownCommands: ['senta', 'fica', 'junto']
+            knownCommands: ['senta', 'fica', 'junto'],
+            observations: ''
           },
           routine: {
-            sleepsWhere: 'Cama própria',
-            accessFurniture: true,
+            sleepsWhere: ['Cama própria'],
             bathroomHabits: 'Faz xixi no tapete higiênico'
           },
           alerts: 'Gosta de buscar bolinha',
@@ -72,13 +68,8 @@ const Pets = {
           weight: 12,
           birthdate: '2022-07-20',
           sex: 'Fêmea',
-          health: {
-            neutered: true,
-            vaccines: [],
-            conditions: 'Nenhuma',
-            vet: {}
-          },
-          food: {},
+          health: { neutered: true, vaccines: [], conditions: 'Nenhuma', vet: {}, observations: '' },
+          food: { type: '', portion: '', schedule: '', restrictions: '', observations: '' },
           behavior: {
             sociabilityDogs: 'Seletivo',
             sociabilityHumans: 'Cauteloso',
@@ -86,13 +77,10 @@ const Pets = {
             resourceGuarding: { active: true, items: ['comida'] },
             pullsLeash: true,
             barksExcessively: false,
-            knownCommands: ['senta']
+            knownCommands: ['senta'],
+            observations: ''
           },
-          routine: {
-            sleepsWhere: 'Cama do tutor',
-            accessFurniture: true,
-            bathroomHabits: 'Faz xixi na rua'
-          },
+          routine: { sleepsWhere: ['Cama do tutor', 'Sofá'], bathroomHabits: 'Faz xixi na rua' },
           alerts: 'Medo de fogos de artifício',
           personality: 'Tímida no início, mas muito amorosa depois'
         },
@@ -104,13 +92,8 @@ const Pets = {
           weight: 38,
           birthdate: '2019-11-05',
           sex: 'Macho',
-          health: {
-            neutered: true,
-            vaccines: [],
-            conditions: 'Displasia leve',
-            vet: {}
-          },
-          food: {},
+          health: { neutered: true, vaccines: [], conditions: 'Displasia leve', vet: {}, observations: '' },
+          food: { type: '', portion: '', schedule: '', restrictions: '', observations: '' },
           behavior: {
             sociabilityDogs: 'Não sociável',
             sociabilityHumans: 'Amigável',
@@ -118,13 +101,10 @@ const Pets = {
             resourceGuarding: { active: false, items: [] },
             pullsLeash: true,
             barksExcessively: true,
-            knownCommands: ['senta', 'deita', 'fica', 'junto']
+            knownCommands: ['senta', 'deita', 'fica', 'junto'],
+            observations: ''
           },
-          routine: {
-            sleepsWhere: 'Área externa',
-            accessFurniture: false,
-            bathroomHabits: 'Faz xixi no jardim'
-          },
+          routine: { sleepsWhere: ['Área externa'], bathroomHabits: 'Faz xixi no jardim' },
           alerts: 'Não pode ficar com outros cães sem supervisão',
           personality: 'Protetor, leal e muito inteligente'
         }
@@ -132,13 +112,9 @@ const Pets = {
     }
   },
   
-  /**
-   * Bind de eventos do formulário
-   */
   bindEvents: () => {
     const petForm = document.getElementById('petForm');
     
-    // Toggle guarda de recursos
     document.getElementById('guardActive')?.addEventListener('change', function() {
       const guardItems = document.getElementById('guardItems');
       if (guardItems) {
@@ -146,25 +122,17 @@ const Pets = {
       }
     });
     
-    // Adicionar vacina
     document.getElementById('addVaccineBtn')?.addEventListener('click', Pets.addVaccineField);
     
-    // Submit do formulário
     petForm?.addEventListener('submit', (e) => {
       e.preventDefault();
       Pets.save();
     });
     
-    // Auto-save a cada 30 segundos
     Pets.startAutoSave();
-    
-    // Carregar pet se houver ID na URL (hash)
     Pets.loadFromURL();
   },
   
-  /**
-   * Carregar pet da URL/hash (edição)
-   */
   loadFromURL: () => {
     const hash = window.location.hash;
     const params = new URLSearchParams(hash.split('?')[1]);
@@ -184,36 +152,37 @@ const Pets = {
     }
   },
   
-  /**
-   * Adicionar campo de vacina
-   */
   addVaccineField: (data = null) => {
     const container = document.getElementById('vaccinesContainer');
     if (!container) return;
     
     const div = document.createElement('div');
-    div.className = 'input-group vaccine-field';
-    div.style.marginBottom = '0.5rem';
+    div.className = 'vaccine-field';
+    div.style.marginBottom = '1rem';
+    div.style.padding = '1rem';
+    div.style.background = 'var(--color-bg-hover)';
+    div.style.borderRadius = 'var(--radius-md)';
     div.innerHTML = `
-      <input type="text" class="form-control" placeholder="Nome da vacina" name="vaccineName" value="${data?.name || ''}">
-      <input type="date" class="form-control" name="vaccineDate" title="Data da aplicação" value="${data?.date || ''}">
-      <input type="date" class="form-control" name="vaccineNext" title="Próxima revacinação" value="${data?.nextDate || ''}">
-      <button type="button" class="btn btn-sm btn-secondary" onclick="Pets.removeVaccineField(this)" aria-label="Remover vacina">✕</button>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:0.5rem;margin-bottom:0.5rem">
+        <input type="text" class="form-control" placeholder="Nome da vacina" name="vaccineName" value="${data?.name || ''}">
+        <input type="date" class="form-control" name="vaccineDate" title="Data da vacinação" value="${data?.date || ''}">
+        <input type="date" class="form-control" name="vaccineNext" title="Data da revacinação" value="${data?.nextDate || ''}">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="Pets.removeVaccineField(this)" aria-label="Remover vacina">✕</button>
+      </div>
+      <div style="font-size:0.75rem;color:var(--color-text-muted);display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.5rem;padding:0 0.25rem">
+        <span>Nome da vacina</span>
+        <span>Data vacinação</span>
+        <span>Data revacinação</span>
+      </div>
     `;
     
     container.appendChild(div);
   },
   
-  /**
-   * Remover campo de vacina
-   */
   removeVaccineField: (btn) => {
     btn.parentElement.remove();
   },
   
-  /**
-   * Carregar dados do pet no formulário
-   */
   load: (petId) => {
     const pets = Utils.get('pets', []);
     const pet = pets.find(p => p.id === petId);
@@ -225,7 +194,6 @@ const Pets = {
     
     Pets.currentPetId = petId;
     
-    // Identificação
     document.getElementById('petId').value = pet.id;
     document.getElementById('petName').value = pet.name || '';
     document.getElementById('petBreed').value = pet.breed || '';
@@ -235,15 +203,14 @@ const Pets = {
     document.getElementById('petRga').value = pet.rga || '';
     document.getElementById('petChip').value = pet.microchip || '';
     
-    // Saúde
     document.getElementById('petPlan').value = pet.health?.plan || '';
     document.getElementById('petNeutered').checked = pet.health?.neutered || false;
     document.getElementById('petConditions').value = pet.health?.conditions || '';
     document.getElementById('vetName').value = pet.health?.vet?.name || '';
     document.getElementById('vetPhone').value = pet.health?.vet?.phone || '';
     document.getElementById('vetAddress').value = pet.health?.vet?.address || '';
+    document.getElementById('healthObservations').value = pet.health?.observations || '';
     
-    // Vacinas
     const vaccinesContainer = document.getElementById('vaccinesContainer');
     if (vaccinesContainer) {
       vaccinesContainer.innerHTML = '';
@@ -253,22 +220,19 @@ const Pets = {
       }
     }
     
-    // Alimentação
     document.getElementById('foodType').value = pet.food?.type || '';
     document.getElementById('foodPortion').value = pet.food?.portion || '';
     document.getElementById('foodSchedule').value = pet.food?.schedule || '';
     document.getElementById('foodRestrictions').value = pet.food?.restrictions || '';
+    document.getElementById('foodObservations').value = pet.food?.observations || '';
     
-    // Comportamento
     document.getElementById('behavDogs').value = pet.behavior?.sociabilityDogs || '';
     document.getElementById('behavHumans').value = pet.behavior?.sociabilityHumans || '';
     
-    // Reatividade
     document.querySelectorAll('input[name="reactivity"]').forEach(cb => {
       cb.checked = pet.behavior?.reactivity?.includes(cb.value) || false;
     });
     
-    // Guarda de recursos
     document.getElementById('guardActive').checked = pet.behavior?.resourceGuarding?.active || false;
     document.getElementById('guardItems').style.display = (pet.behavior?.resourceGuarding?.active) ? 'block' : 'none';
     document.querySelectorAll('input[name="guardItem"]').forEach(cb => {
@@ -278,27 +242,23 @@ const Pets = {
     document.getElementById('pullsLeash').checked = pet.behavior?.pullsLeash || false;
     document.getElementById('barksExcessively').checked = pet.behavior?.barksExcessively || false;
     document.getElementById('commands').value = pet.behavior?.knownCommands?.join(', ') || '';
+    document.getElementById('behaviorObservations').value = pet.behavior?.observations || '';
     
-    // Rotina
-    document.getElementById('sleepsWhere').value = pet.routine?.sleepsWhere || '';
-    document.getElementById('accessFurniture').checked = pet.routine?.accessFurniture || false;
+    document.querySelectorAll('input[name="sleepsWhere"]').forEach(cb => {
+      cb.checked = pet.routine?.sleepsWhere?.includes(cb.value) || false;
+    });
     document.getElementById('bathroomHabits').value = pet.routine?.bathroomHabits || '';
     
-    // Alertas e personalidade
     document.getElementById('petAlerts').value = pet.alerts || '';
     document.getElementById('petPersonality').value = pet.personality || '';
   },
   
-  /**
-   * Salvar pet
-   */
   save: () => {
     if (!Auth.currentUser) {
       Utils.toast('Faça login para salvar', 'error');
       return;
     }
     
-    // Validar campos obrigatórios
     const requiredFields = ['petName', 'petBreed', 'petWeight', 'petBirth', 'petSex', 'petAlerts'];
     let isValid = true;
     
@@ -322,7 +282,6 @@ const Pets = {
       return;
     }
     
-    // Coletar vacinas
     const vaccines = [];
     document.querySelectorAll('.vaccine-field').forEach(field => {
       const name = field.querySelector('[name="vaccineName"]')?.value;
@@ -333,21 +292,11 @@ const Pets = {
       }
     });
     
-    // Coletar reatividade
-    const reactivity = Array.from(document.querySelectorAll('input[name="reactivity"]:checked'))
-      .map(cb => cb.value);
+    const reactivity = Array.from(document.querySelectorAll('input[name="reactivity"]:checked')).map(cb => cb.value);
+    const guardItems = Array.from(document.querySelectorAll('input[name="guardItem"]:checked')).map(cb => cb.value);
+    const commands = document.getElementById('commands').value.split(',').map(c => c.trim()).filter(Boolean);
+    const sleepsWhere = Array.from(document.querySelectorAll('input[name="sleepsWhere"]:checked')).map(cb => cb.value);
     
-    // Coletar itens de guarda
-    const guardItems = Array.from(document.querySelectorAll('input[name="guardItem"]:checked'))
-      .map(cb => cb.value);
-    
-    // Coletar comandos
-    const commands = document.getElementById('commands').value
-      .split(',')
-      .map(c => c.trim())
-      .filter(Boolean);
-    
-    // Montar objeto pet
     const petData = {
       id: Pets.currentPetId || Utils.generateId('pet_'),
       userId: Auth.currentUser.id,
@@ -367,13 +316,15 @@ const Pets = {
           name: document.getElementById('vetName').value.trim(),
           phone: document.getElementById('vetPhone').value.trim(),
           address: document.getElementById('vetAddress').value.trim()
-        }
+        },
+        observations: document.getElementById('healthObservations').value.trim()
       },
       food: {
         type: document.getElementById('foodType').value.trim(),
         portion: document.getElementById('foodPortion').value.trim(),
         schedule: document.getElementById('foodSchedule').value.trim(),
-        restrictions: document.getElementById('foodRestrictions').value.trim()
+        restrictions: document.getElementById('foodRestrictions').value.trim(),
+        observations: document.getElementById('foodObservations').value.trim()
       },
       behavior: {
         sociabilityDogs: document.getElementById('behavDogs').value,
@@ -385,28 +336,25 @@ const Pets = {
         },
         pullsLeash: document.getElementById('pullsLeash').checked,
         barksExcessively: document.getElementById('barksExcessively').checked,
-        knownCommands: commands
+        knownCommands: commands,
+        observations: document.getElementById('behaviorObservations').value.trim()
       },
       routine: {
-        sleepsWhere: document.getElementById('sleepsWhere').value,
-        accessFurniture: document.getElementById('accessFurniture').checked,
+        sleepsWhere,
         bathroomHabits: document.getElementById('bathroomHabits').value.trim()
       },
       alerts: document.getElementById('petAlerts').value.trim(),
       personality: document.getElementById('petPersonality').value.trim()
     };
     
-    // Salvar
     const pets = Utils.get('pets', []);
     
     if (Pets.currentPetId) {
-      // Atualizar
       const index = pets.findIndex(p => p.id === Pets.currentPetId);
       if (index !== -1) {
         pets[index] = petData;
       }
     } else {
-      // Novo
       pets.push(petData);
     }
     
@@ -414,15 +362,11 @@ const Pets = {
     
     Utils.toast(Pets.currentPetId ? 'Pet atualizado com sucesso!' : 'Pet cadastrado com sucesso!', 'success');
     
-    // Resetar e redirecionar
     setTimeout(() => {
       window.location.hash = '#dashboard';
     }, 1000);
   },
   
-  /**
-   * Iniciar auto-save
-   */
   startAutoSave: () => {
     if (Pets.autoSaveInterval) {
       clearInterval(Pets.autoSaveInterval);
@@ -436,9 +380,6 @@ const Pets = {
     }, 30000);
   },
   
-  /**
-   * Parar auto-save
-   */
   stopAutoSave: () => {
     if (Pets.autoSaveInterval) {
       clearInterval(Pets.autoSaveInterval);
@@ -446,30 +387,19 @@ const Pets = {
     }
   },
   
-  /**
-   * Obter pets do usuário atual
-   */
   getUserPets: () => {
     if (!Auth.currentUser) return [];
     const pets = Utils.get('pets', []);
     return pets.filter(p => p.userId === Auth.currentUser.id);
   },
   
-  /**
-   * Obter pet por ID
-   */
   getPetById: (petId) => {
     const pets = Utils.get('pets', []);
     return pets.find(p => p.id === petId) || null;
   },
   
-  /**
-   * Deletar pet
-   */
   delete: (petId, callback) => {
-    if (!confirm('Tem certeza que deseja excluir este pet? Esta ação não pode ser desfeita.')) {
-      return;
-    }
+    if (!confirm('Tem certeza que deseja excluir este pet?')) return;
     
     const pets = Utils.get('pets', []);
     const filtered = pets.filter(p => p.id !== petId);
@@ -485,9 +415,6 @@ const Pets = {
     if (callback) callback();
   },
   
-  /**
-   * Renderizar lista de pets no dashboard
-   */
   renderDashboardList: () => {
     const container = document.getElementById('dashPets');
     if (!container) return;
@@ -510,9 +437,6 @@ const Pets = {
     `).join('');
   },
   
-  /**
-   * Verificar vacinas vencendo
-   */
   getVaccineAlerts: (days = 30) => {
     const pets = Utils.get('pets', []);
     const alerts = [];
@@ -540,9 +464,6 @@ const Pets = {
     return alerts.sort((a, b) => a.daysRemaining - b.daysRemaining);
   },
   
-  /**
-   * Renderizar alertas de vacina no dashboard
-   */
   renderVaccineAlerts: () => {
     const container = document.getElementById('dashAlerts');
     if (!container) return;

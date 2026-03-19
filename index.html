@@ -7,7 +7,10 @@
   <meta name="description" content="Adestramento positivo, passeios, pet sitter e hospedagem para seu cão em São Paulo">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  
+  <!-- Font Awesome (ícones) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- CSS -->
   <link rel="stylesheet" href="02-styles.css">
@@ -17,7 +20,9 @@
   <nav class="navbar" role="navigation" aria-label="Navegação principal">
     <div class="container navbar-container">
       <a href="#home" class="navbar-brand" aria-label="Página inicial">
-        <div class="navbar-logo">🐾</div>
+        <!-- SUBSTITUA AQUI SUA LOGO -->
+        <img src="logo.png" alt="CQC" style="width:40px;height:40px;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="navbar-logo" style="display:none">🐾</div>
         <div>
           CQC Adestramento
           <span class="navbar-brand-sub">passeios e hospedagem</span>
@@ -69,13 +74,11 @@
       <section class="container section">
         <div class="section-header text-center">
           <h2>Sobre a CQC Adestramento</h2>
-          <p class="lead">Somos especializados em cuidados personalizados para cães, utilizando métodos positivos e baseados em ciência. Nossa missão é fortalecer o vínculo entre tutores e pets.</p>
+          <p class="lead">Somos especializados em cuidados personalizados para cães, utilizando métodos positivos e baseados em ciência.</p>
         </div>
         
         <h3 class="text-center section-title">Nossos Serviços</h3>
-        <div class="services-grid" id="homeServicesGrid">
-          <!-- Preenchido via JS -->
-        </div>
+        <div class="services-grid" id="homeServicesGrid"></div>
         
         <div class="text-center" style="margin-top:2rem">
           <a href="#servicos" class="btn btn-primary">Ver todos os serviços</a>
@@ -123,12 +126,10 @@
       <div class="container section">
         <div class="section-header text-center">
           <h1>Nossos Serviços</h1>
-          <p class="lead">Soluções completas para o bem-estar do seu cão, com método positivo e atendimento personalizado.</p>
+          <p class="lead">Soluções completas para o bem-estar do seu cão.</p>
         </div>
         
-        <div class="services-grid" id="servicesGrid">
-          <!-- Preenchido via JS -->
-        </div>
+        <div class="services-grid" id="servicesGrid"></div>
         
         <div class="text-center" style="margin-top:2rem">
           <p style="margin-bottom:1rem">Quer saber os valores?</p>
@@ -142,68 +143,61 @@
       <div class="container section">
         <div class="section-header text-center">
           <h1>Investimento</h1>
-          <p class="lead">Transparência total nos nossos valores. Preços podem variar conforme necessidades especiais do pet.</p>
+          <p class="lead">Transparência total nos nossos valores.</p>
         </div>
         
         <div class="table-responsive">
           <table class="pricing-table" id="pricingTable">
             <thead>
-              <tr>
-                <th>Serviço</th>
-                <th>Valor</th>
-              </tr>
+              <tr><th>Serviço</th><th>Valor</th></tr>
             </thead>
-            <tbody>
-              <!-- Preenchido via JS -->
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
         
         <p class="text-muted"><small>* Alta temporada: meses de julho, dezembro e janeiro.</small></p>
         
-<!-- Calculadora -->
-<div class="calculator card">
-  <h3 style="margin-bottom:1.5rem">🧮 Simulador de Hospedagem/Daycare</h3>
-  <p class="text-muted" style="margin-bottom:1.5rem">
-    Calcule o valor estimado da estadia do seu pet. O cálculo considera automaticamente finais de semana, feriados e alta temporada.
-  </p>
-  
-  <form id="calculatorForm">
-    <div class="calculator-grid">
-      <div class="form-group">
-        <label class="form-label required" for="calcService">Tipo de serviço</label>
-        <select class="form-control" id="calcService" required>
-          <option value="">Selecione...</option>
-          <option value="hospedagem">Hospedagem (24h)</option>
-          <option value="daycare">Daycare (8h-20h)</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label required" for="calcStart">Data de Entrada *</label>
-        <input type="date" class="form-control" id="calcStart" required>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label required" for="calcEnd">Data de Saída *</label>
-        <input type="date" class="form-control" id="calcEnd" required>
-      </div>
-      
-      <div class="calculator-result">
-        <div>Valor estimado:</div>
-        <div class="amount" id="calcResult">R$ 0,00</div>
-        <small class="text-muted">* Estimativa. Valor final confirmado no agendamento.</small>
-        <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
-      </div>
-    </div>
-    
-    <div class="text-center" style="margin-top:1.5rem">
-      <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20hospedagem/daycare." target="_blank" rel="noopener" class="btn btn-primary btn-large">
-        💬 Agendar via WhatsApp
-      </a>
-    </div>
-  </form>
-</div>
+        <!-- Calculadora -->
+        <div class="calculator card">
+          <h3 style="margin-bottom:1.5rem">🧮 Simulador de Hospedagem/Daycare</h3>
+          <p class="text-muted" style="margin-bottom:1.5rem">Calcule o valor estimado da estadia do seu pet. O cálculo considera automaticamente finais de semana, feriados e alta temporada. Cortesia de 4h incluída.</p>
+          
+          <form id="calculatorForm">
+            <div class="calculator-grid">
+              <div class="form-group">
+                <label class="form-label required" for="calcService">Tipo de serviço</label>
+                <select class="form-control" id="calcService" required>
+                  <option value="">Selecione...</option>
+                  <option value="hospedagem">Hospedagem (24h)</option>
+                  <option value="daycare">Daycare (8h-20h)</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required" for="calcStart">Data e Hora de Entrada *</label>
+                <input type="datetime-local" class="form-control" id="calcStart" required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label required" for="calcEnd">Data e Hora de Saída *</label>
+                <input type="datetime-local" class="form-control" id="calcEnd" required>
+              </div>
+              
+              <div class="calculator-result">
+                <div>Valor estimado:</div>
+                <div class="amount" id="calcResult">R$ 0,00</div>
+                <small class="text-muted" id="calcDetails">* Estimativa. Valor final confirmado no agendamento.</small>
+                <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
+              </div>
+            </div>
+            
+            <div class="text-center" style="margin-top:1.5rem">
+              <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20hospedagem/daycare." target="_blank" rel="noopener" class="btn btn-primary btn-large">
+                💬 Agendar via WhatsApp
+              </a>
+            </div>
+          </form>
+        </div>
         
         <!-- Observações -->
         <div class="accordion">
@@ -213,8 +207,8 @@
           </div>
           <div class="accordion-content" id="accContent">
             <ul class="accordion-list">
-              <li>Valores podem ser ajustados conforme necessidades especiais do pet (medicação, cuidados adicionais)</li>
-              <li>Animais com necessidades comportamentais específicas podem requerer avaliação prévia</li>
+              <li>Valores podem ser ajustados conforme necessidades especiais do pet</li>
+              <li>Animais com necessidades comportamentais podem requerer avaliação prévia</li>
               <li>Cancelamentos seguem política descrita na página de Regras</li>
               <li>Pagamento de 50% garante a reserva para hospedagem</li>
             </ul>
@@ -222,30 +216,29 @@
         </div>
         
         <div class="text-center" style="margin-top:2rem">
-          <p style="margin-bottom:1rem">Dúvidas? Fale conosco diretamente:</p>
+          <p style="margin-bottom:1rem">Dúvidas? Fale conosco:</p>
           <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-primary btn-large">
             💬 WhatsApp: (11) 9 9781-1891
           </a>
         </div>
       </div>
-    </section>
-
+    </section>    
     <!-- ==================== REGRAS ==================== -->
     <section id="regras" class="page" data-page="regras">
       <div class="container section" style="max-width:800px">
         <div class="section-header text-center">
           <h1>Regras e Termos</h1>
-          <p class="lead">Leia atentamente nossas políticas para garantir o melhor atendimento ao seu pet.</p>
+          <p class="lead">Leia atentamente nossas políticas.</p>
         </div>
         
         <div class="card" style="margin-bottom:1.5rem">
           <h3 style="margin-bottom:1rem">Regras Gerais</h3>
           <ol class="rules-list">
-            <li>O tutor deve certificar-se de providenciar equipamento de condução (guia, coleira) seguro e apropriado para o porte do seu pet, além da coleira de identificação.</li>
+            <li>O tutor deve providenciar equipamento de condução seguro e apropriado.</li>
             <li>É obrigação do tutor informar as condições de saúde do animal.</li>
-            <li>Não enviar o pet se ele apresentar problema de saúde contagioso ou que coloque em risco a ele próprio, qualquer outro animal e o ambiente.</li>
-            <li>Em caso de animais com necessidades especiais o valor do serviço será a combinar.</li>
-            <li>Os dias de emenda e finais de semana que coincidem com feriados serão cobrados com o valor correspondente a feriados.</li>
+            <li>Não enviar o pet se apresentar problema de saúde contagioso.</li>
+            <li>Animais com necessidades especiais: valor a combinar.</li>
+            <li>Dias de emenda e finais de semana que coincidem com feriados serão cobrados como feriado.</li>
           </ol>
         </div>
         
@@ -253,27 +246,26 @@
           <h3 style="margin-bottom:1rem">Hospedagem e Daycare</h3>
           <ol class="rules-list" start="6">
             <li>Horário de entrada e saída: 8h - 20h.</li>
-            <li>Cada diária individual de daycare ocorre dentro do horário acima. Cada diária individual de hospedagem dura 24h.</li>
-            <li>Para o pet em daycare que ficar além do horário, considera-se o valor de hospedagem no lugar de daycare.</li>
-            <li>São considerados alta temporada os meses de julho, dezembro e janeiro.</li>
-            <li>É de responsabilidade do tutor fornecer alimentação e demais necessidades que o animal venha a ter.</li>
-            <li>A reserva só é garantia mediante pagamento de 50% do valor total da estadia.</li>
-            <li>Cancelamentos e remarcações (sujeitas a disponibilidade) devem respeitar o prazo mínimo de 48h. Em alta temporada e feriados esse prazo se estende a 10 dias. Caso não seja seguido esse prazo, se aplicará uma taxa de cancelamento de 30% do valor da reserva ou 50% em alta temporada.</li>
+            <li>Diária de daycare: dentro do horário acima. Diária de hospedagem: 24h.</li>
+            <li>Daycare além do horário: cobra-se valor de hospedagem.</li>
+            <li>Alta temporada: julho, dezembro e janeiro.</li>
+            <li>Tutor fornece alimentação e demais necessidades.</li>
+            <li>Reserva garantida mediante 50% do valor total.</li>
+            <li>Cancelamentos: 48h mínimo (10 dias em alta temporada). Taxa: 30% (50% em alta temporada).</li>
           </ol>
         </div>
         
         <div class="card" style="margin-bottom:1.5rem">
           <h3 style="margin-bottom:1rem">Passeios</h3>
           <ol class="rules-list" start="13">
-            <li>Remarcações devem ser feitas com no mínimo 24h de antecedência. O que for diferente disso é considerado desistência e não apto a reposição ou descontos.</li>
-            <li>Mensalistas, para garantirmos a reserva da sua vaga, o valor da mensalidade é fixo e integral, independentemente de faltas, desistências ou condições climáticas (chuva).</li>
-            <li>Para os 2 itens anteriores: exceções por motivos de saúde serão acatadas mediante devida comprovação. Reposições estão sujeitas a disponibilidade.</li>
-            <li>Mensalistas: não há expediente em feriados e emendas. Solicitações para esses dias devem ser combinadas previamente, com custos baseados na tabela de feriados e alta temporada.</li>
+            <li>Remarcações: mínimo 24h de antecedência.</li>
+            <li>Mensalistas: valor fixo independentemente de faltas ou clima.</li>
+            <li>Exceções por saúde: mediante comprovação.</li>
+            <li>Mensalistas: não há expediente em feriados e emendas.</li>
           </ol>
         </div>
         
         <div class="text-center" style="margin-top:2rem">
-          <p style="margin-bottom:1rem">Aceitar estas regras é parte do processo de cadastro.</p>
           <a href="#auth" class="btn btn-primary btn-large">Criar conta e aceitar termos</a>
         </div>
       </div>
@@ -284,16 +276,14 @@
       <div class="container section">
         <div class="section-header text-center">
           <h1>Conteúdos Educativos</h1>
-          <p class="lead">Artigos e vídeos para ajudar você a entender melhor o mundo canino.</p>
+          <p class="lead">Artigos e vídeos para entender melhor o mundo canino.</p>
         </div>
         
         <div class="admin-only hidden" style="text-align:center;margin-bottom:1.5rem">
           <button class="btn btn-secondary" id="editContentBtn">✏️ Editar conteúdos</button>
         </div>
         
-        <div class="content-grid" id="contentGrid">
-          <!-- Preenchido via JS -->
-        </div>
+        <div class="content-grid" id="contentGrid"></div>
       </div>
     </section>
 
@@ -302,7 +292,7 @@
       <div class="container section">
         <div class="section-header text-center">
           <h1>Entre em Contato</h1>
-          <p class="lead">Estamos à disposição para tirar suas dúvidas e ajudar a cuidar do seu melhor amigo.</p>
+          <p class="lead">Estamos à disposição para cuidar do seu melhor amigo.</p>
         </div>
         
         <div class="contact-grid">
@@ -325,7 +315,6 @@
                   <div>
                     <strong>WhatsApp</strong><br>
                     <a href="https://wa.me/5511997811891" target="_blank" rel="noopener">(11) 9 9781-1891</a>
-                    <br><small class="text-muted">Clique para enviar mensagem pré-preenchida</small>
                   </div>
                 </div>
                 
@@ -355,17 +344,14 @@
                 <div class="form-group">
                   <label class="form-label required" for="contactName">Seu nome</label>
                   <input type="text" class="form-control" id="contactName" required>
-                  <div class="form-error"></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label required" for="contactEmail">Seu e-mail</label>
                   <input type="email" class="form-control" id="contactEmail" required>
-                  <div class="form-error"></div>
                 </div>
                 <div class="form-group">
                   <label class="form-label required" for="contactMessage">Mensagem</label>
                   <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
-                  <div class="form-error"></div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Enviar mensagem</button>
                 <p class="form-hint text-center">* Esta mensagem será redirecionada para nosso WhatsApp</p>
@@ -387,49 +373,40 @@
             <button id="toggleRegister">Cadastro</button>
           </div>
           
-          <!-- Login Form -->
           <form id="loginForm">
             <div class="form-group">
               <label class="form-label required" for="loginEmail">E-mail</label>
               <input type="email" class="form-control" id="loginEmail" required placeholder="seu@email.com">
-              <div class="form-error"></div>
             </div>
             <div class="form-group">
               <label class="form-label required" for="loginPassword">Senha</label>
               <input type="password" class="form-control" id="loginPassword" required>
-              <div class="form-error"></div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Entrar</button>
           </form>
           
-          <!-- Register Form -->
           <form id="registerForm" class="hidden">
             <div class="form-group">
               <label class="form-label required" for="regName">Nome completo</label>
               <input type="text" class="form-control" id="regName" required>
-              <div class="form-error"></div>
             </div>
             <div class="form-group">
               <label class="form-label required" for="regEmail">E-mail</label>
               <input type="email" class="form-control" id="regEmail" required placeholder="seu@email.com">
-              <div class="form-error"></div>
             </div>
             <div class="form-group">
               <label class="form-label required" for="regPassword">Senha (mín. 6 caracteres)</label>
               <input type="password" class="form-control" id="regPassword" required minlength="6">
-              <div class="form-error"></div>
             </div>
             <div class="form-group">
               <label class="form-label required" for="regConfirm">Confirmar senha</label>
               <input type="password" class="form-control" id="regConfirm" required>
-              <div class="form-error"></div>
             </div>
             <div class="form-group" style="margin-top:1.5rem">
               <label class="checkbox-label">
                 <input type="checkbox" id="regTerms" required>
                 <span>Li e aceito os <a href="#regras" target="_blank">Termos e Regras</a> *</span>
               </label>
-              <div class="form-error"></div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
           </form>
@@ -451,31 +428,24 @@
         
         <div class="dashboard-grid">
           <div class="dashboard-main">
-            <!-- Próximos Agendamentos -->
             <div class="card dashboard-card">
               <div class="card-header">
                 <h3 style="margin:0">Próximos Agendamentos</h3>
                 <a href="#agendamentos" class="btn btn-sm btn-secondary">Ver todos</a>
               </div>
-              <div class="card-body" id="dashAppointments">
-                <!-- Preenchido via JS -->
-              </div>
+              <div class="card-body" id="dashAppointments"></div>
             </div>
             
-            <!-- Meus Pets -->
             <div class="card dashboard-card" style="margin-top:1.5rem">
               <div class="card-header">
                 <h3 style="margin:0">Meus Pets</h3>
                 <a href="#pet" class="btn btn-sm btn-primary">+ Adicionar</a>
               </div>
-              <div class="card-body" id="dashPets">
-                <!-- Preenchido via JS -->
-              </div>
+              <div class="card-body" id="dashPets"></div>
             </div>
           </div>
           
           <div class="dashboard-sidebar">
-            <!-- Atalhos -->
             <div class="card">
               <h3 style="margin-bottom:1rem">Atalhos</h3>
               <div class="quick-links">
@@ -486,26 +456,15 @@
               </div>
             </div>
             
-            <!-- Alertas -->
             <div class="card" style="margin-top:1.5rem">
               <h3 style="margin-bottom:1rem">Alertas</h3>
-              <div id="dashAlerts">
-                <!-- Preenchido via JS -->
-              </div>
+              <div id="dashAlerts"></div>
             </div>
             
-            <!-- Exportar Dados -->
             <div class="card" style="margin-top:1.5rem">
               <h4 style="margin-bottom:0.5rem">Exportar meus dados</h4>
-              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">
-                Baixe uma cópia do seu cadastro e dos seus pets.
-              </p>
-              <button class="btn btn-sm btn-secondary btn-block" id="exportDataBtn">
-                📥 Baixar dados (.txt)
-              </button>
-              <button class="btn btn-sm btn-secondary btn-block" style="margin-top:0.5rem" id="exportPdfBtn">
-                📄 Baixar PDF
-              </button>
+              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">Baixe uma cópia do seu cadastro e dos seus pets.</p>
+              <button class="btn btn-sm btn-secondary btn-block" id="exportDataBtn">📥 Baixar dados (.txt)</button>
             </div>
           </div>
         </div>
@@ -521,14 +480,12 @@
         </div>
         
         <form class="profile-form card" id="profileForm">
-          <!-- Tutor 1 -->
           <div class="form-section">
             <h3 class="form-section-title">Dados do Tutor Principal *</h3>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label required" for="pName">Nome completo</label>
                 <input type="text" class="form-control" id="pName" required>
-                <div class="form-error"></div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="pBirth">Data de nascimento</label>
@@ -543,24 +500,20 @@
               <div class="form-group">
                 <label class="form-label required" for="pCpf">CPF</label>
                 <input type="text" class="form-control" id="pCpf" placeholder="000.000.000-00" maxlength="14" required>
-                <div class="form-error"></div>
               </div>
             </div>
             <div class="form-group">
               <label class="form-label required" for="pAddress">Endereço completo</label>
               <input type="text" class="form-control" id="pAddress" required>
-              <div class="form-error"></div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label required" for="pEmail">E-mail</label>
                 <input type="email" class="form-control" id="pEmail" required>
-                <div class="form-error"></div>
               </div>
               <div class="form-group">
                 <label class="form-label required" for="pPhone">Telefone</label>
                 <input type="tel" class="form-control" id="pPhone" placeholder="(00) 00000-0000" maxlength="15" required>
-                <div class="form-error"></div>
               </div>
             </div>
             <div class="form-group">
@@ -569,7 +522,6 @@
             </div>
           </div>
           
-          <!-- Tutor 2 -->
           <div class="form-section">
             <h3 class="form-section-title">Segundo Tutor (opcional)</h3>
             <div class="form-row">
@@ -594,11 +546,10 @@
             </div>
           </div>
           
-          <!-- Observações -->
           <div class="form-section" style="border-bottom:none">
             <h3 class="form-section-title">Observações Gerais</h3>
             <div class="form-group">
-              <textarea class="form-control" id="pNotes" rows="3" placeholder="Informações adicionais que deseja registrar..."></textarea>
+              <textarea class="form-control" id="pNotes" rows="3"></textarea>
             </div>
           </div>
           
@@ -609,7 +560,6 @@
         </form>
       </div>
     </section>
-
     <!-- ==================== PET FORM ==================== -->
     <section id="pet" class="page" data-page="pet">
       <div class="container section">
@@ -628,24 +578,20 @@
               <div class="form-group">
                 <label class="form-label required" for="petName">Nome</label>
                 <input type="text" class="form-control" id="petName" required>
-                <div class="form-error"></div>
               </div>
               <div class="form-group">
                 <label class="form-label required" for="petBreed">Raça</label>
                 <input type="text" class="form-control" id="petBreed" required>
-                <div class="form-error"></div>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label required" for="petWeight">Peso (kg)</label>
                 <input type="number" class="form-control" id="petWeight" step="0.1" min="0" required>
-                <div class="form-error"></div>
               </div>
               <div class="form-group">
                 <label class="form-label required" for="petBirth">Data de nascimento</label>
                 <input type="date" class="form-control" id="petBirth" required>
-                <div class="form-error"></div>
               </div>
             </div>
             <div class="form-row">
@@ -656,7 +602,6 @@
                   <option value="Macho">Macho</option>
                   <option value="Fêmea">Fêmea</option>
                 </select>
-                <div class="form-error"></div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="petRga">RGA</label>
@@ -691,9 +636,7 @@
             
             <div class="form-group">
               <label class="form-label">Vacinas</label>
-              <div id="vaccinesContainer">
-                <!-- Vacinas dinâmicas -->
-              </div>
+              <div id="vaccinesContainer"></div>
               <button type="button" class="btn btn-sm btn-secondary" id="addVaccineBtn" style="margin-top:0.5rem">
                 + Adicionar vacina
               </button>
@@ -719,6 +662,11 @@
               <label class="form-label" for="vetAddress">Endereço da clínica</label>
               <input type="text" class="form-control" id="vetAddress">
             </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="healthObservations">Observações de Saúde</label>
+              <textarea class="form-control" id="healthObservations" rows="2" placeholder="Outras informações sobre saúde..."></textarea>
+            </div>
           </div>
           
           <!-- Alimentação -->
@@ -743,6 +691,11 @@
                 <label class="form-label" for="foodRestrictions">Restrições</label>
                 <input type="text" class="form-control" id="foodRestrictions" placeholder="Ex: Sem lactose">
               </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="foodObservations">Observações de Alimentação</label>
+              <textarea class="form-control" id="foodObservations" rows="2" placeholder="Outras informações sobre alimentação..."></textarea>
             </div>
           </div>
           
@@ -806,7 +759,7 @@
                   <input type="checkbox" id="guardActive">
                   <span class="toggle-slider"></span>
                 </label>
-                <span class="toggle-label">Ativo</span>
+                <span class="toggle-label">Faz</span>
               </div>
               <div id="guardItems" class="checkbox-group" style="margin-top:0.5rem;display:none">
                 <label class="checkbox-label">
@@ -852,37 +805,46 @@
             <div class="form-group">
               <label class="form-label" for="commands">Comandos conhecidos</label>
               <input type="text" class="form-control" id="commands" placeholder="Ex: senta, fica, junto (separados por vírgula)">
-              <small class="form-hint">Separe os comandos por vírgula</small>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="behaviorObservations">Observações de Comportamento</label>
+              <textarea class="form-control" id="behaviorObservations" rows="2" placeholder="Outras informações sobre comportamento..."></textarea>
             </div>
           </div>
           
           <!-- Rotina -->
           <div class="form-section">
             <h3 class="form-section-title">🏠 Rotina</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="sleepsWhere">Onde dorme</label>
-                <select class="form-control" id="sleepsWhere">
-                  <option value="">Selecione...</option>
-                  <option value="Cama própria">Cama própria</option>
-                  <option value="Cama do tutor">Cama do tutor</option>
-                  <option value="Sofá">Sofá</option>
-                  <option value="Gaiola">Gaiola</option>
-                  <option value="Área externa">Área externa</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <div class="toggle-container">
-                  <label class="toggle">
-                    <input type="checkbox" id="accessFurniture">
-                    <span class="toggle-slider"></span>
-                  </label>
-                  <label class="form-label" for="accessFurniture" style="margin:0">Acesso a sofá/cama</label>
-                </div>
+            
+            <div class="form-group">
+              <label class="form-label">Onde dorme</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="sleepsWhere" value="Cama própria">
+                  <span>Cama própria</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="sleepsWhere" value="Cama do tutor">
+                  <span>Cama do tutor</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="sleepsWhere" value="Sofá">
+                  <span>Sofá</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="sleepsWhere" value="Gaiola">
+                  <span>Gaiola</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="sleepsWhere" value="Área externa">
+                  <span>Área externa</span>
+                </label>
               </div>
             </div>
+            
             <div class="form-group">
-              <label class="form-label" for="bathroomHabits">Hábitos de banheiro</label>
+              <label class="form-label" for="bathroomHabits">Hábitos de higiene</label>
               <input type="text" class="form-control" id="bathroomHabits" placeholder="Ex: Faz xixi no tapete higiênico">
             </div>
           </div>
@@ -892,7 +854,6 @@
             <h3 class="form-section-title">⚠️ Pontos de Atenção *</h3>
             <div class="form-group">
               <textarea class="form-control" id="petAlerts" rows="2" required placeholder="Informações essenciais para o cuidado do seu pet..."></textarea>
-              <div class="form-error"></div>
               <small class="form-hint">Ex: Medo de fogos, não pode comer chocolate, precisa de medicação às 14h...</small>
             </div>
           </div>
@@ -902,10 +863,6 @@
             <div class="form-group">
               <textarea class="form-control" id="petPersonality" rows="3" placeholder="Descreva a personalidade única do seu companheiro..."></textarea>
             </div>
-          </div>
-          
-          <div class="autosave-notice text-center">
-            <small class="text-muted">💾 Auto-save: Alterações são salvas automaticamente a cada 30 segundos</small>
           </div>
           
           <div class="form-actions text-center">
@@ -928,7 +885,6 @@
           </div>
         </div>
         
-        <!-- Filtros -->
         <div class="card" style="margin-bottom:1.5rem">
           <div class="filters-row">
             <div class="form-group" style="margin:0;min-width:200px">
@@ -964,7 +920,6 @@
           </div>
         </div>
         
-        <!-- Lista -->
         <div class="card">
           <div class="table-responsive">
             <table class="data-table">
@@ -978,9 +933,7 @@
                   <th>Ações</th>
                 </tr>
               </thead>
-              <tbody id="appointmentsTable">
-                <!-- Preenchido via JS -->
-              </tbody>
+              <tbody id="appointmentsTable"></tbody>
             </table>
           </div>
         </div>
@@ -1017,9 +970,7 @@
                       <th>Nota Fiscal</th>
                     </tr>
                   </thead>
-                  <tbody id="financialTable">
-                    <!-- Preenchido via JS -->
-                  </tbody>
+                  <tbody id="financialTable"></tbody>
                 </table>
               </div>
             </div>
@@ -1028,9 +979,7 @@
           <div class="dashboard-sidebar">
             <div class="card">
               <h3 style="margin-bottom:1rem">Pendências</h3>
-              <div id="finPendingList">
-                <!-- Preenchido via JS -->
-              </div>
+              <div id="finPendingList"></div>
             </div>
             
             <div class="card" style="margin-top:1.5rem">
@@ -1057,7 +1006,6 @@
           </div>
         </div>
         
-        <!-- Stats -->
         <div class="stats-grid">
           <div class="card stat-card">
             <div class="stat-icon">👥</div>
@@ -1081,10 +1029,10 @@
           </div>
         </div>
         
-        <!-- Tabs -->
         <div class="card" style="margin-top:1.5rem">
           <div class="tabs-header">
             <button class="tab-btn active" data-tab="appointments">Agendamentos</button>
+            <button class="tab-btn" data-tab="pets">Pets</button>
             <button class="tab-btn" data-tab="clients">Clientes</button>
             <button class="tab-btn" data-tab="payments">Pagamentos</button>
             <button class="tab-btn" data-tab="reports">Relatórios</button>
@@ -1100,7 +1048,6 @@
                 <button class="btn btn-primary" id="newAppointmentBtn">+ Novo Agendamento</button>
               </div>
               
-              <!-- Filtros -->
               <div class="filters-row" style="margin-bottom:1rem">
                 <div class="form-group" style="margin:0;min-width:200px">
                   <label class="form-label" for="adminFilterClient">Cliente</label>
@@ -1145,9 +1092,29 @@
                       <th>Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="adminAppointmentsTable">
-                    <!-- Preenchido via JS -->
-                  </tbody>
+                  <tbody id="adminAppointmentsTable"></tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Pets (NOVO) -->
+            <div class="tab-pane" id="tab-pets">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h4 style="margin:0">Todos os Pets Cadastrados</h4>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Raça</th>
+                      <th>Idade</th>
+                      <th>Peso</th>
+                      <th>Tutor</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminPetsTable"></tbody>
                 </table>
               </div>
             </div>
@@ -1166,9 +1133,7 @@
                       <th>Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="adminClientsTable">
-                    <!-- Preenchido via JS -->
-                  </tbody>
+                  <tbody id="adminClientsTable"></tbody>
                 </table>
               </div>
             </div>
@@ -1187,9 +1152,7 @@
                       <th>Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="adminPaymentsTable">
-                    <!-- Preenchido via JS -->
-                  </tbody>
+                  <tbody id="adminPaymentsTable"></tbody>
                 </table>
               </div>
             </div>
@@ -1224,14 +1187,6 @@
                 <div class="calculator-grid" id="pricesGrid"></div>
                 <button type="submit" class="btn btn-primary" style="margin-top:1.5rem">💾 Salvar configurações</button>
               </form>
-              
-              <div style="margin-top:2rem">
-                <h4 style="margin-bottom:1rem">Alta Temporada</h4>
-                <p class="text-muted" style="margin-bottom:0.5rem">
-                  Meses configurados: <strong>Julho, Dezembro, Janeiro</strong>
-                </p>
-                <small class="text-muted">Para editar períodos personalizados, contate o desenvolvedor.</small>
-              </div>
             </div>
             
             <!-- Conteúdo -->
@@ -1247,9 +1202,7 @@
       </div>
     </section>
 
-  </main>
-
-  <!-- Footer -->
+  </main>  <!-- Footer -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
@@ -1527,6 +1480,53 @@
     </div>
   </div>
 
+  <!-- MODAL DE CONTEÚDO (ADMIN) -->
+  <div id="contentModal" class="hidden">
+    <div class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal" style="max-width:600px">
+        <div class="modal-header">
+          <h3 id="contentModalTitle" style="margin:0">Conteúdo Educacional</h3>
+          <button class="modal-close" onclick="Admin.closeContentModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="adminContentForm">
+            <input type="hidden" id="contentId">
+            <div class="form-group">
+              <label class="form-label" for="contentTitle">Título</label>
+              <input type="text" class="form-control" id="contentTitle" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contentExcerpt">Descrição Breve</label>
+              <textarea class="form-control" id="contentExcerpt" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contentType">Tipo de Conteúdo</label>
+              <select class="form-control" id="contentType">
+                <option value="article">Artigo</option>
+                <option value="video-youtube">YouTube</option>
+                <option value="video-tiktok">TikTok</option>
+                <option value="video-instagram">Instagram</option>
+              </select>
+            </div>
+            <div class="form-group" id="videoUrlField" style="display:none">
+              <label class="form-label" for="contentVideoUrl">URL do Vídeo</label>
+              <input type="url" class="form-control" id="contentVideoUrl" placeholder="https://youtube.com/watch?v=...">
+              <small class="form-hint">Cole o link completo do vídeo</small>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contentText">Conteúdo Completo</label>
+              <textarea class="form-control" id="contentText" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="Admin.closeContentModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="Admin.saveContent()">💾 Salvar Conteúdo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript Modules -->
   <script src="03-utils.js"></script>
   <script src="04-auth.js"></script>
@@ -1535,99 +1535,122 @@
   <script src="07-admin.js"></script>
   <script src="08-app.js"></script>
   
- <!-- Calculadora - Hospedagem/Daycare -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const calcService = document.getElementById('calcService');
-    const calcStart = document.getElementById('calcStart');
-    const calcEnd = document.getElementById('calcEnd');
-    
-    [calcService, calcStart, calcEnd].forEach(el => {
-      if (el) {
-        el.addEventListener('change', updateCalculator);
+  <!-- Calculadora - Hospedagem/Daycare -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calcService = document.getElementById('calcService');
+      const calcStart = document.getElementById('calcStart');
+      const calcEnd = document.getElementById('calcEnd');
+      
+      [calcService, calcStart, calcEnd].forEach(el => {
+        if (el) {
+          el.addEventListener('change', updateCalculator);
+        }
+      });
+      
+      function updateCalculator() {
+        const service = calcService?.value;
+        const start = calcStart?.value;
+        const end = calcEnd?.value;
+        const resultEl = document.getElementById('calcResult');
+        const detailsEl = document.getElementById('calcDetails');
+        const breakdownEl = document.getElementById('calcBreakdown');
+        
+        if (!resultEl || !service || !start || !end) {
+          if (resultEl) resultEl.textContent = 'R$ 0,00';
+          if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
+          if (breakdownEl) breakdownEl.style.display = 'none';
+          return;
+        }
+        
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        
+        if (endDate < startDate) {
+          resultEl.textContent = 'Data inválida';
+          if (detailsEl) detailsEl.textContent = 'A data de saída deve ser após a entrada';
+          if (breakdownEl) breakdownEl.style.display = 'none';
+          return;
+        }
+        
+        const config = Utils.get('adminConfig', {}) || {};
+        const prices = config.prices || {};
+        let total = 0;
+        const breakdown = [];
+        
+        // Calcular horas totais
+        const totalHours = (endDate - startDate) / (1000 * 60 * 60);
+        
+        // Cortesia de 4h: 28h = 1 diária, 52h = 2 diárias
+        const dailyHours = 24;
+        const graceHours = 4;
+        const numDays = Math.ceil(totalHours / (dailyHours + graceHours));
+        
+        // Calcular preço por dia
+        for (let i = 0; i < numDays; i++) {
+          const currentDate = new Date(startDate);
+          currentDate.setDate(currentDate.getDate() + i);
+          
+          let dailyPrice;
+          const isHoliday = Utils.isHoliday(currentDate);
+          const isHighSeason = Utils.isHighSeason(currentDate);
+          const isWeekend = Utils.isWeekend(currentDate);
+          
+          if (service === 'hospedagem') {
+            if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
+            else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
+            else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
+            else dailyPrice = prices.hospedagemWeekday || 80;
+          } else {
+            if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
+            else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
+            else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
+            else dailyPrice = prices.daycareWeekday || 70;
+          }
+          
+          total += dailyPrice;
+          breakdown.push({
+            date: currentDate.toISOString().split('T')[0],
+            price: dailyPrice,
+            tags: [
+              isHoliday ? 'Feriado' : null,
+              isWeekend ? 'Fim de semana' : null,
+              isHighSeason ? 'Alta temporada' : null
+            ].filter(Boolean)
+          });
+        }
+        
+        resultEl.textContent = Utils.formatCurrency(total);
+        
+        if (detailsEl) {
+          detailsEl.textContent = `${numDays} diária(s) • ${totalHours.toFixed(1)} horas totais (cortesia de 4h incluída)`;
+        }
+        
+        if (breakdownEl) {
+          if (breakdown.length > 1) {
+            breakdownEl.innerHTML = breakdown.map(b => 
+              `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
+                <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
+                <span>${Utils.formatCurrency(b.price)}</span>
+              </div>`
+            ).join('');
+            breakdownEl.style.display = 'block';
+          } else {
+            breakdownEl.style.display = 'none';
+          }
+        }
+      }
+      
+      // Toggle campo de vídeo no modal de conteúdo
+      const contentType = document.getElementById('contentType');
+      const videoUrlField = document.getElementById('videoUrlField');
+      
+      if (contentType && videoUrlField) {
+        contentType.addEventListener('change', function() {
+          videoUrlField.style.display = this.value.startsWith('video-') ? 'block' : 'none';
+        });
       }
     });
-    
-    function updateCalculator() {
-      const service = calcService?.value;
-      const start = calcStart?.value;
-      const end = calcEnd?.value;
-      const resultEl = document.getElementById('calcResult');
-      const breakdownEl = document.getElementById('calcBreakdown');
-      
-      if (!resultEl || !service || !start || !end) {
-        if (resultEl) resultEl.textContent = 'R$ 0,00';
-        if (breakdownEl) breakdownEl.style.display = 'none';
-        return;
-      }
-      
-      // Verificar se data de saída é maior que entrada
-      if (new Date(end) < new Date(start)) {
-        resultEl.textContent = 'Data inválida';
-        breakdownEl.style.display = 'none';
-        return;
-      }
-      
-      const config = Utils.get('adminConfig', {}) || {};
-      const prices = config.prices || {};
-      let total = 0;
-      const breakdown = [];
-      
-      // Iterar por cada dia do período
-      const startDate = new Date(start);
-      const endDate = new Date(end);
-      const currentDate = new Date(startDate);
-      
-      while (currentDate <= endDate) {
-        let dailyPrice;
-        const isHoliday = Utils.isHoliday(currentDate);
-        const isHighSeason = Utils.isHighSeason(currentDate);
-        const isWeekend = Utils.isWeekend(currentDate);
-        
-        if (service === 'hospedagem') {
-          if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
-          else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
-          else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
-          else dailyPrice = prices.hospedagemWeekday || 80;
-        } else { // daycare
-          if (isHighSeason) dailyPrice = prices.daycareHighSeason || 100;
-          else if (isHoliday) dailyPrice = prices.daycareHoliday || 90;
-          else if (isWeekend) dailyPrice = prices.daycareWeekend || 90;
-          else dailyPrice = prices.daycareWeekday || 70;
-        }
-        
-        total += dailyPrice;
-        breakdown.push({
-          date: new Date(currentDate).toISOString().split('T')[0],
-          price: dailyPrice,
-          tags: [
-            isHoliday ? 'Feriado' : null,
-            isWeekend ? 'Fim de semana' : null,
-            isHighSeason ? 'Alta temporada' : null
-          ].filter(Boolean)
-        });
-        
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      
-      resultEl.textContent = Utils.formatCurrency(total);
-      
-      // Mostrar breakdown se houver mais de 1 dia
-      if (breakdownEl) {
-        if (breakdown.length > 1) {
-          breakdownEl.innerHTML = breakdown.map(b => 
-            `<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">
-              <span>${Utils.formatDate(b.date)} ${b.tags.length ? '(' + b.tags.join(', ') + ')' : ''}</span>
-              <span>${Utils.formatCurrency(b.price)}</span>
-            </div>`
-          ).join('');
-          breakdownEl.style.display = 'block';
-        } else {
-          breakdownEl.style.display = 'none';
-        }
-      }
-    }
-  });
-</script>
+  </script>
 </body>
 </html>

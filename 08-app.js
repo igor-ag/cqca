@@ -186,7 +186,6 @@ const App = {
         break;
       
       case 'pet':
-        // IMPORTANTE: Carregar pet da URL (hash com ?id=)
         Pets.loadFromURL();
         break;
       
