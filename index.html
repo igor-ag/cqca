@@ -1576,55 +1576,89 @@
     const calcStartTime = document.getElementById('calcStartTime');
     const calcEndDate = document.getElementById('calcEndDate');
     const calcEndTime = document.getElementById('calcEndTime');
+    const resultEl = document.getElementById('calcResult');
+    const detailsEl = document.getElementById('calcDetails');
+    const breakdownEl = document.getElementById('calcBreakdown');
+    
+    if (!calcStartDate || !calcEndDate || !resultEl) {
+      console.log('Elementos da calculadora não encontrados');
+      return;
+    }
     
     // Definir data mínima como hoje
-    const today = new Date().toISOString().split('T')[0];
-    if (calcStartDate) calcStartDate.min = today;
-    if (calcEndDate) calcEndDate.min = today;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0];
+    
+    calcStartDate.min = todayStr;
+    calcEndDate.min = todayStr;
+    
+    // Valores padrão
+    if (!calcStartDate.value) calcStartDate.value = todayStr;
+    if (!calcEndDate.value) calcEndDate.value = todayStr;
+    if (calcStartTime) calcStartTime.value = '8';
+    if (calcEndTime) calcEndTime.value = '8';
     
     // Calcular quando qualquer campo mudar
     [calcService, calcStartDate, calcStartTime, calcEndDate, calcEndTime].forEach(el => {
       if (el) {
         el.addEventListener('change', updateCalculator);
+        el.addEventListener('input', updateCalculator);
       }
     });
     
     function updateCalculator() {
+      // Resetar valores
+      resultEl.textContent = 'R$ 0,00';
+      if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
+      if (breakdownEl) breakdownEl.style.display = 'none';
+      
       const service = calcService?.value;
       const startDate = calcStartDate?.value;
-      const startTime = calcStartTime?.value;
+      const startTime = calcStartTime?.value || '8';
       const endDate = calcEndDate?.value;
-      const endTime = calcEndTime?.value;
+      const endTime = calcEndTime?.value || '8';
       
-      const resultEl = document.getElementById('calcResult');
-      const detailsEl = document.getElementById('calcDetails');
-      const breakdownEl = document.getElementById('calcBreakdown');
-      
-      if (!resultEl || !service || !startDate || !endDate) {
-        if (resultEl) resultEl.textContent = 'R$ 0,00';
-        if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
-        if (breakdownEl) breakdownEl.style.display = 'none';
+      // Validar campos obrigatórios
+      if (!service || !startDate || !endDate) {
         return;
       }
       
-      // ✅ Criar datas com horário correto (sem timezone issue)
-      const startDateTime = new Date(startDate + 'T' + (startTime || '8') + ':00:00');
-      const endDateTime = new Date(endDate + 'T' + (endTime || '8') + ':00:00');
+      // ✅ Criar datas de forma segura
+      let startDateTime, endDateTime;
       
+      try {
+        startDateTime = new Date(startDate + 'T' + startTime + ':00:00');
+        endDateTime = new Date(endDate + 'T' + endTime + ':00:00');
+        
+        // Validar se as datas são válidas
+        if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+          resultEl.textContent = 'Data inválida';
+          return;
+        }
+      } catch (e) {
+        resultEl.textContent = 'Erro ao calcular';
+        console.error('Erro na data:', e);
+        return;
+      }
+      
+      // Validar se saída é após entrada
       if (endDateTime < startDateTime) {
-        resultEl.textContent = 'R$ 0,00';
-        if (detailsEl) detailsEl.textContent = 'Saída deve ser após entrada';
-        if (breakdownEl) breakdownEl.style.display = 'none';
+        resultEl.textContent = 'Saída deve ser após entrada';
         return;
       }
       
       const config = Utils.get('adminConfig', {}) || {};
       const prices = config.prices || {};
-      let total = 0;
-      const breakdown = [];
       
       // Calcular horas totais
       const totalHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+      
+      // Validar horas
+      if (isNaN(totalHours) || totalHours < 0) {
+        resultEl.textContent = 'R$ 0,00';
+        return;
+      }
       
       // Cortesia de 4h no TOTAL
       const courtesyHours = 4;
@@ -1640,7 +1674,11 @@
         extraDaycareDays = 1;
       }
       
+      // Garantir mínimo de 1 diária se houver horas cobráveis
       const hospDays = Math.max(fullDays, billableHours > 0 ? 1 : 0);
+      
+      let total = 0;
+      const breakdown = [];
       
       // Calcular hospedagem
       for (let i = 0; i < hospDays; i++) {
@@ -1682,6 +1720,7 @@
         });
       }
       
+      // Atualizar UI
       resultEl.textContent = Utils.formatCurrency(total);
       
       if (detailsEl) {
@@ -1696,18 +1735,14 @@
         detailsEl.textContent = details;
       }
       
-      if (breakdownEl) {
-        if (breakdown.length > 0) {
-          breakdownEl.innerHTML = breakdown.map(b => 
-            '<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">' +
-              '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + (b.date !== 'Excedente' ? Utils.formatDate(b.date) : b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
-              '<span>' + Utils.formatCurrency(b.price) + '</span>' +
-            '</div>'
-          ).join('');
-          breakdownEl.style.display = 'block';
-        } else {
-          breakdownEl.style.display = 'none';
-        }
+      if (breakdownEl && breakdown.length > 0) {
+        breakdownEl.innerHTML = breakdown.map(b => 
+          '<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">' +
+            '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + (b.date !== 'Excedente' ? Utils.formatDate(b.date) : b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
+            '<span>' + Utils.formatCurrency(b.price) + '</span>' +
+          '</div>'
+        ).join('');
+        breakdownEl.style.display = 'block';
       }
     }
     
@@ -1722,7 +1757,9 @@
       helpText.innerHTML = 'ℹ️ Check-in e check-out disponíveis das <strong>8h às 20h</strong>.';
       calcGrid.appendChild(helpText);
     }
+    
+    // Calcular inicialmente
+    updateCalculator();
   });
-</script>
-</body>
+</script></body>
 </html>
