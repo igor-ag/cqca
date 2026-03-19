@@ -22,7 +22,10 @@ const Admin = {
   });
   
   // ✅ ESTA LINHA É IMPORTANTE - Botão "+ Novo" conteúdo
-  document.getElementById('addContentBtn')?.addEventListener('click', Admin.openContentModal);
+ document.getElementById('addContentBtn')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  Admin.openContentModal(null);
+});
   
   document.getElementById('newAppointmentBtn')?.addEventListener('click', () => {
     Admin.openAppointmentModal();
