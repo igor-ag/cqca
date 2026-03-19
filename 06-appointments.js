@@ -343,7 +343,7 @@ const Appointments = {
   },
   
   /**
-   * CÁLCULO DE DIÁRIAS COM HORAS (24h + 4h cortesia)
+   * CALCULO DE DIARIAS COM HORAS (24h + 4h cortesia)
    */
  calculateStay: (serviceType, startDate, endDate) => {
   const config = Utils.get('adminConfig', {});
@@ -380,8 +380,6 @@ const Appointments = {
   },
   
   updateCalculator: () => {
-    // Esta função é usada apenas no modal admin
-    // A calculadora pública está no inline script do index.html
   }
 };
 
