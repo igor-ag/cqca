@@ -3,26 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CQC Adestramento | Passeios e Hospedagem</title>
-  <meta name="description" content="Adestramento positivo, passeios, pet sitter e hospedagem para seu cão em São Paulo">
+  <title>CQC Adestramento | Passeios e Hospedagem em São Paulo</title>
+  <meta name="description" content="Adestramento positivo, passeios, pet sitter e hospedagem para seu cão em São Paulo. Cuidado profissional com amor e técnica.">
   
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
   
-  <!-- Font Awesome (ícones) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- CSS -->
   <link rel="stylesheet" href="02-styles.css">
 </head>
 <body>
+
   <!-- Navbar -->
   <nav class="navbar" role="navigation" aria-label="Navegação principal">
-    <div class="container navbar-container">
+    <div class="navbar-container">
       <a href="#home" class="navbar-brand" aria-label="Página inicial">
-        <!-- SUBSTITUA AQUI SUA LOGO -->
-        <img src="logo.png" alt="CQC" style="width:40px;height:40px;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="navbar-logo" style="display:none">🐾</div>
+        <div class="navbar-logo">🐾</div>
         <div>
           CQC Adestramento
           <span class="navbar-brand-sub">passeios e hospedagem</span>
@@ -35,88 +29,92 @@
         <li><a href="#home" data-route="home">Início</a></li>
         <li><a href="#servicos" data-route="servicos">Serviços</a></li>
         <li><a href="#valores" data-route="valores">Valores</a></li>
+        <li><a href="#blog" data-route="blog">Blog</a></li>
         <li><a href="#regras" data-route="regras">Regras</a></li>
-        <li><a href="#conteudos" data-route="conteudos">Conteúdos</a></li>
         <li><a href="#contato" data-route="contato">Contato</a></li>
       </ul>
       
       <div class="nav-actions" id="navActions">
-        <a href="#auth" class="btn btn-sm btn-secondary" id="authLink">Entrar</a>
-        <a href="#dashboard" class="btn btn-sm btn-primary hidden" id="dashboardLink">Minha Conta</a>
-        <button class="btn btn-sm btn-secondary hidden" id="logoutBtn" aria-label="Sair">Sair</button>
-        <button class="btn btn-sm btn-secondary hidden" id="adminToggle" aria-label="Painel Admin">⚙️ Admin</button>
+        <a href="#cadastro" class="btn btn-sm btn-primary">Cadastrar</a>
+        <a href="#auth" class="btn btn-sm btn-secondary hidden" id="authLink">Entrar</a>
+        <button class="btn btn-sm btn-secondary hidden" id="logoutBtn">Sair</button>
+        <button class="btn btn-sm btn-secondary hidden" id="adminToggle">⚙️</button>
       </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
   <main id="app" class="page-container" role="main">
 
     <!-- ==================== HOME ==================== -->
     <section id="home" class="page active" data-page="home">
       <div class="hero">
         <div class="container">
-          <h1>Cuidado profissional para seu melhor amigo</h1>
+          <h1>Cuidado <span>profissional</span> para seu melhor amigo</h1>
           <p>Adestramento positivo, passeios, pet sitter e hospedagem com amor e técnica em São Paulo.</p>
           <div class="hero-cta">
-            <a href="#auth" class="btn btn-primary">Cadastre-se e agende</a>
-            <a href="#servicos" class="btn btn-secondary btn-light">Conheça nossos serviços</a>
+            <a href="#cadastro" class="btn btn-primary btn-large">Cadastre seu pet</a>
+            <a href="#servicos" class="btn btn-secondary btn-large">Conheça nossos serviços</a>
           </div>
           <div class="hero-image">
             <div class="hero-placeholder">
-              <span style="font-size:4rem">🐕🐈</span>
-              <p>Imagem ilustrativa de cães felizes</p>
+              <span style="font-size:5rem">🐕</span>
+              <p style="margin-top:1rem;color:var(--color-text-muted)">Seu pet merece o melhor cuidado</p>
             </div>
           </div>
         </div>
       </div>
       
       <section class="container section">
-        <div class="section-header text-center">
+        <div class="section-header">
           <h2>Sobre a CQC Adestramento</h2>
           <p class="lead">Somos especializados em cuidados personalizados para cães, utilizando métodos positivos e baseados em ciência.</p>
         </div>
         
-        <h3 class="text-center section-title">Nossos Serviços</h3>
+        <h3 class="text-center" style="margin-top:3rem">Nossos Serviços</h3>
         <div class="services-grid" id="homeServicesGrid"></div>
         
-        <div class="text-center" style="margin-top:2rem">
+        <div class="text-center" style="margin-top:3rem">
           <a href="#servicos" class="btn btn-primary">Ver todos os serviços</a>
         </div>
       </section>
       
       <section class="container section">
-        <h3 class="text-center section-title">O que nossos clientes dizem</h3>
+        <div class="section-header">
+          <h2>O que nossos clientes dizem</h2>
+        </div>
         <div class="testimonials-grid">
           <div class="testimonial-card">
-            <p>"O Thor nunca ficou tão bem cuidado! A equipe é atenciosa e sempre manda fotos. Recomendo demais!"</p>
+            <p>"O Thor nunca ficou tão bem cuidado! A equipe é atenciosa e sempre manda fotos."</p>
             <div class="testimonial-author">
               <div class="testimonial-avatar">MS</div>
-              <div><strong>Maria S.</strong><br><small>Tutora do Thor</small></div>
+              <div><strong>Maria S.</strong><br><small class="text-muted">Tutora do Thor</small></div>
             </div>
           </div>
           <div class="testimonial-card">
             <p>"As aulas de adestramento transformaram a relação com minha Luna. Método positivo funciona!"</p>
             <div class="testimonial-author">
               <div class="testimonial-avatar">CO</div>
-              <div><strong>Carlos O.</strong><br><small>Tutor da Luna</small></div>
+              <div><strong>Carlos O.</strong><br><small class="text-muted">Tutor da Luna</small></div>
             </div>
           </div>
           <div class="testimonial-card">
             <p>"Hospedagem impecável. Meu Max voltou cansado e feliz, como deve ser após boas férias!"</p>
             <div class="testimonial-author">
               <div class="testimonial-avatar">AP</div>
-              <div><strong>Ana P.</strong><br><small>Tutora do Max</small></div>
+              <div><strong>Ana P.</strong><br><small class="text-muted">Tutora do Max</small></div>
             </div>
           </div>
         </div>
       </section>
       
       <section class="cta-section">
-        <div class="container text-center">
+        <div class="container">
           <h2>Pronto para cuidar do seu pet?</h2>
           <p>Cadastre-se agora e agende seu primeiro serviço com condições especiais.</p>
-          <a href="#auth" class="btn btn-primary btn-large">Criar conta grátis</a>
+          <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+            <a href="#cadastro" class="btn btn-large" style="background:white;color:var(--color-primary)">Preencher ficha de cadastro</a>
+            <a href="#blog" class="btn btn-large" style="background:transparent;color:white;border:1.5px solid white">Ler nosso blog</a>
+          </div>
         </div>
       </section>
     </section>
@@ -124,14 +122,14 @@
     <!-- ==================== SERVIÇOS ==================== -->
     <section id="servicos" class="page" data-page="servicos">
       <div class="container section">
-        <div class="section-header text-center">
+        <div class="section-header">
           <h1>Nossos Serviços</h1>
-          <p class="lead">Soluções completas para o bem-estar do seu cão.</p>
+          <p class="lead">Soluções completas para o bem-estar do seu cão, com método positivo e atendimento personalizado.</p>
         </div>
         
         <div class="services-grid" id="servicesGrid"></div>
         
-        <div class="text-center" style="margin-top:2rem">
+        <div class="text-center" style="margin-top:3rem">
           <p style="margin-bottom:1rem">Quer saber os valores?</p>
           <a href="#valores" class="btn btn-primary">Ver tabela de valores</a>
         </div>
@@ -141,7 +139,7 @@
     <!-- ==================== VALORES ==================== -->
     <section id="valores" class="page" data-page="valores">
       <div class="container section">
-        <div class="section-header text-center">
+        <div class="section-header">
           <h1>Investimento</h1>
           <p class="lead">Transparência total nos nossos valores.</p>
         </div>
@@ -155,12 +153,12 @@
           </table>
         </div>
         
-        <p class="text-muted"><small>* Alta temporada: meses de julho, dezembro e janeiro.</small></p>
+        <p class="text-muted" style="margin-top:1rem"><small>* Alta temporada: meses de julho, dezembro e janeiro.</small></p>
         
         <!-- Calculadora -->
-        <div class="calculator card">
-          <h3 style="margin-bottom:1.5rem">🧮 Simulador de Hospedagem/Daycare</h3>
-          <p class="text-muted" style="margin-bottom:1.5rem">Calcule o valor estimado da estadia do seu pet. O cálculo considera automaticamente finais de semana, feriados e alta temporada. Cortesia de 4h incluída.</p>
+        <div class="calculator">
+          <h3>🧮 Simulador de Hospedagem/Daycare</h3>
+          <p class="text-muted" style="margin:0.5rem 0 2rem">Calcule o valor estimado da estadia do seu pet.</p>
           
           <form id="calculatorForm">
             <div class="calculator-grid">
@@ -174,57 +172,62 @@
               </div>
               
               <div class="form-group">
-                <label class="form-label required" for="calcStart">Data e Hora de Entrada *</label>
-                <div class="input-group" style="flex-wrap:wrap;gap:0.5rem">
-                <input type="date" class="form-control" id="calcStartDate" placeholder="Data" required style="flex:1;min-width:150px">
-                 <select class="form-control" id="calcStartTime" required style="width:100px">
-                   <option value="8">08:00</option>
-                   <option value="9">09:00</option>
-                   <option value="10">10:00</option>
-                   <option value="11">11:00</option>
-                   <option value="12">12:00</option>
-                   <option value="13">13:00</option>
-                   <option value="14">14:00</option>
-                   <option value="15">15:00</option>
-                   <option value="16">16:00</option>
-                   <option value="17">17:00</option>
-                   <option value="18">18:00</option>
-                   <option value="19">19:00</option>
-                   <option value="20">20:00</option>
-                 </select>
-               </div>
+                <label class="form-label required">Data de Entrada *</label>
+                <div style="display:grid;grid-template-columns:1fr 120px;gap:0.5rem">
+                  <input type="date" class="form-control" id="calcStartDate" required>
+                  <select class="form-control" id="calcStartTime">
+                    <option value="8">08:00</option>
+                    <option value="9">09:00</option>
+                    <option value="10">10:00</option>
+                    <option value="11">11:00</option>
+                    <option value="12">12:00</option>
+                    <option value="13">13:00</option>
+                    <option value="14">14:00</option>
+                    <option value="15">15:00</option>
+                    <option value="16">16:00</option>
+                    <option value="17">17:00</option>
+                    <option value="18">18:00</option>
+                    <option value="19">19:00</option>
+                    <option value="20">20:00</option>
+                  </select>
+                </div>
               </div>
               
               <div class="form-group">
-                <label class="form-label required" for="calcEnd">Data e Hora de Saída *</label>
-<div class="input-group" style="flex-wrap:wrap;gap:0.5rem">
-  <input type="date" class="form-control" id="calcEndDate" placeholder="Data" required style="flex:1;min-width:150px">
-  <select class="form-control" id="calcEndTime" required style="width:100px">
-    <option value="8">08:00</option>
-    <option value="9">09:00</option>
-    <option value="10">10:00</option>
-    <option value="11">11:00</option>
-    <option value="12">12:00</option>
-    <option value="13">13:00</option>
-    <option value="14">14:00</option>
-    <option value="15">15:00</option>
-    <option value="16">16:00</option>
-    <option value="17">17:00</option>
-    <option value="18">18:00</option>
-    <option value="19">19:00</option>
-    <option value="20">20:00</option>
-  </select>
-</div>              </div>
+                <label class="form-label required">Data de Saída *</label>
+                <div style="display:grid;grid-template-columns:1fr 120px;gap:0.5rem">
+                  <input type="date" class="form-control" id="calcEndDate" required>
+                  <select class="form-control" id="calcEndTime">
+                    <option value="8">08:00</option>
+                    <option value="9">09:00</option>
+                    <option value="10">10:00</option>
+                    <option value="11">11:00</option>
+                    <option value="12">12:00</option>
+                    <option value="13">13:00</option>
+                    <option value="14">14:00</option>
+                    <option value="15">15:00</option>
+                    <option value="16">16:00</option>
+                    <option value="17">17:00</option>
+                    <option value="18">18:00</option>
+                    <option value="19">19:00</option>
+                    <option value="20">20:00</option>
+                  </select>
+                </div>
+              </div>
               
               <div class="calculator-result">
                 <div>Valor estimado:</div>
                 <div class="amount" id="calcResult">R$ 0,00</div>
                 <small class="text-muted" id="calcDetails">* Estimativa. Valor final confirmado no agendamento.</small>
-                <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)"></div>
+                <div id="calcBreakdown" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border);text-align:left"></div>
               </div>
             </div>
             
-            <div class="text-center" style="margin-top:1.5rem">
+            <p class="text-muted" style="margin-top:1rem;font-size:0.875rem;text-align:center">
+              ℹ️ Check-in e check-out disponíveis das <strong>8h às 20h</strong>. Cortesia de 4h incluída.
+            </p>
+            
+            <div class="text-center" style="margin-top:2rem">
               <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20hospedagem/daycare." target="_blank" rel="noopener" class="btn btn-primary btn-large">
                 💬 Agendar via WhatsApp
               </a>
@@ -232,7 +235,6 @@
           </form>
         </div>
         
-        <!-- Observações -->
         <div class="accordion">
           <div class="accordion-header" role="button" tabindex="0" id="accHeader">
             <span>Observações importantes</span>
@@ -247,21 +249,41 @@
             </ul>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ==================== BLOG (NOVO!) ==================== -->
+    <section id="blog" class="page" data-page="blog">
+      <div class="container section">
+        <div class="section-header">
+          <h1>Blog</h1>
+          <p class="lead">Artigos, dicas e conteúdos sobre o mundo canino para você e seu pet.</p>
+        </div>
         
-        <div class="text-center" style="margin-top:2rem">
-          <p style="margin-bottom:1rem">Dúvidas? Fale conosco:</p>
-          <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-primary btn-large">
-            💬 WhatsApp: (11) 9 9781-1891
-          </a>
+        <div class="blog-grid" id="blogGrid">
+          <!-- Preenchido via JS -->
         </div>
       </div>
-    </section>    
+    </section>
+
+    <!-- ==================== POST INDIVIDUAL ==================== -->
+    <section id="post" class="page" data-page="post">
+      <div class="container section">
+        <article class="blog-post" id="blogPost">
+          <!-- Preenchido via JS -->
+        </article>
+        <div class="text-center" style="margin-top:3rem">
+          <a href="#blog" class="btn btn-secondary">← Voltar ao Blog</a>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== REGRAS ==================== -->
     <section id="regras" class="page" data-page="regras">
       <div class="container section" style="max-width:800px">
-        <div class="section-header text-center">
+        <div class="section-header">
           <h1>Regras e Termos</h1>
-          <p class="lead">Leia atentamente nossas políticas.</p>
+          <p class="lead">Leia atentamente nossas políticas para garantir o melhor atendimento ao seu pet.</p>
         </div>
         
         <div class="card" style="margin-bottom:1.5rem">
@@ -271,7 +293,7 @@
             <li>É obrigação do tutor informar as condições de saúde do animal.</li>
             <li>Não enviar o pet se apresentar problema de saúde contagioso.</li>
             <li>Animais com necessidades especiais: valor a combinar.</li>
-            <li>Dias de emenda e finais de semana que coincidem com feriados serão cobrados como feriado.</li>
+            <li>Dias de emenda e finais de semana em feriados serão cobrados como feriado.</li>
           </ol>
         </div>
         
@@ -297,33 +319,13 @@
             <li>Mensalistas: não há expediente em feriados e emendas.</li>
           </ol>
         </div>
-        
-        <div class="text-center" style="margin-top:2rem">
-          <a href="#auth" class="btn btn-primary btn-large">Criar conta e aceitar termos</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== CONTEÚDOS ==================== -->
-    <section id="conteudos" class="page" data-page="conteudos">
-      <div class="container section">
-        <div class="section-header text-center">
-          <h1>Conteúdos Educativos</h1>
-          <p class="lead">Artigos e vídeos para entender melhor o mundo canino.</p>
-        </div>
-        
-        <div class="admin-only hidden" style="text-align:center;margin-bottom:1.5rem">
-          <button class="btn btn-secondary" id="editContentBtn">✏️ Editar conteúdos</button>
-        </div>
-        
-        <div class="content-grid" id="contentGrid"></div>
       </div>
     </section>
 
     <!-- ==================== CONTATO ==================== -->
     <section id="contato" class="page" data-page="contato">
       <div class="container section">
-        <div class="section-header text-center">
+        <div class="section-header">
           <h1>Entre em Contato</h1>
           <p class="lead">Estamos à disposição para cuidar do seu melhor amigo.</p>
         </div>
@@ -332,7 +334,6 @@
           <div>
             <div class="card">
               <h3 style="margin-bottom:1.5rem">Informações de Contato</h3>
-              
               <div class="contact-info">
                 <div class="contact-item">
                   <div class="contact-icon">📍</div>
@@ -342,7 +343,6 @@
                     Chácara Inglesa, São Paulo/SP
                   </div>
                 </div>
-                
                 <div class="contact-item">
                   <div class="contact-icon">📱</div>
                   <div>
@@ -350,7 +350,6 @@
                     <a href="https://wa.me/5511997811891" target="_blank" rel="noopener">(11) 9 9781-1891</a>
                   </div>
                 </div>
-                
                 <div class="contact-item">
                   <div class="contact-icon">✉️</div>
                   <div>
@@ -358,7 +357,6 @@
                     <a href="mailto:ctt.cqca@gmail.com">ctt.cqca@gmail.com</a>
                   </div>
                 </div>
-                
                 <div class="contact-item">
                   <div class="contact-icon">📷</div>
                   <div>
@@ -387,7 +385,7 @@
                   <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Enviar mensagem</button>
-                <p class="form-hint text-center">* Esta mensagem será redirecionada para nosso WhatsApp</p>
+                <p class="form-hint text-center" style="margin-top:0.5rem">* Redirecionada para nosso WhatsApp</p>
               </form>
             </div>
           </div>
@@ -395,732 +393,104 @@
       </div>
     </section>
 
+    <!-- ==================== CADASTRO (TALLY) ==================== -->
+    <section id="cadastro" class="page" data-page="cadastro">
+      <div class="container section">
+        <div class="section-header">
+          <h1>Ficha de Cadastro</h1>
+          <p class="lead">Preencha seus dados e do seu pet para começar</p>
+        </div>
+        
+        <div style="position:relative;padding-bottom:120%;height:0;overflow:hidden;border-radius:var(--radius-lg);background:var(--color-surface);box-shadow:var(--shadow-md);margin-top:2rem">
+          <iframe 
+            data-tally-src="https://tally.so/r/zxeRok?transparentBackground=1" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            marginheight="0" 
+            marginwidth="0" 
+            title="Cadastro Pet/Cliente"
+            style="position:absolute;top:0;left:0;border:0"
+            loading="lazy">
+          </iframe>
+        </div>
+        <script async src="https://tally.so/widgets/embed.js"></script>
+        
+        <p class="text-center text-muted" style="margin-top:1.5rem;font-size:0.875rem">
+          🔒 Seus dados estão seguros. Ao enviar, você concorda com nossas políticas.
+        </p>
+      </div>
+    </section>
+
     <!-- ==================== AUTH ==================== -->
     <section id="auth" class="page" data-page="auth">
       <div class="auth-container">
         <div class="card">
-          <h2 class="text-center" style="margin-bottom:1.5rem">Acesse sua conta</h2>
-          
-          <div class="auth-toggle">
-            <button class="active" id="toggleLogin">Login</button>
-            <button id="toggleRegister">Cadastro</button>
-          </div>
+          <h2 class="text-center" style="margin-bottom:1.5rem">Acesso Administrativo</h2>
           
           <form id="loginForm">
             <div class="form-group">
               <label class="form-label required" for="loginEmail">E-mail</label>
-              <input type="email" class="form-control" id="loginEmail" required placeholder="seu@email.com">
+              <input type="email" class="form-control" id="loginEmail" required placeholder="admin@cqc.com">
             </div>
             <div class="form-group">
               <label class="form-label required" for="loginPassword">Senha</label>
               <input type="password" class="form-control" id="loginPassword" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-          </form>
-          
-          <form id="registerForm" class="hidden">
-            <div class="form-group">
-              <label class="form-label required" for="regName">Nome completo</label>
-              <input type="text" class="form-control" id="regName" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label required" for="regEmail">E-mail</label>
-              <input type="email" class="form-control" id="regEmail" required placeholder="seu@email.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label required" for="regPassword">Senha (mín. 6 caracteres)</label>
-              <input type="password" class="form-control" id="regPassword" required minlength="6">
-            </div>
-            <div class="form-group">
-              <label class="form-label required" for="regConfirm">Confirmar senha</label>
-              <input type="password" class="form-control" id="regConfirm" required>
-            </div>
-            <div class="form-group" style="margin-top:1.5rem">
-              <label class="checkbox-label">
-                <input type="checkbox" id="regTerms" required>
-                <span>Li e aceito os <a href="#regras" target="_blank">Termos e Regras</a> *</span>
-              </label>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
+            <button type="submit" class="btn btn-primary btn-block">Acessar Painel</button>
           </form>
           
           <p class="text-center text-muted" style="margin-top:1.5rem;font-size:0.875rem">
-            <strong>Demo:</strong> Use <em>admin@cqc.com</em> / <em>admin</em> para acesso administrativo
+            <strong>Demo:</strong> admin@cqc.com / admin
           </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== DASHBOARD ==================== -->
-    <section id="dashboard" class="page" data-page="dashboard">
-      <div class="container section">
-        <div class="dashboard-header">
-          <h1 id="dashWelcome">Olá! 👋</h1>
-          <p>Aqui você gerencia seus pets e agendamentos.</p>
-        </div>
-        
-        <div class="dashboard-grid">
-          <div class="dashboard-main">
-            <div class="card dashboard-card">
-              <div class="card-header">
-                <h3 style="margin:0">Próximos Agendamentos</h3>
-                <a href="#agendamentos" class="btn btn-sm btn-secondary">Ver todos</a>
-              </div>
-              <div class="card-body" id="dashAppointments"></div>
-            </div>
-            
-            <div class="card dashboard-card" style="margin-top:1.5rem">
-              <div class="card-header">
-                <h3 style="margin:0">Meus Pets</h3>
-                <a href="#pet" class="btn btn-sm btn-primary">+ Adicionar</a>
-              </div>
-              <div class="card-body" id="dashPets"></div>
-            </div>
-          </div>
           
-          <div class="dashboard-sidebar">
-            <div class="card">
-              <h3 style="margin-bottom:1rem">Atalhos</h3>
-              <div class="quick-links">
-                <a href="#perfil" class="btn btn-secondary btn-block">✏️ Editar meus dados</a>
-                <a href="#pet" class="btn btn-secondary btn-block">🐕 Cadastrar novo pet</a>
-                <a href="#agendamentos" class="btn btn-secondary btn-block">📅 Novo agendamento</a>
-                <a href="#financeiro" class="btn btn-secondary btn-block">💰 Financeiro</a>
-              </div>
-            </div>
-            
-            <div class="card" style="margin-top:1.5rem">
-              <h3 style="margin-bottom:1rem">Alertas</h3>
-              <div id="dashAlerts"></div>
-            </div>
-            
-            <div class="card" style="margin-top:1.5rem">
-              <h4 style="margin-bottom:0.5rem">Exportar meus dados</h4>
-              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">Baixe uma cópia do seu cadastro e dos seus pets.</p>
-              <button class="btn btn-sm btn-secondary btn-block" id="exportDataBtn">📥 Baixar dados (.txt)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== PERFIL ==================== -->
-    <section id="perfil" class="page" data-page="perfil">
-      <div class="container section">
-        <div class="section-header text-center">
-          <h1>Meu Cadastro</h1>
-          <p class="lead">Atualize suas informações pessoais.</p>
-        </div>
-        
-        <form class="profile-form card" id="profileForm">
-          <div class="form-section">
-            <h3 class="form-section-title">Dados do Tutor Principal *</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="pName">Nome completo</label>
-                <input type="text" class="form-control" id="pName" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="pBirth">Data de nascimento</label>
-                <input type="date" class="form-control" id="pBirth">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="pProfession">Profissão</label>
-                <input type="text" class="form-control" id="pProfession">
-              </div>
-              <div class="form-group">
-                <label class="form-label required" for="pCpf">CPF</label>
-                <input type="text" class="form-control" id="pCpf" placeholder="000.000.000-00" maxlength="14" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label required" for="pAddress">Endereço completo</label>
-              <input type="text" class="form-control" id="pAddress" required>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="pEmail">E-mail</label>
-                <input type="email" class="form-control" id="pEmail" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label required" for="pPhone">Telefone</label>
-                <input type="tel" class="form-control" id="pPhone" placeholder="(00) 00000-0000" maxlength="15" required>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="pEmergency">Contato de emergência</label>
-              <input type="text" class="form-control" id="pEmergency" placeholder="Nome - Telefone">
-            </div>
-          </div>
-          
-          <div class="form-section">
-            <h3 class="form-section-title">Segundo Tutor (opcional)</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="t2Name">Nome</label>
-                <input type="text" class="form-control" id="t2Name">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="t2Phone">Telefone</label>
-                <input type="tel" class="form-control" id="t2Phone" placeholder="(00) 00000-0000" maxlength="15">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="t2Relation">Vínculo</label>
-              <select class="form-control" id="t2Relation">
-                <option value="">Selecione...</option>
-                <option value="cônjuge">Cônjuge</option>
-                <option value="familiar">Familiar</option>
-                <option value="amigo">Amigo</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-          </div>
-          
-          <div class="form-section" style="border-bottom:none">
-            <h3 class="form-section-title">Observações Gerais</h3>
-            <div class="form-group">
-              <textarea class="form-control" id="pNotes" rows="3"></textarea>
-            </div>
-          </div>
-          
-          <div class="form-actions text-center">
-            <button type="submit" class="btn btn-primary btn-large">💾 Salvar alterações</button>
-            <a href="#dashboard" class="btn btn-secondary btn-large" style="margin-left:0.5rem">Cancelar</a>
-          </div>
-        </form>
-      </div>
-    </section>
-    <!-- ==================== PET FORM ==================== -->
-    <section id="pet" class="page" data-page="pet">
-      <div class="container section">
-        <div class="section-header text-center">
-          <h1 id="petFormTitle">Cadastrar Pet</h1>
-          <p class="lead">Preencha os dados do seu companheiro.</p>
-        </div>
-        
-        <form class="profile-form card" id="petForm">
-          <input type="hidden" id="petId">
-          
-          <!-- Identificação -->
-          <div class="form-section">
-            <h3 class="form-section-title">🆔 Identificação *</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="petName">Nome</label>
-                <input type="text" class="form-control" id="petName" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label required" for="petBreed">Raça</label>
-                <input type="text" class="form-control" id="petBreed" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="petWeight">Peso (kg)</label>
-                <input type="number" class="form-control" id="petWeight" step="0.1" min="0" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label required" for="petBirth">Data de nascimento</label>
-                <input type="date" class="form-control" id="petBirth" required>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="petSex">Sexo</label>
-                <select class="form-control" id="petSex" required>
-                  <option value="">Selecione...</option>
-                  <option value="Macho">Macho</option>
-                  <option value="Fêmea">Fêmea</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="petRga">RGA</label>
-                <input type="text" class="form-control" id="petRga">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="petChip">Microchip</label>
-              <input type="text" class="form-control" id="petChip" placeholder="982000123456789">
-            </div>
-          </div>
-          
-          <!-- Saúde -->
-          <div class="form-section">
-            <h3 class="form-section-title">🏥 Saúde</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="petPlan">Plano de saúde</label>
-                <input type="text" class="form-control" id="petPlan">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Castrado</label>
-                <div class="toggle-container">
-                  <label class="toggle">
-                    <input type="checkbox" id="petNeutered">
-                    <span class="toggle-slider"></span>
-                  </label>
-                  <span class="toggle-label">Sim / Não</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Vacinas</label>
-              <div id="vaccinesContainer"></div>
-              <button type="button" class="btn btn-sm btn-secondary" id="addVaccineBtn" style="margin-top:0.5rem">
-                + Adicionar vacina
-              </button>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="petConditions">Condições pré-existentes</label>
-              <input type="text" class="form-control" id="petConditions" placeholder="Ex: Displasia, alergias...">
-            </div>
-            
-            <h4 class="form-subtitle">Veterinário</h4>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="vetName">Nome</label>
-                <input type="text" class="form-control" id="vetName">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="vetPhone">Telefone</label>
-                <input type="tel" class="form-control" id="vetPhone" placeholder="(00) 0000-0000" maxlength="15">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="vetAddress">Endereço da clínica</label>
-              <input type="text" class="form-control" id="vetAddress">
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="healthObservations">Observações de Saúde</label>
-              <textarea class="form-control" id="healthObservations" rows="2" placeholder="Outras informações sobre saúde..."></textarea>
-            </div>
-          </div>
-          
-          <!-- Alimentação -->
-          <div class="form-section">
-            <h3 class="form-section-title">🍽️ Alimentação</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="foodType">Tipo de alimento</label>
-                <input type="text" class="form-control" id="foodType" placeholder="Ex: Ração Premium">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="foodPortion">Porção</label>
-                <input type="text" class="form-control" id="foodPortion" placeholder="Ex: 300g">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="foodSchedule">Horários</label>
-                <input type="text" class="form-control" id="foodSchedule" placeholder="Ex: 8h e 18h">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="foodRestrictions">Restrições</label>
-                <input type="text" class="form-control" id="foodRestrictions" placeholder="Ex: Sem lactose">
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="foodObservations">Observações de Alimentação</label>
-              <textarea class="form-control" id="foodObservations" rows="2" placeholder="Outras informações sobre alimentação..."></textarea>
-            </div>
-          </div>
-          
-          <!-- Comportamento -->
-          <div class="form-section">
-            <h3 class="form-section-title">🧠 Comportamento</h3>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="behavDogs">Sociabilidade com cães</label>
-                <select class="form-control" id="behavDogs">
-                  <option value="">Selecione...</option>
-                  <option value="Muito sociável">Muito sociável</option>
-                  <option value="Seletivo">Seletivo</option>
-                  <option value="Não sociável">Não sociável</option>
-                  <option value="Reativo">Reativo</option>
-                  <option value="Agressivo">Agressivo</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="behavHumans">Sociabilidade com humanos</label>
-                <select class="form-control" id="behavHumans">
-                  <option value="">Selecione...</option>
-                  <option value="Amigável">Amigável</option>
-                  <option value="Cauteloso">Cauteloso</option>
-                  <option value="Medroso">Medroso</option>
-                  <option value="Agressivo">Agressivo</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Reatividade específica</label>
-              <div class="checkbox-group" id="reactivityGroup">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="reactivity" value="barulhos">
-                  <span>Barulhos</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="reactivity" value="carros">
-                  <span>Carros</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="reactivity" value="crianças">
-                  <span>Crianças</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="reactivity" value="bicicletas">
-                  <span>Bicicletas</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="reactivity" value="outros cães">
-                  <span>Outros cães</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">Guarda de recursos</label>
-              <div class="toggle-container">
-                <label class="toggle">
-                  <input type="checkbox" id="guardActive">
-                  <span class="toggle-slider"></span>
-                </label>
-                <span class="toggle-label">Faz</span>
-              </div>
-              <div id="guardItems" class="checkbox-group" style="margin-top:0.5rem;display:none">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="guardItem" value="comida">
-                  <span>Comida</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="guardItem" value="brinquedos">
-                  <span>Brinquedos</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="guardItem" value="espaço">
-                  <span>Espaço</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="guardItem" value="pessoas">
-                  <span>Pessoas</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <div class="toggle-container">
-                  <label class="toggle">
-                    <input type="checkbox" id="pullsLeash">
-                    <span class="toggle-slider"></span>
-                  </label>
-                  <label class="form-label" for="pullsLeash" style="margin:0">Puxa a guia?</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="toggle-container">
-                  <label class="toggle">
-                    <input type="checkbox" id="barksExcessively">
-                    <span class="toggle-slider"></span>
-                  </label>
-                  <label class="form-label" for="barksExcessively" style="margin:0">Late excessivamente?</label>
-                </div>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="commands">Comandos conhecidos</label>
-              <input type="text" class="form-control" id="commands" placeholder="Ex: senta, fica, junto (separados por vírgula)">
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="behaviorObservations">Observações de Comportamento</label>
-              <textarea class="form-control" id="behaviorObservations" rows="2" placeholder="Outras informações sobre comportamento..."></textarea>
-            </div>
-          </div>
-          
-          <!-- Rotina -->
-          <div class="form-section">
-            <h3 class="form-section-title">🏠 Rotina</h3>
-            
-            <div class="form-group">
-              <label class="form-label">Onde dorme</label>
-              <div class="checkbox-group">
-                <label class="checkbox-label">
-                  <input type="checkbox" name="sleepsWhere" value="Cama própria">
-                  <span>Cama própria</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="sleepsWhere" value="Cama do tutor">
-                  <span>Cama do tutor</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="sleepsWhere" value="Sofá">
-                  <span>Sofá</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="sleepsWhere" value="Gaiola">
-                  <span>Gaiola</span>
-                </label>
-                <label class="checkbox-label">
-                  <input type="checkbox" name="sleepsWhere" value="Área externa">
-                  <span>Área externa</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="bathroomHabits">Hábitos de higiene</label>
-              <input type="text" class="form-control" id="bathroomHabits" placeholder="Ex: Faz xixi no tapete higiênico">
-            </div>
-          </div>
-          
-          <!-- Alertas e Personalidade -->
-          <div class="form-section">
-            <h3 class="form-section-title">⚠️ Pontos de Atenção *</h3>
-            <div class="form-group">
-              <textarea class="form-control" id="petAlerts" rows="2" required placeholder="Informações essenciais para o cuidado do seu pet..."></textarea>
-              <small class="form-hint">Ex: Medo de fogos, não pode comer chocolate, precisa de medicação às 14h...</small>
-            </div>
-          </div>
-          
-          <div class="form-section" style="border-bottom:none">
-            <h3 class="form-section-title">💭 Personalidade</h3>
-            <div class="form-group">
-              <textarea class="form-control" id="petPersonality" rows="3" placeholder="Descreva a personalidade única do seu companheiro..."></textarea>
-            </div>
-          </div>
-          
-          <div class="form-actions text-center">
-            <button type="submit" class="btn btn-primary btn-large">💾 Salvar pet</button>
-            <a href="#dashboard" class="btn btn-secondary btn-large" style="margin-left:0.5rem">Cancelar</a>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- ==================== AGENDAMENTOS ==================== -->
-    <section id="agendamentos" class="page" data-page="agendamentos">
-      <div class="container section">
-        <div class="dashboard-header">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
-            <h1>Meus Agendamentos</h1>
-            <a href="https://wa.me/5511997811891?text=Olá!%20Gostaria%20de%20agendar%20um%20serviço." target="_blank" rel="noopener" class="btn btn-primary">
-              + Novo Agendamento
+          <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border)">
+            <p class="text-center" style="font-size:0.875rem;margin-bottom:0.5rem">
+              <strong>É cliente?</strong>
+            </p>
+            <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-secondary btn-block">
+              💬 WhatsApp: (11) 9 9781-1891
             </a>
           </div>
         </div>
-        
-        <div class="card" style="margin-bottom:1.5rem">
-          <div class="filters-row">
-            <div class="form-group" style="margin:0;min-width:200px">
-              <label class="form-label" for="filterService">Serviço</label>
-              <select class="form-control" id="filterService">
-                <option value="">Todos</option>
-                <option value="adestramento">Adestramento</option>
-                <option value="pet-sitter">Pet Sitter</option>
-                <option value="passeio">Passeios</option>
-                <option value="hospedagem">Hospedagem</option>
-                <option value="daycare">Daycare</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin:0;min-width:150px">
-              <label class="form-label" for="filterStatus">Status</label>
-              <select class="form-control" id="filterStatus">
-                <option value="">Todos</option>
-                <option value="confirmed">Confirmados</option>
-                <option value="pending">Pendentes</option>
-                <option value="completed">Concluídos</option>
-                <option value="cancelled">Cancelados</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin:0;min-width:200px">
-              <label class="form-label" for="filterPeriod">Período</label>
-              <select class="form-control" id="filterPeriod">
-                <option value="all">Todos</option>
-                <option value="past">Passados</option>
-                <option value="future">Futuros</option>
-                <option value="this-month">Este mês</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Serviço</th>
-                  <th>Pet</th>
-                  <th>Valor</th>
-                  <th>Status</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="appointmentsTable"></tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </section>
 
-    <!-- ==================== FINANCEIRO ==================== -->
-    <section id="financeiro" class="page" data-page="financeiro">
-      <div class="container section">
-        <div class="section-header">
-          <h1>Financeiro</h1>
-          <p class="lead">Acompanhe seus pagamentos e notas fiscais.</p>
-        </div>
-        
-        <div class="dashboard-grid">
-          <div class="dashboard-main">
-            <div class="card stat-card-large">
-              <h3 style="margin:0 0 0.5rem">Total em Aberto</h3>
-              <div class="stat-amount" id="finTotalPending">R$ 0,00</div>
-              <p class="text-muted" style="margin:0.5rem 0 0">Pendências podem afetar novos agendamentos</p>
-            </div>
-            
-            <div class="card" style="margin-top:1.5rem">
-              <div class="card-header">
-                <h3 style="margin:0">Histórico de Pagamentos</h3>
-              </div>
-              <div class="table-responsive">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Data</th>
-                      <th>Serviço</th>
-                      <th>Valor</th>
-                      <th>Nota Fiscal</th>
-                    </tr>
-                  </thead>
-                  <tbody id="financialTable"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          
-          <div class="dashboard-sidebar">
-            <div class="card">
-              <h3 style="margin-bottom:1rem">Pendências</h3>
-              <div id="finPendingList"></div>
-            </div>
-            
-            <div class="card" style="margin-top:1.5rem">
-              <h4 style="margin-bottom:0.5rem">Precisa de ajuda?</h4>
-              <p class="text-muted" style="font-size:0.875rem;margin-bottom:1rem">
-                Para questões sobre pagamentos ou notas fiscais, entre em contato:
-              </p>
-              <a href="https://wa.me/5511997811891" target="_blank" rel="noopener" class="btn btn-sm btn-secondary btn-block">
-                💬 Falar no WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== ADMIN ==================== -->
+    <!-- ==================== ADMIN (SIMPLIFICADO) ==================== -->
     <section id="admin" class="page" data-page="admin">
       <div class="container section">
-        <div class="dashboard-header">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
-            <h1>🛠️ Painel Administrativo</h1>
-            <button class="btn btn-secondary" id="adminLogoutBtn">Sair do modo admin</button>
-          </div>
+        <div class="section-header">
+          <h1>🛠️ Painel Administrativo</h1>
+          <p class="lead">Gerencie seu conteúdo e clientes</p>
         </div>
         
-        <div class="stats-grid">
-          <div class="card stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-number" id="adminClients">0</div>
-            <div class="stat-label">Clientes ativos</div>
-          </div>
-          <div class="card stat-card">
-            <div class="stat-icon">📅</div>
-            <div class="stat-number" id="adminAppointments">0</div>
-            <div class="stat-label">Agendamentos</div>
-          </div>
-          <div class="card stat-card">
-            <div class="stat-icon">💰</div>
-            <div class="stat-number" id="adminRevenue">R$ 0</div>
-            <div class="stat-label">Faturamento</div>
-          </div>
-          <div class="card stat-card">
-            <div class="stat-icon">🐕</div>
-            <div class="stat-number" id="adminPets">0</div>
-            <div class="stat-label">Pets cadastrados</div>
-          </div>
-        </div>
-        
-        <div class="card" style="margin-top:1.5rem">
-          <div class="tabs-header">
-            <button class="tab-btn active" data-tab="appointments">Agendamentos</button>
-            <button class="tab-btn" data-tab="pets">Pets</button>
-            <button class="tab-btn" data-tab="clients">Clientes</button>
-            <button class="tab-btn" data-tab="payments">Pagamentos</button>
-            <button class="tab-btn" data-tab="reports">Relatórios</button>
-            <button class="tab-btn" data-tab="settings">Configurações</button>
-            <button class="tab-btn" data-tab="content">Conteúdo</button>
+        <div class="card" style="margin-top:2rem">
+          <div class="tabs-header" style="display:flex;gap:0.5rem;margin-bottom:2rem;border-bottom:1px solid var(--color-border)">
+            <button class="tab-btn active" data-tab="blog" style="padding:0.75rem 1.5rem;background:none;border:none;cursor:pointer;font-weight:500;border-bottom:2px solid transparent;color:var(--color-text-muted)">Blog</button>
+            <button class="tab-btn" data-tab="appointments" style="padding:0.75rem 1.5rem;background:none;border:none;cursor:pointer;font-weight:500;border-bottom:2px solid transparent;color:var(--color-text-muted)">Agendamentos</button>
+            <button class="tab-btn" data-tab="clients" style="padding:0.75rem 1.5rem;background:none;border:none;cursor:pointer;font-weight:500;border-bottom:2px solid transparent;color:var(--color-text-muted)">Clientes</button>
           </div>
           
           <div class="tabs-content">
+            <!-- Blog Admin -->
+            <div class="tab-pane active" id="tab-blog">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+                <h3 style="margin:0">Posts do Blog</h3>
+                <button class="btn btn-primary" id="addBlogPostBtn">+ Novo Post</button>
+              </div>
+              <div id="blogPostsList"></div>
+            </div>
+            
             <!-- Agendamentos -->
-            <div class="tab-pane active" id="tab-appointments">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                <h4 style="margin:0">Todos os Agendamentos</h4>
-                <button class="btn btn-primary" id="newAppointmentBtn">+ Novo Agendamento</button>
-              </div>
-              
-              <div class="filters-row" style="margin-bottom:1rem">
-                <div class="form-group" style="margin:0;min-width:200px">
-                  <label class="form-label" for="adminFilterClient">Cliente</label>
-                  <select class="form-control" id="adminFilterClient">
-                    <option value="">Todos</option>
-                  </select>
-                </div>
-                <div class="form-group" style="margin:0;min-width:150px">
-                  <label class="form-label" for="adminFilterService">Serviço</label>
-                  <select class="form-control" id="adminFilterService">
-                    <option value="">Todos</option>
-                    <option value="adestramento">Adestramento</option>
-                    <option value="pet-sitter">Pet Sitter</option>
-                    <option value="passeio">Passeios</option>
-                    <option value="hospedagem">Hospedagem</option>
-                    <option value="daycare">Daycare</option>
-                  </select>
-                </div>
-                <div class="form-group" style="margin:0;min-width:150px">
-                  <label class="form-label" for="adminFilterStatus">Status</label>
-                  <select class="form-control" id="adminFilterStatus">
-                    <option value="">Todos</option>
-                    <option value="confirmed">Confirmados</option>
-                    <option value="pending">Pendentes</option>
-                    <option value="completed">Concluídos</option>
-                    <option value="cancelled">Cancelados</option>
-                  </select>
-                </div>
-              </div>
-              
+            <div class="tab-pane" id="tab-appointments" style="display:none">
+              <h3>Agendamentos</h3>
               <div class="table-responsive">
                 <table class="data-table">
                   <thead>
                     <tr>
                       <th>Cliente</th>
-                      <th>Pet</th>
                       <th>Serviço</th>
-                      <th>Data(s)</th>
-                      <th>Valor</th>
-                      <th>Pagamento</th>
+                      <th>Data</th>
                       <th>Status</th>
                       <th>Ações</th>
                     </tr>
@@ -1130,118 +500,28 @@
               </div>
             </div>
             
-            <!-- Pets (NOVO) -->
-            <div class="tab-pane" id="tab-pets">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                <h4 style="margin:0">Todos os Pets Cadastrados</h4>
-              </div>
-              <div class="table-responsive">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>Raça</th>
-                      <th>Idade</th>
-                      <th>Peso</th>
-                      <th>Tutor</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody id="adminPetsTable"></tbody>
-                </table>
-              </div>
-            </div>
-            
             <!-- Clientes -->
-            <div class="tab-pane" id="tab-clients">
-              <div class="table-responsive">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                      <th>E-mail</th>
-                      <th>Telefone</th>
-                      <th>Pets</th>
-                      <th>Agendamentos</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody id="adminClientsTable"></tbody>
-                </table>
-              </div>
-            </div>
-            
-            <!-- Pagamentos -->
-            <div class="tab-pane" id="tab-payments">
-              <div class="table-responsive">
-                <table class="data-table">
-                  <thead>
-                    <tr>
-                      <th>Cliente</th>
-                      <th>Serviço</th>
-                      <th>Data</th>
-                      <th>Valor</th>
-                      <th>Status</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody id="adminPaymentsTable"></tbody>
-                </table>
-              </div>
-            </div>
-            
-            <!-- Relatórios -->
-            <div class="tab-pane" id="tab-reports">
-              <div class="reports-grid">
-                <div class="card">
-                  <h4>Faturamento por Serviço</h4>
-                  <div id="revenueByService"></div>
-                </div>
-                <div class="card">
-                  <h4>Alertas de Vacinas</h4>
-                  <p class="text-muted" style="font-size:0.875rem">Próximos 30 dias</p>
-                  <div id="vaccineAlerts"></div>
-                </div>
-                <div class="card">
-                  <h4>Clientes Mais Frequentes</h4>
-                  <div id="topClients"></div>
-                </div>
-                <div class="card">
-                  <h4>Inadimplências</h4>
-                  <div id="defaulters"></div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Configurações -->
-            <div class="tab-pane" id="tab-settings">
-              <form id="adminConfigForm">
-                <h4 style="margin-bottom:1rem">Valores dos Serviços</h4>
-                <div class="calculator-grid" id="pricesGrid"></div>
-                <button type="submit" class="btn btn-primary" style="margin-top:1.5rem">💾 Salvar configurações</button>
-              </form>
-            </div>
-            
-            <!-- Conteúdo -->
-            <div class="tab-pane" id="tab-content">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                <h4>Conteúdos Educacionais</h4>
-                <button class="btn btn-sm btn-primary" id="addContentBtn">+ Novo</button>
-              </div>
-              <div id="contentList"></div>
+            <div class="tab-pane" id="tab-clients" style="display:none">
+              <h3>Clientes</h3>
+              <p class="text-muted">Gerencie os clientes cadastrados via Tally.</p>
+              <a href="https://tally.so" target="_blank" rel="noopener" class="btn btn-primary">
+                Abrir Tally →
+              </a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-  </main>  <!-- Footer -->
+  </main>
+
+  <!-- Footer -->
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
         <div>
           <h4>CQC Adestramento</h4>
-          <p class="text-light">
+          <p style="color:rgba(255,255,255,0.75)">
             Adestramento positivo, passeios e hospedagem com cuidado e profissionalismo para seu melhor amigo.
           </p>
           <div class="social-links">
@@ -1251,12 +531,13 @@
           </div>
         </div>
         <div>
-          <h4>Links Rápidos</h4>
+          <h4>Navegação</h4>
           <ul class="footer-links">
             <li><a href="#home">Início</a></li>
             <li><a href="#servicos">Serviços</a></li>
             <li><a href="#valores">Valores</a></li>
-            <li><a href="#regras">Termos e Regras</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#regras">Regras</a></li>
             <li><a href="#contato">Contato</a></li>
           </ul>
         </div>
@@ -1266,7 +547,6 @@
             <li>📍 Rua Guiratinga, 1249<br>Chácara Inglesa, São Paulo/SP</li>
             <li>📱 <a href="https://wa.me/5511997811891">(11) 9 9781-1891</a></li>
             <li>✉️ <a href="mailto:ctt.cqca@gmail.com">ctt.cqca@gmail.com</a></li>
-            <li>📷 @cqc.adestramento</li>
           </ul>
         </div>
       </div>
@@ -1277,290 +557,59 @@
   </footer>
 
   <!-- Toast Container -->
-  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
-
+  <div class="toast-container" id="toastContainer"></div>
+  
   <!-- Modal Container -->
   <div id="modalContainer"></div>
-
-  <!-- Loading Overlay -->
+  
+  <!-- Loading -->
   <div class="loading-overlay hidden" id="loadingOverlay">
-    <div class="spinner" role="status" aria-label="Carregando"></div>
+    <div class="spinner"></div>
   </div>
 
-  <!-- MODAL DE AGENDAMENTO -->
-  <div id="appointmentModal" class="hidden">
-    <div class="modal-overlay" role="dialog" aria-modal="true">
+  <!-- MODAL DE POST DO BLOG -->
+  <div id="blogPostModal" class="hidden">
+    <div class="modal-overlay">
       <div class="modal" style="max-width:700px">
         <div class="modal-header">
-          <h3 id="appointmentModalTitle" style="margin:0">Novo Agendamento</h3>
-          <button class="modal-close" onclick="Admin.closeAppointmentModal()">&times;</button>
+          <h3 id="blogPostModalTitle" style="margin:0">Novo Post</h3>
+          <button class="modal-close" onclick="Admin.closeBlogPostModal()">&times;</button>
         </div>
         <div class="modal-body">
-          <form id="adminAppointmentForm">
-            <input type="hidden" id="adminAptId">
+          <form id="blogPostForm">
+            <input type="hidden" id="blogPostId">
             <div class="form-group">
-              <label class="form-label required" for="adminAptClient">Cliente *</label>
-              <select class="form-control" id="adminAptClient" required>
-                <option value="">Selecione o cliente...</option>
-              </select>
+              <label class="form-label required">Título</label>
+              <input type="text" class="form-control" id="blogPostTitle" required>
             </div>
             <div class="form-group">
-              <label class="form-label required" for="adminAptPet">Pet *</label>
-              <select class="form-control" id="adminAptPet" required>
-                <option value="">Selecione o pet...</option>
-              </select>
+              <label class="form-label required">Resumo</label>
+              <textarea class="form-control" id="blogPostExcerpt" rows="2" required></textarea>
             </div>
             <div class="form-group">
-              <label class="form-label required" for="adminAptService">Serviço *</label>
-              <select class="form-control" id="adminAptService" required>
-                <option value="">Selecione o serviço...</option>
-                <option value="adestramento">Adestramento</option>
-                <option value="pet-sitter">Pet Sitter</option>
-                <option value="passeio">Passeio</option>
-                <option value="hospedagem">Hospedagem</option>
-                <option value="daycare">Daycare</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label required" for="adminAptStart">Data Início *</label>
-                <input type="date" class="form-control" id="adminAptStart" required>
-              </div>
-              <div class="form-group" id="adminAptEndField">
-                <label class="form-label" for="adminAptEnd">Data Fim</label>
-                <input type="date" class="form-control" id="adminAptEnd">
-              </div>
-            </div>
-            <div class="form-group" id="adminAptDurationField">
-              <label class="form-label">Duração</label>
-              <select class="form-control" id="adminAptDuration">
-                <option value="30">30 minutos</option>
-                <option value="50" selected>50 minutos</option>
-              </select>
-            </div>
-            <div class="form-group" id="adminAptFrequencyField">
-              <label class="form-label">Frequência (passeio mensal)</label>
-              <select class="form-control" id="adminAptFrequency">
-                <option value="2">2x por semana</option>
-                <option value="3">3x por semana</option>
-                <option value="4">4x por semana</option>
-                <option value="5">5x por semana</option>
-              </select>
-            </div>
-            <div class="card" style="background:var(--color-bg-hover);margin:1rem 0;padding:1rem">
-              <h4 style="margin:0 0 0.5rem">💰 Resumo do Valor</h4>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <span>Total:</span>
-                <span id="adminAptTotal" style="font-size:1.5rem;font-weight:700;color:var(--color-accent)">R$ 0,00</span>
-              </div>
-              <div id="adminAptBreakdown" style="margin-top:0.5rem;font-size:0.875rem;color:var(--color-text-muted)"></div>
+              <label class="form-label">Categoria</label>
+              <input type="text" class="form-control" id="blogPostCategory" placeholder="Ex: Adestramento, Saúde, Comportamento">
             </div>
             <div class="form-group">
-              <label class="form-label" for="adminAptPayment">Status do Pagamento</label>
-              <select class="form-control" id="adminAptPayment">
-                <option value="pending">Pendente</option>
-                <option value="paid">Pago</option>
-              </select>
+              <label class="form-label">Emoji/Ícone</label>
+              <input type="text" class="form-control" id="blogPostIcon" placeholder="🐕" maxlength="2">
             </div>
             <div class="form-group">
-              <label class="form-label" for="adminAptStatus">Status do Agendamento</label>
-              <select class="form-control" id="adminAptStatus">
-                <option value="confirmed">Confirmado</option>
-                <option value="pending">Pendente</option>
-                <option value="completed">Concluído</option>
-                <option value="cancelled">Cancelado</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="adminAptNotes">Observações</label>
-              <textarea class="form-control" id="adminAptNotes" rows="2" placeholder="Observações adicionais..."></textarea>
+              <label class="form-label required">Conteúdo</label>
+              <textarea class="form-control" id="blogPostContent" rows="10" required style="font-family:monospace"></textarea>
+              <small class="form-hint">Use **texto** para negrito, ## para subtítulos</small>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="Admin.closeAppointmentModal()">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="Admin.saveAppointment()">💾 Salvar Agendamento</button>
+          <button type="button" class="btn btn-secondary" onclick="Admin.closeBlogPostModal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="Admin.saveBlogPost()">💾 Salvar Post</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL DE CLIENTE -->
-  <div id="clientModal" class="hidden">
-    <div class="modal-overlay" role="dialog" aria-modal="true">
-      <div class="modal" style="max-width:800px;max-height:90vh;overflow-y:auto">
-        <div class="modal-header">
-          <h3 id="clientModalTitle" style="margin:0">Dados do Cliente</h3>
-          <button class="modal-close" onclick="Admin.closeClientModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="adminClientForm">
-            <input type="hidden" id="adminClientId">
-            <h4 style="margin:1rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">👤 Dados Pessoais</h4>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="adminClientName">Nome</label>
-                <input type="text" class="form-control" id="adminClientName">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adminClientEmail">E-mail</label>
-                <input type="email" class="form-control" id="adminClientEmail">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="adminClientCpf">CPF</label>
-                <input type="text" class="form-control" id="adminClientCpf" maxlength="14">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adminClientPhone">Telefone</label>
-                <input type="tel" class="form-control" id="adminClientPhone" maxlength="15">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="adminClientAddress">Endereço</label>
-              <input type="text" class="form-control" id="adminClientAddress">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="adminClientBirth">Data de Nascimento</label>
-                <input type="date" class="form-control" id="adminClientBirth">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adminClientProfession">Profissão</label>
-                <input type="text" class="form-control" id="adminClientProfession">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="adminClientEmergency">Contato de Emergência</label>
-              <input type="text" class="form-control" id="adminClientEmergency" placeholder="Nome - Telefone">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="adminClientNotes">Observações</label>
-              <textarea class="form-control" id="adminClientNotes" rows="2"></textarea>
-            </div>
-            <h4 style="margin:1.5rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">👥 Segundo Tutor</h4>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="adminT2Name">Nome</label>
-                <input type="text" class="form-control" id="adminT2Name">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="adminT2Phone">Telefone</label>
-                <input type="tel" class="form-control" id="adminT2Phone" maxlength="15">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="adminT2Relation">Vínculo</label>
-              <select class="form-control" id="adminT2Relation">
-                <option value="">Selecione...</option>
-                <option value="cônjuge">Cônjuge</option>
-                <option value="familiar">Familiar</option>
-                <option value="amigo">Amigo</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-            <h4 style="margin:1.5rem 0 0.5rem;border-bottom:1px solid var(--color-border);padding-bottom:0.5rem">🐕 Pets do Cliente</h4>
-            <div id="adminClientPets" style="margin-bottom:1rem"></div>
-            <a href="#pet" class="btn btn-sm btn-secondary" onclick="Admin.closeClientModal()">+ Cadastrar Novo Pet</a>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="Admin.closeClientModal()">Fechar</button>
-          <button type="button" class="btn btn-primary" onclick="Admin.saveClient()">💾 Salvar Alterações</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE NOTA FISCAL -->
-  <div id="invoiceModal" class="hidden">
-    <div class="modal-overlay" role="dialog" aria-modal="true">
-      <div class="modal" style="max-width:600px">
-        <div class="modal-header">
-          <h3 style="margin:0">📄 Nota Fiscal</h3>
-          <button class="modal-close" onclick="Admin.closeInvoiceModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="invoiceAptId">
-          <div class="form-group">
-            <label class="form-label" for="invoiceNumber">Número da Nota</label>
-            <input type="text" class="form-control" id="invoiceNumber" placeholder="Ex: 001234">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="invoiceDate">Data de Emissão</label>
-            <input type="date" class="form-control" id="invoiceDate">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="invoiceObservations">Observações da Nota</label>
-            <textarea class="form-control" id="invoiceObservations" rows="3" placeholder="Observações adicionais..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="invoiceFileUrl">📎 Link do Arquivo (Google Drive)</label>
-            <input type="url" class="form-control" id="invoiceFileUrl" placeholder="https://drive.google.com/file/d/...">
-            <small class="form-hint">Cole o link compartilhável do arquivo PDF da nota fiscal</small>
-          </div>
-          <div class="card" style="background:var(--color-bg-hover);padding:1rem;margin-top:1rem">
-            <h4 style="margin:0 0 0.5rem">📋 Resumo do Agendamento</h4>
-            <div id="invoiceAppointmentSummary"></div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="Admin.closeInvoiceModal()">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="Admin.saveInvoice()">📄 Emitir Nota Fiscal</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE CONTEÚDO (ADMIN) -->
-  <div id="contentModal" class="hidden">
-    <div class="modal-overlay" role="dialog" aria-modal="true">
-      <div class="modal" style="max-width:600px">
-        <div class="modal-header">
-          <h3 id="contentModalTitle" style="margin:0">Conteúdo Educacional</h3>
-          <button class="modal-close" onclick="Admin.closeContentModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="adminContentForm">
-            <input type="hidden" id="contentId">
-            <div class="form-group">
-              <label class="form-label" for="contentTitle">Título</label>
-              <input type="text" class="form-control" id="contentTitle" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contentExcerpt">Descrição Breve</label>
-              <textarea class="form-control" id="contentExcerpt" rows="2"></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contentType">Tipo de Conteúdo</label>
-              <select class="form-control" id="contentType">
-                <option value="article">Artigo</option>
-                <option value="video-youtube">YouTube</option>
-                <option value="video-tiktok">TikTok</option>
-                <option value="video-instagram">Instagram</option>
-              </select>
-            </div>
-            <div class="form-group" id="videoUrlField" style="display:none">
-              <label class="form-label" for="contentVideoUrl">URL do Vídeo</label>
-              <input type="url" class="form-control" id="contentVideoUrl" placeholder="https://youtube.com/watch?v=...">
-              <small class="form-hint">Cole o link completo do vídeo</small>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="contentText">Conteúdo Completo</label>
-              <textarea class="form-control" id="contentText" rows="5"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="Admin.closeContentModal()">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="Admin.saveContent()">💾 Salvar Conteúdo</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript Modules -->
+  <!-- Scripts -->
   <script src="03-utils.js"></script>
   <script src="04-auth.js"></script>
   <script src="05-pets.js"></script>
@@ -1568,198 +617,157 @@
   <script src="07-admin.js"></script>
   <script src="08-app.js"></script>
   
-<!-- Calculadora - Hospedagem/Daycare -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const calcService = document.getElementById('calcService');
-    const calcStartDate = document.getElementById('calcStartDate');
-    const calcStartTime = document.getElementById('calcStartTime');
-    const calcEndDate = document.getElementById('calcEndDate');
-    const calcEndTime = document.getElementById('calcEndTime');
-    const resultEl = document.getElementById('calcResult');
-    const detailsEl = document.getElementById('calcDetails');
-    const breakdownEl = document.getElementById('calcBreakdown');
-    
-    if (!calcStartDate || !calcEndDate || !resultEl) {
-      console.log('Elementos da calculadora não encontrados');
-      return;
-    }
-    
-    // Definir data mínima como hoje
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().split('T')[0];
-    
-    calcStartDate.min = todayStr;
-    calcEndDate.min = todayStr;
-    
-    // Valores padrão
-    if (!calcStartDate.value) calcStartDate.value = todayStr;
-    if (!calcEndDate.value) calcEndDate.value = todayStr;
-    if (calcStartTime) calcStartTime.value = '8';
-    if (calcEndTime) calcEndTime.value = '8';
-    
-    // Calcular quando qualquer campo mudar
-    [calcService, calcStartDate, calcStartTime, calcEndDate, calcEndTime].forEach(el => {
-      if (el) {
-        el.addEventListener('change', updateCalculator);
-        el.addEventListener('input', updateCalculator);
-      }
-    });
-    
-    function updateCalculator() {
-      // Resetar valores
-      resultEl.textContent = 'R$ 0,00';
-      if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
-      if (breakdownEl) breakdownEl.style.display = 'none';
+  <!-- Calculadora Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calcService = document.getElementById('calcService');
+      const calcStartDate = document.getElementById('calcStartDate');
+      const calcStartTime = document.getElementById('calcStartTime');
+      const calcEndDate = document.getElementById('calcEndDate');
+      const calcEndTime = document.getElementById('calcEndTime');
+      const resultEl = document.getElementById('calcResult');
+      const detailsEl = document.getElementById('calcDetails');
+      const breakdownEl = document.getElementById('calcBreakdown');
       
-      const service = calcService?.value;
-      const startDate = calcStartDate?.value;
-      const startTime = calcStartTime?.value || '8';
-      const endDate = calcEndDate?.value;
-      const endTime = calcEndTime?.value || '8';
+      if (!calcStartDate || !calcEndDate || !resultEl) return;
       
-      // Validar campos obrigatórios
-      if (!service || !startDate || !endDate) {
-        return;
-      }
+      const today = new Date().toISOString().split('T')[0];
+      calcStartDate.min = today;
+      calcEndDate.min = today;
+      calcStartDate.value = today;
+      calcEndDate.value = today;
       
-      // ✅ Criar datas de forma segura
-      let startDateTime, endDateTime;
+      [calcService, calcStartDate, calcStartTime, calcEndDate, calcEndTime].forEach(el => {
+        if (el) el.addEventListener('change', updateCalculator);
+      });
       
-      try {
-        startDateTime = new Date(startDate + 'T' + startTime + ':00:00');
-        endDateTime = new Date(endDate + 'T' + endTime + ':00:00');
+      function updateCalculator() {
+        resultEl.textContent = 'R$ 0,00';
+        if (detailsEl) detailsEl.textContent = '* Estimativa. Valor final confirmado no agendamento.';
+        if (breakdownEl) breakdownEl.style.display = 'none';
         
-        // Validar se as datas são válidas
-        if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+        const service = calcService?.value;
+        const startDate = calcStartDate?.value;
+        const startTime = calcStartTime?.value || '8';
+        const endDate = calcEndDate?.value;
+        const endTime = calcEndTime?.value || '8';
+        
+        if (!service || !startDate || !endDate) return;
+        
+        let startDateTime, endDateTime;
+        try {
+          startDateTime = new Date(startDate + 'T' + startTime + ':00:00');
+          endDateTime = new Date(endDate + 'T' + endTime + ':00:00');
+          if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) return;
+        } catch (e) { return; }
+        
+        if (endDateTime < startDateTime) {
           resultEl.textContent = 'Data inválida';
           return;
         }
-      } catch (e) {
-        resultEl.textContent = 'Erro ao calcular';
-        console.error('Erro na data:', e);
-        return;
-      }
-      
-      // Validar se saída é após entrada
-      if (endDateTime < startDateTime) {
-        resultEl.textContent = 'Saída deve ser após entrada';
-        return;
-      }
-      
-      const config = Utils.get('adminConfig', {}) || {};
-      const prices = config.prices || {};
-      
-      // Calcular horas totais
-      const totalHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
-      
-      // Validar horas
-      if (isNaN(totalHours) || totalHours < 0) {
-        resultEl.textContent = 'R$ 0,00';
-        return;
-      }
-      
-      // Cortesia de 4h no TOTAL
-      const courtesyHours = 4;
-      const billableHours = Math.max(0, totalHours - courtesyHours);
-      
-      // Diárias completas (24h cada)
-      const fullDays = Math.floor(billableHours / 24);
-      const remainingHours = billableHours % 24;
-      
-      // Horas excedentes
-      let extraDaycareDays = 0;
-      if (remainingHours > 0 && remainingHours <= 12) {
-        extraDaycareDays = 1;
-      }
-      
-      // Garantir mínimo de 1 diária se houver horas cobráveis
-      const hospDays = Math.max(fullDays, billableHours > 0 ? 1 : 0);
-      
-      let total = 0;
-      const breakdown = [];
-      
-      // Calcular hospedagem
-      for (let i = 0; i < hospDays; i++) {
-        const currentDate = new Date(startDateTime);
-        currentDate.setDate(currentDate.getDate() + i);
         
-        let dailyPrice;
-        const isHoliday = Utils.isHoliday(currentDate);
-        const isHighSeason = Utils.isHighSeason(currentDate);
-        const isWeekend = Utils.isWeekend(currentDate);
+        const config = Utils.get('adminConfig', {}) || {};
+        const prices = config.prices || {};
+        let total = 0;
+        const breakdown = [];
         
-        if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
-        else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
-        else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
-        else dailyPrice = prices.hospedagemWeekday || 80;
+        const totalHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
+        const courtesyHours = 4;
+        const billableHours = Math.max(0, totalHours - courtesyHours);
+        const fullDays = Math.floor(billableHours / 24);
+        const remainingHours = billableHours % 24;
         
-        total += dailyPrice;
-        breakdown.push({
-          type: 'hospedagem',
-          date: currentDate.toISOString().split('T')[0],
-          price: dailyPrice,
-          tags: [
-            isHoliday ? 'Feriado' : null,
-            isWeekend ? 'Fim de semana' : null,
-            isHighSeason ? 'Alta temporada' : null
-          ].filter(Boolean)
-        });
-      }
-      
-      // Calcular daycare extra
-      if (extraDaycareDays > 0) {
-        const daycarePrice = prices.daycareWeekday || 70;
-        total += daycarePrice;
-        breakdown.push({
-          type: 'daycare',
-          date: 'Excedente',
-          price: daycarePrice,
-          tags: [remainingHours.toFixed(1) + 'h']
-        });
-      }
-      
-      // Atualizar UI
-      resultEl.textContent = Utils.formatCurrency(total);
-      
-      if (detailsEl) {
-        let details = hospDays + ' hospedagem';
+        let extraDaycareDays = 0;
+        if (remainingHours > 0 && remainingHours <= 12) extraDaycareDays = 1;
+        
+        const hospDays = Math.max(fullDays, billableHours > 0 ? 1 : 0);
+        
+        for (let i = 0; i < hospDays; i++) {
+          const currentDate = new Date(startDateTime);
+          currentDate.setDate(currentDate.getDate() + i);
+          
+          let dailyPrice;
+          const isHoliday = Utils.isHoliday(currentDate);
+          const isHighSeason = Utils.isHighSeason(currentDate);
+          const isWeekend = Utils.isWeekend(currentDate);
+          
+          if (isHighSeason) dailyPrice = prices.hospedagemHighSeason || 120;
+          else if (isHoliday) dailyPrice = prices.hospedagemHoliday || 100;
+          else if (isWeekend) dailyPrice = prices.hospedagemWeekend || 90;
+          else dailyPrice = prices.hospedagemWeekday || 80;
+          
+          total += dailyPrice;
+          breakdown.push({
+            type: 'hospedagem',
+            date: currentDate.toISOString().split('T')[0],
+            price: dailyPrice,
+            tags: [
+              isHoliday ? 'Feriado' : null,
+              isWeekend ? 'Fim de semana' : null,
+              isHighSeason ? 'Alta temporada' : null
+            ].filter(Boolean)
+          });
+        }
+        
         if (extraDaycareDays > 0) {
-          details += ' + 1 daycare';
+          const daycarePrice = prices.daycareWeekday || 70;
+          total += daycarePrice;
+          breakdown.push({
+            type: 'daycare',
+            date: 'Excedente',
+            price: daycarePrice,
+            tags: [remainingHours.toFixed(1) + 'h']
+          });
         }
-        details += ' | ' + totalHours.toFixed(1) + 'h totais';
-        if (totalHours > 4) {
-          details += ' (cortesia 4h)';
+        
+        resultEl.textContent = Utils.formatCurrency(total);
+        
+        if (detailsEl) {
+          let details = hospDays + ' hospedagem';
+          if (extraDaycareDays > 0) details += ' + 1 daycare';
+          details += ' | ' + totalHours.toFixed(1) + 'h totais';
+          if (totalHours > 4) details += ' (cortesia 4h)';
+          detailsEl.textContent = details;
         }
-        detailsEl.textContent = details;
+        
+        if (breakdownEl && breakdown.length > 0) {
+          breakdownEl.innerHTML = breakdown.map(b => 
+            '<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">' +
+              '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + (b.date !== 'Excedente' ? Utils.formatDate(b.date) : b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
+              '<span>' + Utils.formatCurrency(b.price) + '</span>' +
+            '</div>'
+          ).join('');
+          breakdownEl.style.display = 'block';
+        }
       }
       
-      if (breakdownEl && breakdown.length > 0) {
-        breakdownEl.innerHTML = breakdown.map(b => 
-          '<div style="display:flex;justify-content:space-between;font-size:0.875rem;padding:0.25rem 0;border-bottom:1px solid var(--color-border)">' +
-            '<span>' + (b.type === 'daycare' ? '🌞 ' : '🌙 ') + (b.date !== 'Excedente' ? Utils.formatDate(b.date) : b.date) + (b.tags.length ? ' (' + b.tags.join(', ') + ')' : '') + '</span>' +
-            '<span>' + Utils.formatCurrency(b.price) + '</span>' +
-          '</div>'
-        ).join('');
-        breakdownEl.style.display = 'block';
+      // Navbar scroll effect
+      window.addEventListener('scroll', () => {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+      });
+      
+      // Accordion
+      const accHeader = document.getElementById('accHeader');
+      const accContent = document.getElementById('accContent');
+      if (accHeader) {
+        accHeader.addEventListener('click', () => {
+          accHeader.classList.toggle('active');
+          accContent?.classList.toggle('show');
+        });
       }
-    }
-    
-    // Adicionar texto de ajuda
-    const calcGrid = document.querySelector('.calculator-grid');
-    if (calcGrid) {
-      const helpText = document.createElement('p');
-      helpText.className = 'text-muted';
-      helpText.style.gridColumn = '1 / -1';
-      helpText.style.fontSize = '0.875rem';
-      helpText.style.marginTop = '0.5rem';
-      helpText.innerHTML = 'ℹ️ Check-in e check-out disponíveis das <strong>8h às 20h</strong>.';
-      calcGrid.appendChild(helpText);
-    }
-    
-    // Calcular inicialmente
-    updateCalculator();
-  });
-</script></body>
+      
+      // Contact form
+      document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contactName').value;
+        const msg = document.getElementById('contactMessage').value;
+        const url = `https://wa.me/5511997811891?text=Olá!%20Meu%20nome%20é%20${encodeURIComponent(name)}.%20${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+        e.target.reset();
+      });
+    });
+  </script>
+</body>
 </html>

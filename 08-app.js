@@ -1,63 +1,41 @@
 /**
  * CQC Adestramento - Aplicação Principal
- * Roteamento, inicialização e coordenação de módulos
+ * Roteamento e coordenação de módulos
  */
 
 const App = {
-  /**
-   * Inicializar aplicação
-   */
   init: () => {
-    // Inicializar módulos
     Auth.init();
     Pets.init();
     Appointments.init();
     Admin.init();
     
-    // Configurar roteamento
     App.setupRouting();
-    
-    // Configurar UI global
     App.setupUI();
     
-    // Ano no footer
     const yearEl = document.getElementById('currentYear');
-    if (yearEl) {
-      yearEl.textContent = new Date().getFullYear();
-    }
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
     
-    console.log('%c🐾 CQC Adestramento App', 'font-size:16px;font-weight:bold;color:#48bb78');
+    console.log('%c🐾 CQC Adestramento App', 'font-size:16px;font-weight:bold;color:#2d4a3e');
     console.log('Aplicação inicializada com sucesso!');
   },
   
-  /**
-   * Configurar roteamento por hash
-   */
   setupRouting: () => {
     const handleRoute = () => {
       const hash = window.location.hash.slice(1) || 'home';
       const hashWithoutParams = hash.split('?')[0];
       
       const allowedPages = [
-        'home', 'servicos', 'valores', 'regras', 'conteudos', 'contato',
-        'auth', 'dashboard', 'perfil', 'pet', 'agendamentos', 'financeiro', 'admin'
+        'home', 'servicos', 'valores', 'blog', 'post', 'regras', 'contato', 'cadastro',
+        'auth', 'admin'
       ];
       
       const targetPage = allowedPages.includes(hashWithoutParams) ? hashWithoutParams : 'home';
       
-      // Proteger páginas privadas
-      if (['dashboard', 'perfil', 'pet', 'agendamentos', 'financeiro'].includes(targetPage)) {
-        if (!Auth.isLoggedIn()) {
-          window.location.hash = '#auth';
-          Utils.toast('Faça login para acessar esta área', 'warning');
-          return;
-        }
-      }
-      
       // Proteger admin
       if (targetPage === 'admin') {
         if (!Auth.isAdminUser()) {
-          window.location.hash = '#dashboard';
+          window.location.hash = '#auth';
           Utils.toast('Acesso restrito ao administrador', 'error');
           return;
         }
@@ -66,17 +44,15 @@ const App = {
       // Mostrar página
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       const target = document.querySelector(`.page[data-page="${targetPage}"]`);
-      if (target) {
-        target.classList.add('active');
-      }
+      if (target) target.classList.add('active');
       
       // Atualizar navegação
       document.querySelectorAll('.nav-menu a').forEach(link => {
         link.classList.toggle('active', link.dataset.route === targetPage);
       });
       
-      // Carregar dados específicos da página
-      App.loadPageData(targetPage);
+      // Carregar dados específicos
+      App.loadPageData(targetPage, hash);
       
       // Scroll para topo
       window.scrollTo(0, 0);
@@ -106,19 +82,7 @@ const App = {
     });
   },
   
-  /**
-   * Configurar UI global
-   */
   setupUI: () => {
-    // Accordion
-    const accHeader = document.getElementById('accHeader');
-    const accContent = document.getElementById('accContent');
-    
-    accHeader?.addEventListener('click', () => {
-      accHeader.classList.toggle('active');
-      accContent?.classList.toggle('show');
-    });
-    
     // Formulário de contato
     document.getElementById('contactForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -129,35 +93,9 @@ const App = {
       Utils.toast('Redirecionando para WhatsApp...', 'success');
       e.target.reset();
     });
-    
-    // Formulário de perfil
-    document.getElementById('profileForm')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      App.saveProfile();
-    });
-    
-    // Exportar dados
-    document.getElementById('exportDataBtn')?.addEventListener('click', () => {
-      Auth.exportUserData();
-    });
-    
-    // Exportar PDF
-    document.getElementById('exportPdfBtn')?.addEventListener('click', () => {
-      Utils.toast('Funcionalidade de PDF em desenvolvimento', 'info');
-    });
-    
-    // Botão de editar conteúdo (admin)
-    document.getElementById('editContentBtn')?.addEventListener('click', () => {
-      window.location.hash = '#admin';
-    });
   },
   
-  /**
-   * Carregar dados específicos da página
-   */
-  loadPageData: (page) => {
-    console.log('Carregando página:', page);
-    
+  loadPageData: (page, hash) => {
     switch(page) {
       case 'home':
         App.renderHomeServices();
@@ -171,30 +109,13 @@ const App = {
         App.renderPricing();
         break;
       
-      case 'conteudos':
-        App.renderContents();
+      case 'blog':
+        App.renderBlog();
         break;
       
-      case 'dashboard':
-        Appointments.renderDashboard();
-        Pets.renderDashboardList();
-        Pets.renderVaccineAlerts();
-        break;
-      
-      case 'perfil':
-        App.loadProfile();
-        break;
-      
-      case 'pet':
-        Pets.loadFromURL();
-        break;
-      
-      case 'agendamentos':
-        Appointments.renderTable();
-        break;
-      
-      case 'financeiro':
-        Appointments.renderFinancial();
+      case 'post':
+        const postId = new URLSearchParams(hash.split('?')[1]).get('id');
+        if (postId) App.renderBlogPost(postId);
         break;
       
       case 'admin':
@@ -203,9 +124,6 @@ const App = {
     }
   },
   
-  /**
-   * Renderizar serviços na home
-   */
   renderHomeServices: () => {
     const container = document.getElementById('homeServicesGrid');
     if (!container) return;
@@ -222,9 +140,6 @@ const App = {
     `).join('');
   },
   
-  /**
-   * Renderizar página de serviços
-   */
   renderServices: () => {
     const container = document.getElementById('servicesGrid');
     if (!container) return;
@@ -247,9 +162,6 @@ const App = {
     `).join('');
   },
   
-  /**
-   * Renderizar tabela de preços
-   */
   renderPricing: () => {
     const container = document.querySelector('#pricingTable tbody');
     if (!container) return;
@@ -334,186 +246,81 @@ const App = {
     `;
   },
   
-  /**
-   * Renderizar conteúdos educacionais
-   */
-  renderContents: () => {
-    const container = document.getElementById('contentGrid');
+  renderBlog: () => {
+    const container = document.getElementById('blogGrid');
     if (!container) return;
     
-    const contents = Utils.get('educationalContent', []);
+    const posts = Utils.get('blogPosts', []);
     
-    if (contents.length === 0) {
-      container.innerHTML = '<p class="text-center" style="grid-column:1/-1">Nenhum conteúdo disponível no momento.</p>';
+    if (posts.length === 0) {
+      container.innerHTML = '<p class="text-center text-muted" style="grid-column:1/-1;padding:3rem">Nenhum post publicado ainda.</p>';
       return;
     }
     
-    container.innerHTML = contents.map(c => `
-      <a href="#" class="content-card" onclick="App.viewContent('${c.id}'); return false;">
-        <h4>${c.title}</h4>
-        <p class="meta">${c.type === 'video' ? '🎥 Vídeo' : '📄 Artigo'} • ${Utils.formatDate(c.createdAt)}</p>
-        <p>${Utils.truncate(c.excerpt, 100)}</p>
-        <span style="color:var(--color-accent);font-weight:500">Ler mais →</span>
-      </a>
+    container.innerHTML = posts.map(post => `
+      <article class="blog-card" onclick="window.location.hash='#post?id=${post.id}'">
+        <div class="blog-card-image">
+          <span style="position:relative;z-index:1">${post.icon || '📝'}</span>
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-card-meta">
+            <span>${post.category || 'Geral'}</span>
+            <span>•</span>
+            <span>${Utils.formatDate(post.createdAt)}</span>
+          </div>
+          <h3>${post.title}</h3>
+          <p>${Utils.truncate(post.excerpt, 120)}</p>
+          <span class="blog-card-link">Ler mais →</span>
+        </div>
+      </article>
     `).join('');
   },
   
-  /**
-   * Visualizar conteúdo
-   */
-viewContent: (id) => {
-  const contents = Utils.get('educationalContent', []);
-  const content = contents.find(c => c.id === id);
-  
-  if (!content) {
-    Utils.toast('Conteúdo não encontrado', 'error');
-    return;
-  }
-  
-  let videoEmbed = '';
-  
-  // Gerar embed para vídeos
-  if (content.type === 'video-youtube' && content.videoUrl) {
-    const videoId = content.videoUrl.split('v=')[1]?.split('&')[0] || content.videoUrl.split('/').pop();
-    videoEmbed = `
-      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:1rem 0;border-radius:var(--radius-md)">
-        <iframe src="https://www.youtube.com/embed/${videoId}" 
-                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-        </iframe>
-      </div>
-    `;
-  } else if (content.type === 'video-tiktok' && content.videoUrl) {
-    videoEmbed = `
-      <div style="margin:1rem 0;text-align:center">
-        <p style="color:var(--color-text-muted);margin-bottom:0.5rem">📱 Vídeo do TikTok</p>
-        <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-primary">
-          Abrir no TikTok
-        </a>
-      </div>
-    `;
-  } else if (content.type === 'video-instagram' && content.videoUrl) {
-    videoEmbed = `
-      <div style="margin:1rem 0;text-align:center">
-        <p style="color:var(--color-text-muted);margin-bottom:0.5rem">📷 Vídeo do Instagram</p>
-        <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-primary">
-          Abrir no Instagram
-        </a>
-      </div>
-    `;
-  }
-  
-  const modalContent = `
-    <div class="modal" style="max-width:700px">
-      <div class="modal-header">
-        <h3 id="modalTitle" style="margin:0">${content.title}</h3>
-        <button class="modal-close" onclick="Utils.hideModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p class="text-muted" style="margin-bottom:1rem">
-          ${content.type.startsWith('video-') ? '🎥 Vídeo' : '📄 Artigo'} • Publicado em ${Utils.formatDate(content.createdAt)}
-        </p>
-        
-        ${videoEmbed}
-        
-        ${content.type === 'article' ? `
-          <div style="white-space:pre-wrap;line-height:1.8">${content.content || ''}</div>
-        ` : `
-          ${content.content ? `
-            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--color-border)">
-              <h4 style="margin-bottom:0.5rem">Descrição</h4>
-              <p style="white-space:pre-wrap;line-height:1.8">${content.content}</p>
-            </div>
-          ` : ''}
-        `}
-        
-        ${content.excerpt ? `
-          <div style="margin-top:1rem;padding:1rem;background:var(--color-bg-hover);border-radius:var(--radius-md)">
-            <strong>Resumo:</strong> ${content.excerpt}
-          </div>
-        ` : ''}
-      </div>
-      <div class="modal-footer">
-        ${content.videoUrl ? `
-          <a href="${content.videoUrl}" target="_blank" rel="noopener" class="btn btn-secondary">
-            Abrir vídeo original
-          </a>
-        ` : ''}
-        <button class="btn btn-primary" onclick="Utils.hideModal()">Fechar</button>
-      </div>
-    </div>
-  `;
-  
-  Utils.showModal(modalContent);
-},
-  /**
-   * Carregar perfil
-   */
-  loadProfile: () => {
-    if (!Auth.currentUser) return;
+  renderBlogPost: (postId) => {
+    const container = document.getElementById('blogPost');
+    if (!container) return;
     
-    const profile = Auth.currentUser.profile || {};
+    const posts = Utils.get('blogPosts', []);
+    const post = posts.find(p => p.id === postId);
     
-    document.getElementById('pName').value = profile.name || Auth.currentUser.name;
-    document.getElementById('pBirth').value = profile.birthdate || '';
-    document.getElementById('pProfession').value = profile.profession || '';
-    document.getElementById('pCpf').value = profile.cpf || '';
-    document.getElementById('pAddress').value = profile.address || '';
-    document.getElementById('pEmail').value = profile.email || Auth.currentUser.email;
-    document.getElementById('pPhone').value = profile.phone || '';
-    document.getElementById('pEmergency').value = profile.emergencyContact || '';
-    document.getElementById('pNotes').value = profile.notes || '';
-    document.getElementById('t2Name').value = profile.tutor2?.name || '';
-    document.getElementById('t2Phone').value = profile.tutor2?.phone || '';
-    document.getElementById('t2Relation').value = profile.tutor2?.relation || '';
-  },
-  
-  /**
-   * Salvar perfil
-   */
-  saveProfile: () => {
-    if (!Auth.currentUser) return;
-    
-    const updates = {
-      profile: {
-        name: document.getElementById('pName').value.trim(),
-        birthdate: document.getElementById('pBirth').value,
-        profession: document.getElementById('pProfession').value.trim(),
-        cpf: document.getElementById('pCpf').value.trim(),
-        address: document.getElementById('pAddress').value.trim(),
-        email: document.getElementById('pEmail').value.trim(),
-        phone: document.getElementById('pPhone').value.trim(),
-        emergencyContact: document.getElementById('pEmergency').value.trim(),
-        tutor2: {
-          name: document.getElementById('t2Name').value.trim(),
-          phone: document.getElementById('t2Phone').value.trim(),
-          relation: document.getElementById('t2Relation').value
-        },
-        notes: document.getElementById('pNotes').value.trim()
-      }
-    };
-    
-    if (Auth.updateUser(Auth.currentUser.id, updates)) {
-      Utils.toast('Perfil atualizado com sucesso!', 'success');
-      setTimeout(() => {
-        window.location.hash = '#dashboard';
-      }, 1000);
-    } else {
-      Utils.toast('Erro ao salvar. Tente novamente.', 'error');
+    if (!post) {
+      container.innerHTML = '<p class="text-center text-muted">Post não encontrado.</p>';
+      return;
     }
+    
+    // Converter markdown básico para HTML
+    let content = post.content
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    
+    content = '<p>' + content + '</p>';
+    
+    container.innerHTML = `
+      <header class="blog-post-header">
+        <div class="blog-card-meta">
+          <span>${post.category || 'Geral'}</span>
+          <span>•</span>
+          <span>${Utils.formatDate(post.createdAt)}</span>
+        </div>
+        <h1>${post.title}</h1>
+        <p class="lead">${post.excerpt}</p>
+      </header>
+      <div class="blog-post-content">
+        ${content}
+      </div>
+    `;
   },
   
-  /**
-   * Dados dos serviços
-   */
   getServicesData: () => {
     return [
       {
         id: 'adestramento',
         icon: '🎾',
         title: 'Adestramento',
-        description: 'Método positivo e individualizado para corrigir comportamentos indesejados e fortalecer o vínculo tutor-pet.',
+        description: 'Método positivo e individualizado para corrigir comportamentos e fortalecer o vínculo tutor-pet.',
         includes: ['Avaliação comportamental', 'Plano customizado', 'Material de apoio', 'Relatório de progresso'],
         duration: '50 minutos por aula',
         cta: 'Consultar disponibilidade'
@@ -522,8 +329,8 @@ viewContent: (id) => {
         id: 'pet-sitter',
         icon: '🏠',
         title: 'Pet Sitter',
-        description: 'Cuidado domiciliar para quando você precisa ausentar-se. Visita programada com alimentação, higiene e brincadeiras.',
-        includes: ['Alimentação conforme rotina', 'Limpeza de necessidades', 'Brincadeiras', 'Envio de fotos/vídeos', 'Verificação de segurança'],
+        description: 'Cuidado domiciliar para quando você precisa ausentar-se. Visita programada com alimentação e brincadeiras.',
+        includes: ['Alimentação conforme rotina', 'Limpeza de necessidades', 'Brincadeiras', 'Envio de fotos/vídeos'],
         duration: '50 minutos por visita',
         cta: 'Saber mais'
       },
@@ -531,8 +338,8 @@ viewContent: (id) => {
         id: 'passeios',
         icon: '🚶',
         title: 'Passeios',
-        description: 'Passeios individuais ou em pequenos grupos compatíveis, respeitando o ritmo e as necessidades do seu cão.',
-        includes: ['Condução segura e profissional', 'Exercícios para melhor comportamento', 'Limpeza de patas', 'Relatório do passeio'],
+        description: 'Passeios individuais ou em pequenos grupos compatíveis, respeitando o ritmo do seu cão.',
+        includes: ['Condução segura', 'Exercícios para comportamento', 'Limpeza de patas', 'Relatório do passeio'],
         duration: '30min ou 50min | Planos mensais',
         cta: 'Ver planos'
       },
@@ -541,24 +348,16 @@ viewContent: (id) => {
         icon: '🌙',
         title: 'Hospedagem & Daycare',
         description: 'Ambiente residencial seguro e acolhedor, com atenção 24h e atividades supervisionadas.',
-        includes: ['Acomodação personalizada', '2-3 passeios diários', 'Alimentação conforme instruções', 'Fotos e vídeos diários', 'Administração de medicamentos'],
+        includes: ['Acomodação personalizada', '2-3 passeios diários', 'Alimentação conforme instruções', 'Fotos e vídeos diários'],
         duration: 'Diária ou pacotes',
         cta: 'Simular estadia'
       }
     ];
-  },
-  
-  /**
-   * Obter nome do serviço
-   */
-  getServiceName: (service) => {
-    return Appointments.getServiceName(service);
   }
 };
 
 window.App = App;
 
-// Inicializar quando DOM estiver pronto
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', App.init);
 } else {
